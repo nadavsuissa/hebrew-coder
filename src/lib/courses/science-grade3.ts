@@ -284,6 +284,12 @@ export const scienceGrade3Course: Course = {
     description: 'מגלים את העולם! חומרים, מים, צמחים ועוד',
     icon: '🧪',
     color: 'from-teal-500 to-cyan-500',
-    modules: scienceGrade3Modules
+    modules: scienceGrade3Modules,
+    features: [
+        'ניסויים מעשיים ומרתקים',
+        'חומרים ותכונותיהם',
+        'צמחים, בעלי חיים ומערכות אקולוגיות',
+        'הכרת גוף האדם והחושים'
+    ]
 };
 

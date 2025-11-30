@@ -483,6 +483,12 @@ export const bibleGrade3Course: Course = {
     description: 'סיפורי התורה: מבריאת העולם ועד האבות',
     icon: '📜',
     color: 'from-amber-600 to-yellow-600',
-    modules: bibleGrade3Modules
+    modules: bibleGrade3Modules,
+    features: [
+        'סיפורי בראשית והאבות',
+        'מדרשים וערכים יהודיים',
+        'הבנת הטקסט המקראי',
+        'קישור לערכים בחיים המודרניים'
+    ]
 };
 

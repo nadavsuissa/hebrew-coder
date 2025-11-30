@@ -136,6 +136,48 @@ export const CourseBasics: React.FC<CourseBasicsProps> = ({ data, onChange }) =>
                 </div>
               </div>
             </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">
+                תכונות לכרטיס הקורס
+              </label>
+              <p className="text-xs text-slate-500 mb-3">
+                תכונות אלו יוצגו בכרטיס הקורס בדף הקורסים. אם לא תוגדרו, יוצגו תכונות אוטומטיות לפי תוכן הקורס.
+              </p>
+              <div className="space-y-3">
+                <input
+                  type="text"
+                  placeholder="הקלד תכונה ולחץ Enter..."
+                  className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-all"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      const val = e.currentTarget.value.trim();
+                      if (val && !data.features?.includes(val)) {
+                        onChange({ features: [...(data.features || []), val] });
+                        e.currentTarget.value = '';
+                      }
+                    }
+                  }}
+                />
+                <div className="space-y-2">
+                  {data.features?.map((feature, idx) => (
+                    <div key={idx} className="flex items-center gap-2 p-3 bg-slate-700/30 border border-slate-700 rounded-xl">
+                      <div className="w-5 h-5 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 flex-shrink-0">
+                        <span className="text-xs">✓</span>
+                      </div>
+                      <span className="flex-1 text-sm text-slate-300">{feature}</span>
+                      <button
+                        onClick={() => onChange({ features: data.features?.filter((_, i) => i !== idx) })}
+                        className="text-slate-500 hover:text-red-400 transition-colors"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

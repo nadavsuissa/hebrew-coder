@@ -658,6 +658,12 @@ export const mathGrade5Course: Course = {
     description: 'תוכנית הלימודים המלאה: שברים, אחוזים, הנדסה ועוד',
     icon: '📐',
     color: 'from-indigo-500 to-violet-500',
-    modules: mathGrade5Modules
+    modules: mathGrade5Modules,
+    features: [
+        'שברים ועשרוניים מתקדמים',
+        'אחוזים וחישובי אחוזים',
+        'גאומטריה והנדסה',
+        'פתרון בעיות מילוליות'
+    ]
 };
 

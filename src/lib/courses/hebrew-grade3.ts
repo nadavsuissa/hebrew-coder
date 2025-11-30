@@ -2012,6 +2012,12 @@ export const hebrewGrade3Course: Course = {
     description: 'תוכנית לימודים מלאה לפי משרד החינוך: הבנת הנקרא, כתיבה, שיח, לשון וקריאה',
     icon: '📚',
     color: 'from-orange-500 to-amber-500',
-    modules: hebrewGrade3Modules
+    modules: hebrewGrade3Modules,
+    features: [
+        'קריאה והבנת הנקרא',
+        'כתיבה יצירתית ומעשית',
+        'לשון עברית ודקדוק',
+        'שיח ושיחה בעברית'
+    ]
 };
 

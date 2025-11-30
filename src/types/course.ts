@@ -43,6 +43,7 @@ export interface Course {
   createdBy?: string;
   createdAt?: string;
   updatedAt?: string;
+  features?: string[]; // Optional custom features list for the course card
 }
 
 export type UserRole = 'user' | 'admin' | 'moderator';

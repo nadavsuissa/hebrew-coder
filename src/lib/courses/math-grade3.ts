@@ -1356,6 +1356,12 @@ export const mathGrade3Course: Course = {
     description: 'תוכנית לימודים מלאה במתמטיקה לכיתה ג׳ על פי משרד החינוך',
     icon: '🔢',
     color: 'from-blue-500 to-purple-500',
-    modules: mathGrade3Modules
+    modules: mathGrade3Modules,
+    features: [
+        'תוכנית לפי משרד החינוך',
+        'חיבור, חיסור, כפל וחילוק',
+        'תרגולים ומשחקים אינטראקטיביים',
+        'הכנה מושלמת למבחנים'
+    ]
 };
 

@@ -3287,6 +3287,12 @@ export const pythonCourse: Course = {
     description: 'קורס מקיף ללימוד תכנות בפייתון לילדים בגילאי 8-14',
     icon: '🐍',
     color: 'from-green-500 to-emerald-500',
-    modules: pythonModules
+    modules: pythonModules,
+    features: [
+        'למידת תכנות מאפס ועד מתקדם',
+        'פרויקטים מעשיים ומשחקים',
+        'הסברים בעברית פשוטה וברורה',
+        'תרגול עם רובוט וירטואלי'
+    ]
 };
 

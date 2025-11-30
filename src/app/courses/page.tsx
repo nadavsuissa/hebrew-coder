@@ -69,11 +69,29 @@ export default function CoursesPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {courses.map((course) => {
             const isPurchased = purchasedCourses.includes(course.id);
-            const features = [
-              'גישה מלאה לכל התכנים',
-              'תרגולים ופרויקטים מעשיים',
-              'תעודת סיום יוקרתית',
-              'תמיכה אישית מהמדריכים'
+            
+            // Calculate dynamic course statistics
+            const totalLessons = course.modules.reduce((sum, m) => sum + m.lessons.length, 0);
+            const totalModules = course.modules.length;
+            const totalXP = course.modules.reduce((sum, module) => 
+              sum + module.lessons.reduce((lessonSum, lesson) => lessonSum + (lesson.xpReward || 0), 0), 0
+            );
+            const textLessons = course.modules.reduce((sum, m) => 
+              sum + m.lessons.filter(l => l.type === 'text').length, 0
+            );
+            const quizLessons = course.modules.reduce((sum, m) => 
+              sum + m.lessons.filter(l => l.type === 'quiz').length, 0
+            );
+            const gameLessons = course.modules.reduce((sum, m) => 
+              sum + m.lessons.filter(l => l.type === 'game').length, 0
+            );
+
+            // Use custom features if available, otherwise generate from course content
+            const features = course.features || [
+              `${totalModules} מודולי למידה מקיפים`,
+              `${totalLessons} שיעורים אינטראקטיביים`,
+              `${quizLessons} בוחנים לבדיקת הבנה`,
+              `${gameLessons} משחקים ותרגולים`
             ];
 
             return (

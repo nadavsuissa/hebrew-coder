@@ -518,6 +518,12 @@ export const englishGrade3Course: Course = {
     description: 'לומדים אנגלית בכיף! תוכנית לימודים לכיתה ג׳',
     icon: '🔤',
     color: 'from-red-500 to-pink-500',
-    modules: englishGrade3Modules
+    modules: englishGrade3Modules,
+    features: [
+        'אוצר מילים בסיסי ושימושי',
+        'דקדוק פשוט וברור',
+        'קריאה והבנת הנקרא',
+        'שיחות יומיומיות נפוצות'
+    ]
 };
 
