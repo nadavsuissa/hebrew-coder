@@ -121,234 +121,149 @@ export default function CourseModulesPage() {
               <div
                 key={module.id}
                 className={clsx(
-                  "group relative rounded-3xl transition-all duration-500 overflow-hidden",
+                  "group relative flex flex-col h-full rounded-2xl transition-all duration-300 border",
                   isModuleLocked
-                    ? "bg-slate-900/40 opacity-50"
-                    : "hover:scale-[1.02] hover:-translate-y-2"
+                    ? "bg-slate-900/50 border-slate-800/50 opacity-75"
+                    : isModuleCompleted
+                    ? "bg-slate-900/80 border-green-500/30 hover:border-green-500/50 hover:shadow-lg hover:shadow-green-900/20"
+                    : "bg-slate-900/80 border-slate-700/50 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-900/20 hover:-translate-y-1"
                 )}
               >
-                {/* Gradient Border Effect */}
+                {/* Module Number Badge - positioned absolutely */}
                 <div className={clsx(
-                  "absolute inset-0 rounded-3xl p-[2px] transition-all duration-500",
-                  isModuleLocked
-                    ? "bg-slate-800/50"
-                    : isModuleCompleted
-                    ? "bg-gradient-to-br from-green-400 via-emerald-400 to-teal-400 group-hover:from-green-300 group-hover:via-emerald-300 group-hover:to-teal-300"
-                    : "bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 group-hover:from-blue-400 group-hover:via-purple-400 group-hover:to-pink-400"
+                  "absolute -top-3 -left-3 z-20 w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm shadow-lg border",
+                  isModuleCompleted
+                    ? "bg-green-600 border-green-500 text-white"
+                    : isModuleLocked
+                    ? "bg-slate-800 border-slate-700 text-slate-500"
+                    : "bg-blue-600 border-blue-500 text-white"
                 )}>
-                  <div className="w-full h-full rounded-3xl bg-[#0F172A]" />
+                  {moduleIndex + 1}
                 </div>
 
-                {/* Glow Effect */}
-                {!isModuleLocked && (
-                  <div className={clsx(
-                    "absolute inset-0 rounded-3xl blur-2xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 -z-10",
-                    isModuleCompleted
-                      ? "bg-gradient-to-br from-green-500 to-emerald-500"
-                      : "bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500"
-                  )} />
-                )}
-
                 {/* Content Container */}
-                <div className="relative z-10 p-8">
-                  {/* Header Section */}
-                  <div className="flex items-start justify-between mb-6">
-                    {/* Module Number Badge */}
+                <div className="flex flex-col flex-grow p-6 relative overflow-hidden rounded-2xl">
+                  {/* Background Gradient Accent - subtle */}
+                  {!isModuleLocked && (
                     <div className={clsx(
-                      "relative w-16 h-16 rounded-2xl flex items-center justify-center font-black text-2xl shadow-2xl transition-all duration-500",
-                      isModuleCompleted
-                        ? "bg-gradient-to-br from-green-500 to-emerald-500 text-white ring-4 ring-green-500/20"
-                        : isModuleLocked
-                        ? "bg-slate-800 text-slate-600"
-                        : "bg-gradient-to-br from-blue-500 to-purple-500 text-white group-hover:scale-110 group-hover:rotate-3"
-                    )}>
-                      {moduleIndex + 1}
-                      {!isModuleLocked && (
-                        <div className={clsx(
-                          "absolute inset-0 rounded-2xl blur-xl opacity-50",
-                          isModuleCompleted ? "bg-green-500" : "bg-blue-500"
-                        )} />
-                      )}
-                    </div>
+                      "absolute top-0 right-0 w-32 h-32 bg-gradient-to-br opacity-10 rounded-bl-full -mr-10 -mt-10 pointer-events-none",
+                      isModuleCompleted ? "from-green-500 to-transparent" : "from-blue-500 to-transparent"
+                    )} />
+                  )}
 
-                    {/* Completion Badge */}
-                    {isModuleCompleted && (
-                      <div className="relative">
-                        <div className="absolute inset-0 animate-ping bg-green-500 rounded-full opacity-20" />
-                        <div className="relative bg-gradient-to-br from-green-500 to-emerald-500 rounded-full p-3 shadow-xl ring-4 ring-green-500/20">
-                          <Trophy size={20} className="text-white" />
-                        </div>
-                      </div>
-                    )}
-
-                    {isModuleLocked && (
-                      <div className="bg-slate-800 rounded-full p-3">
-                        <Lock size={20} className="text-slate-600" />
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Module Title & Description */}
-                  <div className="mb-6">
+                  {/* Header Section */}
+                  <div className="flex items-start justify-between gap-4 mb-4 z-10">
                     <h2 className={clsx(
-                      "text-2xl font-black mb-3 transition-all duration-300",
-                      isModuleLocked
-                        ? "text-slate-600"
-                        : "text-white group-hover:bg-gradient-to-r group-hover:from-blue-300 group-hover:to-purple-300 group-hover:bg-clip-text group-hover:text-transparent"
+                      "text-xl font-bold leading-tight",
+                      isModuleLocked ? "text-slate-500" : "text-slate-100"
                     )}>
                       {module.title}
                     </h2>
-                    <p className={clsx(
-                      "text-sm leading-relaxed min-h-[3rem]",
-                      isModuleLocked ? "text-slate-600" : "text-slate-400"
-                    )}>
-                      {module.description}
-                    </p>
-                  </div>
-
-                  {/* Progress Section */}
-                  <div className="mb-6">
-                    <div className="flex items-center justify-between text-xs font-bold mb-3">
-                      <span className={clsx(
-                        isModuleLocked ? "text-slate-600" : "text-slate-300"
-                      )}>
-                        התקדמות
-                      </span>
-                      <span className={clsx(
-                        "text-base",
-                        isModuleCompleted
-                          ? "text-green-400"
-                          : isModuleLocked
-                          ? "text-slate-600"
-                          : "text-blue-400"
-                      )}>
-                        {progress.percentage}%
-                      </span>
-                    </div>
-                    <div className="relative w-full h-3 bg-slate-800/50 rounded-full overflow-hidden backdrop-blur-sm">
-                      <div
-                        className={clsx(
-                          "h-full transition-all duration-700 rounded-full relative",
-                          isModuleCompleted
-                            ? "bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500"
-                            : "bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"
-                        )}
-                        style={{ width: `${progress.percentage}%` }}
-                      >
-                        <div className="absolute inset-0 bg-white/20 animate-pulse" />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Lessons Preview */}
-                  <div className="space-y-2 mb-6">
-                    {module.lessons.slice(0, 3).map((lesson) => {
-                      const isCompleted = completedLessons.includes(lesson.id);
-                      const Icon = lesson.type === 'game' ? PlayCircle : lesson.type === 'quiz' ? HelpCircle : BookOpen;
-                      
-                      return (
-                        <div
-                          key={lesson.id}
-                          className={clsx(
-                            "flex items-center gap-3 text-sm p-3 rounded-xl transition-all duration-300",
-                            isCompleted
-                              ? "bg-green-500/10 text-green-300 border border-green-500/20"
-                              : isModuleLocked
-                              ? "bg-slate-800/30 text-slate-600"
-                              : "bg-slate-800/50 text-slate-300 hover:bg-slate-800 border border-slate-700/50"
-                          )}
-                        >
-                          <div className={clsx(
-                            "flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center",
-                            isCompleted
-                              ? "bg-green-500/20"
-                              : isModuleLocked
-                              ? "bg-slate-800"
-                              : "bg-slate-700"
-                          )}>
-                            <Icon size={16} />
-                          </div>
-                          <span className="truncate flex-1 font-medium">{lesson.title}</span>
-                          {isCompleted && (
-                            <CheckCircle size={18} className="text-green-400 flex-shrink-0" />
-                          )}
+                    
+                    {/* Status Icon */}
+                    <div className="flex-shrink-0">
+                      {isModuleCompleted ? (
+                        <div className="bg-green-500/20 p-2 rounded-full">
+                          <Trophy size={20} className="text-green-400" />
                         </div>
-                      );
-                    })}
-                    {module.lessons.length > 3 && (
-                      <div className={clsx(
-                        "text-xs text-center py-2 font-medium",
-                        isModuleLocked ? "text-slate-600" : "text-slate-500"
-                      )}>
-                        +{module.lessons.length - 3} שיעורים נוספים
-                      </div>
-                    )}
+                      ) : isModuleLocked ? (
+                        <div className="bg-slate-800 p-2 rounded-full">
+                          <Lock size={20} className="text-slate-600" />
+                        </div>
+                      ) : (
+                        <div className="bg-blue-500/20 p-2 rounded-full">
+                          <PlayCircle size={20} className="text-blue-400" />
+                        </div>
+                      )}
+                    </div>
                   </div>
 
-                  {/* Module Stats */}
-                  <div className="flex items-center justify-between text-xs font-medium mb-6 py-4 border-y border-slate-800">
-                    <div className={clsx(
-                      "flex flex-col items-center gap-1",
-                      isModuleLocked ? "text-slate-600" : "text-slate-400"
-                    )}>
-                      <BookOpen size={18} />
+                  {/* Description */}
+                  <p className={clsx(
+                    "text-sm mb-6 flex-grow leading-relaxed",
+                    isModuleLocked ? "text-slate-600" : "text-slate-400"
+                  )}>
+                    {module.description}
+                  </p>
+
+                  {/* Progress Bar (only if unlocked) */}
+                  {!isModuleLocked && (
+                    <div className="mb-6 space-y-2">
+                      <div className="flex justify-between text-xs font-medium">
+                        <span className="text-slate-400">התקדמות</span>
+                        <span className={clsx(
+                          isModuleCompleted ? "text-green-400" : "text-blue-400"
+                        )}>
+                          {progress.percentage}%
+                        </span>
+                      </div>
+                      <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                        <div 
+                          className={clsx(
+                            "h-full rounded-full transition-all duration-500",
+                            isModuleCompleted ? "bg-green-500" : "bg-blue-500"
+                          )}
+                          style={{ width: `${progress.percentage}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Stats Row */}
+                  <div className={clsx(
+                    "flex items-center justify-between text-xs py-3 border-t border-slate-800/50",
+                    isModuleLocked ? "text-slate-600" : "text-slate-500"
+                  )}>
+                    <div className="flex items-center gap-1.5">
+                      <BookOpen size={14} />
                       <span>{module.lessons.filter(l => l.type === 'text').length}</span>
                     </div>
-                    <div className={clsx(
-                      "flex flex-col items-center gap-1",
-                      isModuleLocked ? "text-slate-600" : "text-slate-400"
-                    )}>
-                      <PlayCircle size={18} />
+                    <div className="flex items-center gap-1.5">
+                      <PlayCircle size={14} />
                       <span>{module.lessons.filter(l => l.type === 'game').length}</span>
                     </div>
-                    <div className={clsx(
-                      "flex flex-col items-center gap-1",
-                      isModuleLocked ? "text-slate-600" : "text-slate-400"
-                    )}>
-                      <HelpCircle size={18} />
+                    <div className="flex items-center gap-1.5">
+                      <HelpCircle size={14} />
                       <span>{module.lessons.filter(l => l.type === 'quiz').length}</span>
                     </div>
                   </div>
 
                   {/* Action Button */}
-                  <Link
-                    href={isModuleLocked ? '#' : `/learn/${course.id}/${module.id}`}
-                    className={clsx(
-                      "relative block w-full py-4 rounded-xl font-bold text-center transition-all duration-300 overflow-hidden group/btn",
-                      isModuleLocked
-                        ? "bg-slate-800 text-slate-600 cursor-not-allowed"
-                        : isModuleCompleted
-                        ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-400 hover:to-emerald-400 shadow-lg shadow-green-500/20 hover:shadow-green-500/40"
-                        : "bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-500 hover:via-purple-500 hover:to-pink-500 text-white shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40"
-                    )}
-                  >
-                    {!isModuleLocked && (
-                      <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300" />
-                    )}
-                    <span className="relative z-10 flex items-center justify-center gap-2">
-                      {isModuleLocked ? (
-                        <>
-                          <Lock size={18} />
-                          נעול
-                        </>
-                      ) : isModuleCompleted ? (
-                        <>
-                          <Trophy size={18} />
-                          הושלם!
-                        </>
-                      ) : progress.completed > 0 ? (
-                        <>
-                          <ChevronRight size={18} />
-                          המשך לימוד ({progress.completed}/{progress.total})
-                        </>
-                      ) : (
-                        <>
-                          <ChevronRight size={18} />
-                          התחל ללמוד
-                        </>
+                  <div className="mt-4">
+                    <Link
+                      href={isModuleLocked ? '#' : `/learn/${course.id}/${module.id}`}
+                      className={clsx(
+                        "flex items-center justify-center w-full py-2.5 rounded-lg font-medium text-sm transition-all duration-200",
+                        isModuleLocked
+                          ? "bg-slate-800 text-slate-600 cursor-not-allowed"
+                          : isModuleCompleted
+                          ? "bg-green-600/10 text-green-400 hover:bg-green-600/20 border border-green-600/20"
+                          : "bg-blue-600 text-white hover:bg-blue-500 shadow-lg shadow-blue-900/20"
                       )}
-                    </span>
-                  </Link>
+                    >
+                      {isModuleLocked ? (
+                        <span className="flex items-center gap-2">
+                          <Lock size={14} />
+                          נעול
+                        </span>
+                      ) : isModuleCompleted ? (
+                        <span className="flex items-center gap-2">
+                          <Trophy size={14} />
+                          חזור לתרגול
+                        </span>
+                      ) : progress.completed > 0 ? (
+                        <span className="flex items-center gap-2">
+                          <ChevronRight size={16} />
+                          המשך ({progress.completed}/{progress.total})
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-2">
+                          <ChevronRight size={16} />
+                          התחל ללמוד
+                        </span>
+                      )}
+                    </Link>
+                  </div>
                 </div>
               </div>
             );
