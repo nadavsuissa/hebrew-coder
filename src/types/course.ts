@@ -37,7 +37,12 @@ export interface Course {
   description: string;
   icon?: string;
   color?: string;
+  tags?: string[];
   modules: Module[];
+  published?: boolean;
+  createdBy?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export type UserRole = 'user' | 'admin' | 'moderator';

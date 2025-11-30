@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { getLesson, getNextLessonInModule, getCourse } from '@/lib/curriculum';
 import { useUserStore } from '@/store/userStore';
@@ -193,7 +193,7 @@ export default function LessonPage() {
 
   const renderContent = (content: string) => {
       const lines = content.split('\n');
-      const elements: JSX.Element[] = [];
+      const elements: React.JSX.Element[] = [];
       let lineIndex = 0;
 
       // Helper function to detect math expressions
@@ -204,8 +204,8 @@ export default function LessonPage() {
       };
 
       // Helper function to parse inline markdown (bold, code, math, etc.)
-      const parseInlineMarkdown = (text: string): (string | JSX.Element)[] => {
-          const parts: (string | JSX.Element)[] = [];
+      const parseInlineMarkdown = (text: string): (string | React.JSX.Element)[] => {
+          const parts: (string | React.JSX.Element)[] = [];
           
           // Match bold text **text**, inline code `code`, or math expressions
           const boldRegex = /\*\*([^*]+)\*\*/g;
@@ -504,7 +504,7 @@ export default function LessonPage() {
                 </div>
                 
                 <h2 className="text-2xl font-bold mb-8" dir="rtl">
-                  {question.question.split(/(\d+\s*[+\-×÷=<>≤≥]\s*\d+(?:\s*[+\-×÷=<>≤≥]\s*\d+)*)/g).map((part, idx) => {
+                  {question.question.split(/(\d+\s*[+\-×÷=<>≤≥]\s*\d+(?:\s*[+\-×÷=<>≤≥]\s*\d+)*)/g).map((part: string, idx: number) => {
                     const isMath = /^\d+\s*[+\-×÷=<>≤≥]\s*\d+(?:\s*[+\-×÷=<>≤≥]\s*\d+)*$/.test(part);
                     if (isMath) {
                       return <span key={idx} dir="ltr" style={{ unicodeBidi: 'embed', display: 'inline-block' }}>{part}</span>;

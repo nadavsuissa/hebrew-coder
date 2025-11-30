@@ -31,7 +31,7 @@ export async function GET() {
     console.error('Firebase Admin test error:', error);
     return NextResponse.json({
       error: 'Firebase Admin test failed',
-      details: error.message
+      details: error instanceof Error ? error.message : 'Unknown error'
     }, { status: 500 });
   }
 }

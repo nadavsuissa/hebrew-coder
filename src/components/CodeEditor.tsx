@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useGameStore } from '@/store/gameStore';
 import { FileCode, Play, RotateCcw } from 'lucide-react';
 import { usePyodide } from '@/hooks/usePyodide';
@@ -17,7 +17,7 @@ loader.config({
     vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.54.0/min/vs',
     'stackframe': 'https://cdn.jsdelivr.net/npm/stackframe@1.3.4/dist/stackframe.min',
     'error-stack-parser': 'https://cdn.jsdelivr.net/npm/error-stack-parser@2.1.4/dist/error-stack-parser.min',
-  },
+  } as any,
 });
 
 const MonacoEditor = dynamic(() => import('@monaco-editor/react'), {
@@ -33,6 +33,7 @@ export const CodeEditor: React.FC = () => {
   const { code, setCode, resetPlayback, isGenerating } = useGameStore();
   const { runCode, isLoading } = usePyodide();
   const [isEditorReady, setIsEditorReady] = useState(false);
+  const editorRef = useRef<any>(null);
 
   // Pre-configure Monaco loader before component mounts
   useEffect(() => {

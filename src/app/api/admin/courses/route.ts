@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get courses based on permissions
-    let coursesQuery = db.collection('courses');
+    let coursesQuery: any = db.collection('courses');
 
     if (isModerator && !isAdmin) {
       // Moderators can only see their own courses
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
     }
 
     const coursesSnapshot = await coursesQuery.get();
-    const courses = coursesSnapshot.docs.map(doc => ({
+    const courses = coursesSnapshot.docs.map((doc: any) => ({
       id: doc.id,
       ...doc.data()
     }));

@@ -1,0 +1,32 @@
+
+> hebrew-coder@0.1.0 build
+> next build
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+ ΓÜá Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\97252\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\97252\AiStocks\hebrew-coder\package-lock.json
+
+   Γû▓ Next.js 16.0.3 (Turbopack)
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+ Γ£ô Compiled successfully in 34.6s
+   Running TypeScript ...
+Failed to compile.
+
+./src/app/admin/courses/editor/components/CourseBasics.tsx:117:40
+Type error: Property 'tags' does not exist on type 'Partial<Course>'.
+
+  115 |                       e.preventDefault();
+  116 |                       const val = e.currentTarget.value.trim();
+> 117 |                       if (val && !data.tags?.includes(val)) {
+      |                                        ^
+  118 |                         onChange({ tags: [...(data.tags || []), val] });
+  119 |                         e.currentTarget.value = '';
+  120 |                       }
+Next.js build worker exited with code: 1 and signal: null
