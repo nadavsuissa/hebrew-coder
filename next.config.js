@@ -5,8 +5,6 @@ const nextConfig = {
   devIndicators: {
     buildActivity: false,
   },
-  // Empty turbopack config to silence the error
-  turbopack: {},
   transpilePackages: ['firebase-admin'],
 };
 
