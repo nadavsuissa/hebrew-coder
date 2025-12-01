@@ -118,6 +118,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Friend ID and content required' }, { status: 400 });
     }
 
+    // Rate Limiting
+    const { rateLimit } = await import('@/lib/rate-limit');
+    const rateLimitResult = await rateLimit(userId, 'chat');
+    
+    if (!rateLimitResult.success) {
+        return NextResponse.json({ error: 'Too many messages. Please slow down.' }, { status: 429 });
+    }
+
     // Verify they are friends
     const friendshipSnapshot = await db.collection('friendships')
       .where('users', 'array-contains', userId)

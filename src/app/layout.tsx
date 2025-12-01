@@ -15,6 +15,8 @@ export const metadata: Metadata = {
   description: "Learn Python in Hebrew",
 };
 
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -46,10 +48,12 @@ export default function RootLayout({
         />
       </head>
       <body className={`${heebo.className} bg-slate-950 text-slate-100 transition-colors duration-300`}>
-          <AuthProvider>
-            <Header />
-            {children}
-          </AuthProvider>
+          <ErrorBoundary>
+            <AuthProvider>
+              <Header />
+              {children}
+            </AuthProvider>
+          </ErrorBoundary>
       </body>
     </html>
   );

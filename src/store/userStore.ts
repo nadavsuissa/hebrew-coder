@@ -5,10 +5,10 @@ import { auth, db } from '@/lib/firebase';
 import { doc, updateDoc, arrayUnion, increment, setDoc, getDoc } from 'firebase/firestore';
 
 interface UserStore extends UserProgress {
-  completeLesson: (lessonId: string, xp: number) => void;
-  saveQuizScore: (lessonId: string, score: number) => void;
-  addXp: (amount: number) => void;
-  checkStreak: () => void;
+  completeLesson: (lessonId: string, xp: number) => Promise<void>;
+  saveQuizScore: (lessonId: string, score: number) => Promise<void>;
+  addXp: (amount: number) => Promise<void>;
+  checkStreak: () => Promise<void>;
   resetProgress: () => void;
 }
 
@@ -19,19 +19,16 @@ const syncToFirestore = async (data: Partial<any>) => {
 
   try {
     const userRef = doc(db, 'users', user.uid);
-    // Check if document exists first (it should, but just in case)
     const userDoc = await getDoc(userRef);
     
     if (userDoc.exists()) {
       await updateDoc(userRef, data);
     } else {
-      // If document doesn't exist, we should probably create it or handle it, 
-      // but updateDoc will fail if it doesn't exist. 
-      // Since we create user doc on register, this should be fine.
       await setDoc(userRef, { ...data, email: user.email, createdAt: new Date() }, { merge: true });
     }
   } catch (error) {
     console.error('Error syncing to Firestore:', error);
+    throw error; // Re-throw to allow rollback
   }
 };
 
@@ -45,69 +42,94 @@ export const useUserStore = create<UserStore>()(
       lastLoginDate: new Date().toISOString().split('T')[0],
       unlockedBadges: [],
 
-      completeLesson: (lessonId, xp) => {
+      completeLesson: async (lessonId, xp) => {
         const state = get();
         if (state.completedLessons.includes(lessonId)) return;
 
-        const newCompletedLessons = [...state.completedLessons, lessonId];
-        const newXp = state.xp + xp;
+        const prevState = { ...state };
 
+        // Optimistic Update
         set({
-          completedLessons: newCompletedLessons,
-          xp: newXp
+          completedLessons: [...state.completedLessons, lessonId],
+          xp: state.xp + xp
         });
 
-        // Sync to Firestore
-        syncToFirestore({
-          completedLessons: arrayUnion(lessonId),
-          xp: increment(xp)
-        });
+        try {
+            await syncToFirestore({
+                completedLessons: arrayUnion(lessonId),
+                xp: increment(xp)
+            });
+        } catch (err) {
+            // Rollback
+            set(prevState);
+            console.error("Failed to save progress, rolling back.");
+            // Ideally trigger a toast here
+        }
       },
 
-      saveQuizScore: (lessonId, score) => {
+      saveQuizScore: async (lessonId, score) => {
+        const state = get();
+        const prevState = { ...state };
+
         set((state) => ({
           quizScores: { ...state.quizScores, [lessonId]: score }
         }));
 
-        // Sync to Firestore - using dot notation for nested field update if possible, 
-        // or we might need to update the whole map. Firestore map updates can be tricky with dot notation
-        // if the field name is dynamic.
-        // Here we'll update the specific field in the map using `quizScores.${lessonId}` syntax
-        syncToFirestore({
-          [`quizScores.${lessonId}`]: score
-        });
+        try {
+            await syncToFirestore({
+                [`quizScores.${lessonId}`]: score
+            });
+        } catch (err) {
+             set(prevState);
+             console.error("Failed to save quiz score, rolling back.");
+        }
       },
 
-      addXp: (amount) => {
+      addXp: async (amount) => {
+        const state = get();
+        const prevState = { ...state };
+
         set((state) => ({ xp: state.xp + amount }));
         
-        syncToFirestore({
-          xp: increment(amount)
-        });
+        try {
+            await syncToFirestore({
+                xp: increment(amount)
+            });
+        } catch (err) {
+            set(prevState);
+        }
       },
 
-      checkStreak: () => {
+      checkStreak: async () => {
         const today = new Date().toISOString().split('T')[0];
-        const { lastLoginDate, streakDays } = get();
+        const state = get();
+        const { lastLoginDate, streakDays } = state;
         
         if (today === lastLoginDate) return;
+
+        const prevState = { ...state };
 
         const yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
         const yesterdayStr = yesterday.toISOString().split('T')[0];
 
         let newStreakDays = 1;
-        
         if (lastLoginDate === yesterdayStr) {
             newStreakDays = streakDays + 1;
         }
 
         set({ streakDays: newStreakDays, lastLoginDate: today });
 
-        syncToFirestore({
-          streakDays: newStreakDays,
-          lastLoginDate: today
-        });
+        try {
+            await syncToFirestore({
+                streakDays: newStreakDays,
+                lastLoginDate: today
+            });
+        } catch (err) {
+            // For streak, maybe we don't rollback UI immediately to avoid jarring experience, 
+            // but technically we should.
+            set(prevState);
+        }
       },
       
       resetProgress: () => set({

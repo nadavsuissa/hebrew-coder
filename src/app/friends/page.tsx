@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
-import { Users, UserPlus, MessageSquare, Search, Check, X, UserMinus, Clock, UserCheck, Heart, Sparkles } from 'lucide-react';
+import { Users, UserPlus, MessageSquare, Search, Check, X, UserMinus, Clock, UserCheck, Heart, Sparkles, Trophy } from 'lucide-react';
 import clsx from 'clsx';
 
 interface Friend {
@@ -48,7 +48,7 @@ export default function FriendsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [searching, setSearching] = useState(false);
-  const [activeTab, setActiveTab] = useState<'friends' | 'requests' | 'add'>('friends');
+  const [activeTab, setActiveTab] = useState<'friends' | 'requests' | 'add' | 'leaderboard'>('friends');
 
   useEffect(() => {
     if (!loading && !user) {
@@ -59,8 +59,7 @@ export default function FriendsPage() {
   useEffect(() => {
     if (user) {
       loadFriends();
-      // Set up periodic refresh for real-time updates
-      const interval = setInterval(loadFriends, 30000); // Refresh every 30 seconds
+      const interval = setInterval(loadFriends, 30000);
       return () => clearInterval(interval);
     }
   }, [user]);
@@ -71,9 +70,7 @@ export default function FriendsPage() {
       if (!token) return;
 
       const response = await fetch('/api/friends', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        }
+        headers: { 'Authorization': `Bearer ${token}` }
       });
 
       if (response.ok) {
@@ -87,9 +84,8 @@ export default function FriendsPage() {
     }
   };
 
-
   const searchUsers = async (query: string) => {
-    if (!query.trim()) {
+    if (!query.trim() || query.length < 3) {
       setSearchResults([]);
       return;
     }
@@ -99,15 +95,19 @@ export default function FriendsPage() {
       const token = await user?.getIdToken();
       if (!token) return;
 
-      // For now, we'll search through existing friends and requests
-      // In a real implementation, you'd have a separate search API
-      const allUsers = [
-        ...friendsData.friends,
-        ...friendsData.sentRequests.map(r => r.toUser),
-        ...friendsData.receivedRequests.map(r => r.fromUser)
-      ].filter(u => u && u.displayName?.toLowerCase().includes(query.toLowerCase()));
-
-      setSearchResults(allUsers.slice(0, 5));
+      const response = await fetch(`/api/users/search?q=${encodeURIComponent(query)}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      if (response.ok) {
+          const data = await response.json();
+          // Filter out existing friends and self
+          const filtered = data.users.filter((u: any) => 
+              u.id !== user?.uid && 
+              !friendsData.friends.some(f => f.id === u.id)
+          );
+          setSearchResults(filtered);
+      }
     } catch (error) {
       console.error('Error searching users:', error);
     } finally {
@@ -133,9 +133,10 @@ export default function FriendsPage() {
       });
 
       if (response.ok) {
-        loadFriends(); // Refresh the data
+        loadFriends();
         setSearchQuery('');
         setSearchResults([]);
+        setActiveTab('requests');
       }
     } catch (error) {
       console.error('Error sending friend request:', error);
@@ -160,7 +161,7 @@ export default function FriendsPage() {
       });
 
       if (response.ok) {
-        loadFriends(); // Refresh the data
+        loadFriends();
       }
     } catch (error) {
       console.error('Error accepting friend request:', error);
@@ -185,7 +186,7 @@ export default function FriendsPage() {
       });
 
       if (response.ok) {
-        loadFriends(); // Refresh the data
+        loadFriends();
       }
     } catch (error) {
       console.error('Error declining friend request:', error);
@@ -212,7 +213,7 @@ export default function FriendsPage() {
       });
 
       if (response.ok) {
-        loadFriends(); // Refresh the data
+        loadFriends();
       }
     } catch (error) {
       console.error('Error removing friend:', error);
@@ -220,7 +221,6 @@ export default function FriendsPage() {
   };
 
   const startChat = (friendId: string) => {
-    // We'll implement this when we create the chat interface
     router.push(`/chat/${friendId}`);
   };
 
@@ -258,7 +258,7 @@ export default function FriendsPage() {
                     החברים שלי
                   </h1>
                   <p className="text-slate-300 mt-1">
-                    התחבר עם חברים ולמדו יחד
+                    התחבר עם חברים, התחרה בטבלה ולמד יחד
                   </p>
                 </div>
               </div>
@@ -277,9 +277,10 @@ export default function FriendsPage() {
           </div>
 
           {/* Tabs */}
-          <div className="flex gap-2 bg-slate-800/50 backdrop-blur-xl p-2 rounded-2xl border border-slate-700/50">
+          <div className="flex gap-2 bg-slate-800/50 backdrop-blur-xl p-2 rounded-2xl border border-slate-700/50 overflow-x-auto">
             {[
               { id: 'friends', label: 'חברים', icon: Users, count: friendsData.friends.length },
+              { id: 'leaderboard', label: 'טבלת מובילים', icon: Trophy },
               { id: 'requests', label: 'בקשות', icon: UserPlus, count: friendsData.receivedRequests.length },
               { id: 'add', label: 'הוסף חברים', icon: Search }
             ].map((tab) => (
@@ -287,7 +288,7 @@ export default function FriendsPage() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
                 className={clsx(
-                  "flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all",
+                  "flex-1 min-w-[120px] flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all whitespace-nowrap",
                   activeTab === tab.id
                     ? "bg-gradient-to-r from-pink-600 to-purple-600 text-white shadow-lg"
                     : "text-slate-400 hover:text-white hover:bg-slate-700/50"
@@ -322,11 +323,11 @@ export default function FriendsPage() {
                   </div>
                 ) : (
                   friendsData.friends.map((friend) => (
-                    <div key={friend.id} className="bg-slate-800/50 backdrop-blur-xl p-6 rounded-2xl border border-slate-700/50 hover:border-pink-500/30 transition-all">
+                    <div key={friend.id} className="bg-slate-800/50 backdrop-blur-xl p-6 rounded-2xl border border-slate-700/50 hover:border-pink-500/30 transition-all group">
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center gap-3">
                           <div className="relative">
-                            <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                            <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg group-hover:scale-110 transition-transform">
                               {friend.displayName[0].toUpperCase()}
                             </div>
                             {friend.isOnline && (
@@ -335,7 +336,7 @@ export default function FriendsPage() {
                           </div>
                           <div>
                             <h3 className="font-semibold text-white">{friend.displayName}</h3>
-                            <p className="text-sm text-slate-400">{friend.xp} XP</p>
+                            <p className="text-sm text-blue-400 font-mono font-bold">{friend.xp} XP</p>
                           </div>
                         </div>
                       </div>
@@ -360,6 +361,48 @@ export default function FriendsPage() {
                   ))
                 )}
               </div>
+            )}
+
+            {activeTab === 'leaderboard' && (
+                <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-slate-700/50 overflow-hidden">
+                    <div className="p-6 border-b border-slate-700/50">
+                        <h3 className="text-xl font-bold flex items-center gap-2">
+                            <Trophy className="text-yellow-400" />
+                            מובילים בניקוד
+                        </h3>
+                    </div>
+                    <div className="divide-y divide-slate-700/50">
+                        {[...friendsData.friends].sort((a, b) => b.xp - a.xp).map((friend, index) => (
+                            <div key={friend.id} className="p-4 flex items-center justify-between hover:bg-slate-700/30 transition-colors">
+                                <div className="flex items-center gap-4">
+                                    <div className={clsx(
+                                        "w-8 h-8 flex items-center justify-center font-bold rounded-full",
+                                        index === 0 ? "bg-yellow-500 text-black" : 
+                                        index === 1 ? "bg-slate-400 text-black" :
+                                        index === 2 ? "bg-orange-600 text-white" :
+                                        "bg-slate-800 text-slate-500"
+                                    )}>
+                                        {index + 1}
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                                            {friend.displayName[0].toUpperCase()}
+                                        </div>
+                                        <span className="font-medium">{friend.displayName}</span>
+                                    </div>
+                                </div>
+                                <div className="font-mono font-bold text-blue-400">
+                                    {friend.xp} XP
+                                </div>
+                            </div>
+                        ))}
+                        {friendsData.friends.length === 0 && (
+                             <div className="p-8 text-center text-slate-500">
+                                 הוסף חברים כדי לראות מי מוביל!
+                             </div>
+                        )}
+                    </div>
+                </div>
             )}
 
             {activeTab === 'requests' && (
@@ -453,11 +496,12 @@ export default function FriendsPage() {
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" size={20} />
                     <input
                       type="text"
-                      placeholder="הקלד שם או אימייל..."
+                      placeholder="הקלד שם (מינימום 3 תווים)..."
                       value={searchQuery}
                       onChange={(e) => {
                         setSearchQuery(e.target.value);
-                        searchUsers(e.target.value);
+                        // Debounce needed ideally, but simple implementation for now
+                        if (e.target.value.length >= 3) searchUsers(e.target.value);
                       }}
                       className="w-full pl-10 pr-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500"
                     />
@@ -472,7 +516,7 @@ export default function FriendsPage() {
                   {searchResults.length > 0 && (
                     <div className="mt-4 space-y-2">
                       {searchResults.map((user) => (
-                        <div key={user.id} className="flex items-center justify-between p-3 bg-slate-900/30 rounded-lg">
+                        <div key={user.id} className="flex items-center justify-between p-3 bg-slate-900/30 rounded-lg hover:bg-slate-900/50 transition-colors">
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
                               {user.displayName[0].toUpperCase()}
@@ -494,36 +538,12 @@ export default function FriendsPage() {
                     </div>
                   )}
 
-                  {searchQuery && !searching && searchResults.length === 0 && (
+                  {searchQuery.length >= 3 && !searching && searchResults.length === 0 && (
                     <div className="text-center py-8">
                       <Search className="mx-auto mb-4 text-slate-600" size={48} />
                       <p className="text-slate-500">לא נמצאו משתמשים</p>
                     </div>
                   )}
-                </div>
-
-                <div className="bg-gradient-to-r from-pink-600/20 via-purple-600/20 to-indigo-600/20 backdrop-blur-xl p-6 rounded-2xl border border-white/10">
-                  <div className="text-center">
-                    <Heart className="mx-auto mb-4 text-pink-400" size={48} />
-                    <h3 className="text-xl font-semibold mb-2">למה להוסיף חברים?</h3>
-                    <p className="text-slate-300 mb-4">
-                      חברים יכולים לעזור לך ללמוד, לשתף רעיונות, ולעודד אותך להמשיך!
-                    </p>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                      <div className="flex items-center gap-2">
-                        <Sparkles className="text-yellow-400" size={20} />
-                        <span>שיתוף ידע</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <MessageSquare className="text-blue-400" size={20} />
-                        <span>צ'אט בזמן אמת</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Heart className="text-red-400" size={20} />
-                        <span>תמיכה הדדית</span>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             )}
