@@ -4,10 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import { getCourse } from '@/lib/curriculum';
-import { MessageSquare, Plus, Search, Clock, User, Lock, Pin, Eye, MessageCircle, X, ArrowRight, Sparkles } from 'lucide-react';
+import { MessageSquare, Plus, Search, Clock, Lock, Pin, Eye, MessageCircle, X, ArrowRight, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import clsx from 'clsx';
 import { ForumThread } from '@/types/forum';
+import Avatar from '@/components/Avatar';
 
 export default function CourseForum() {
   const params = useParams();
@@ -219,12 +220,12 @@ export default function CourseForum() {
                   <div className="flex items-start gap-5">
                     {/* Avatar / Icon */}
                     <div className="hidden sm:flex flex-col items-center gap-2 min-w-[60px]">
-                       <div className={clsx(
-                         "w-12 h-12 rounded-xl flex items-center justify-center text-lg font-bold shadow-md border border-white/5 transition-transform group-hover:scale-105",
-                         "bg-gradient-to-br from-slate-700 to-slate-800 text-slate-300"
-                       )}>
-                         {thread.authorName[0].toUpperCase()}
-                       </div>
+                       <Avatar 
+                         photoURL={thread.authorPhotoURL} 
+                         displayName={thread.authorName} 
+                         size="lg"
+                         className="shadow-md border border-white/5 transition-transform group-hover:scale-105"
+                       />
                     </div>
 
                     <div className="flex-1 min-w-0">

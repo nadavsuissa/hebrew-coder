@@ -116,7 +116,7 @@ print("שלום עולם!")
         title: 'הפקודה print',
         description: 'איך גורמים למחשב לדבר?',
         type: 'quiz',
-        xpReward: 100,
+        xpReward: 150,
         quizQuestions: [
           {
             id: 'q1',
@@ -131,6 +131,62 @@ print("שלום עולם!")
             options: ['print "Hello World"', 'print("Hello World")', 'console.log("Hello World")', 'echo "Hello World"'],
             correctAnswer: 1,
             explanation: 'בפייתון 3, חובה להשתמש בסוגריים מסביב לטקסט שאנחנו רוצים להדפיס.'
+          },
+          {
+            id: 'q3',
+            question: 'מה ידפיס הקוד: print("שלום")?',
+            options: ['print("שלום")', 'שלום', '"שלום"', 'שגיאה'],
+            correctAnswer: 1,
+            explanation: 'הפקודה print מדפיסה את התוכן שבתוך הסוגריים, בלי המרכאות.'
+          },
+          {
+            id: 'q4',
+            question: 'איזה סימן משמש להדפסת טקסט בפייתון?',
+            options: ['מרכאות בודדות בלבד', 'מרכאות כפולות בלבד', 'מרכאות בודדות או כפולות', 'סוגריים מרובעים'],
+            correctAnswer: 2,
+            explanation: 'בפייתון אפשר להשתמש גם במרכאות בודדות (\') וגם בכפולות (") לטקסט.'
+          },
+          {
+            id: 'q5',
+            question: 'מה יקרה אם נכתוב: print(שלום)?',
+            options: ['ידפיס שלום', 'ידפיס "שלום"', 'שגיאה - חסרות מרכאות', 'לא יקרה כלום'],
+            correctAnswer: 2,
+            explanation: 'טקסט חייב להיות בתוך מרכאות, אחרת פייתון יחשוב שזה שם של משתנה.'
+          },
+          {
+            id: 'q6',
+            question: 'מה ידפיס הקוד: print("1 + 2")?',
+            options: ['3', '1 + 2', '12', 'שגיאה'],
+            correctAnswer: 1,
+            explanation: 'כשהביטוי בתוך מרכאות, הוא נחשב לטקסט ולא לחישוב מתמטי.'
+          },
+          {
+            id: 'q7',
+            question: 'מה ידפיס הקוד: print(1 + 2)?',
+            options: ['3', '1 + 2', '12', 'שגיאה'],
+            correctAnswer: 0,
+            explanation: 'בלי מרכאות, פייתון מחשב את הביטוי ומדפיס את התוצאה.'
+          },
+          {
+            id: 'q8',
+            question: 'איך מדפיסים שתי שורות נפרדות?',
+            options: ['print("שורה 1" + "שורה 2")', 'print("שורה 1"); print("שורה 2")', 'print("שורה 1\\nשורה 2")', 'שתי התשובות האחרונות נכונות'],
+            correctAnswer: 3,
+            explanation: 'אפשר להשתמש בשתי פקודות print נפרדות או בתו \\n שמייצג ירידת שורה.'
+          },
+          {
+            id: 'q9',
+            question: 'מה ידפיס: print("Hello", "World")?',
+            options: ['HelloWorld', 'Hello World', 'Hello, World', 'שגיאה'],
+            correctAnswer: 1,
+            explanation: 'כשמעבירים כמה ערכים ל-print, הם מודפסים עם רווח ביניהם.'
+          },
+          {
+            id: 'q10',
+            question: 'איזו שורה תגרום לשגיאה?',
+            options: ['print("שלום")', 'print(\'שלום\')', 'print(שלום)', 'print("שלום", "עולם")'],
+            correctAnswer: 2,
+            explanation: 'שורה 3 תגרום לשגיאה כי הטקסט לא בתוך מרכאות.'
           }
         ]
       },
@@ -309,7 +365,7 @@ print("אני לומד ב-" + school)
         title: 'סוגי משתנים',
         description: 'מספרים, טקסט ובוליאני - מה ההבדל?',
         type: 'quiz',
-        xpReward: 100,
+        xpReward: 175,
         quizQuestions: [
           {
             id: 'v1',
@@ -338,6 +394,62 @@ print("אני לומד ב-" + school)
             options: ['מספר = 5', 'מספר = "5"', 'מספר = True', 'כל התשובות נכונות'],
             correctAnswer: 3,
             explanation: 'אפשר ליצור משתנה עם כל שם (בעברית או באנגלית) ולהקצות לו כל ערך!'
+          },
+          {
+            id: 'v5',
+            question: 'מה הסוג של המשתנה: price = 19.99?',
+            options: ['int (מספר שלם)', 'float (מספר עשרוני)', 'str (מחרוזת)', 'bool (בוליאני)'],
+            correctAnswer: 1,
+            explanation: 'מספר עם נקודה עשרונית נקרא float (מספר צף).'
+          },
+          {
+            id: 'v6',
+            question: 'מה ידפיס: x = 5; print(type(x))?',
+            options: ['5', 'x', '<class \'int\'>', '<class \'str\'>'],
+            correctAnswer: 2,
+            explanation: 'הפונקציה type() מחזירה את סוג המשתנה. 5 הוא מספר שלם (int).'
+          },
+          {
+            id: 'v7',
+            question: 'מה ההבדל בין 5 ל-"5"?',
+            options: ['אין הבדל', '5 הוא מספר, "5" הוא טקסט', '"5" גדול יותר', '5 הוא טקסט, "5" הוא מספר'],
+            correctAnswer: 1,
+            explanation: '5 הוא מספר שאפשר לעשות איתו חישובים, "5" הוא טקסט.'
+          },
+          {
+            id: 'v8',
+            question: 'מה יקרה אם נכתוב: result = "5" + 3?',
+            options: ['result יהיה 8', 'result יהיה "53"', 'שגיאה - אי אפשר לחבר טקסט ומספר', 'result יהיה "5 + 3"'],
+            correctAnswer: 2,
+            explanation: 'אי אפשר לחבר מחרוזת ומספר ישירות. צריך להמיר קודם.'
+          },
+          {
+            id: 'v9',
+            question: 'איזה שם משתנה לא תקין?',
+            options: ['my_name', 'myName', '2names', '_private'],
+            correctAnswer: 2,
+            explanation: 'שם משתנה לא יכול להתחיל במספר.'
+          },
+          {
+            id: 'v10',
+            question: 'מה ידפיס: a = 10; a = 20; print(a)?',
+            options: ['10', '20', '10 20', 'שגיאה'],
+            correctAnswer: 1,
+            explanation: 'משתנה יכול לקבל ערך חדש. הערך האחרון שהוקצה הוא 20.'
+          },
+          {
+            id: 'v11',
+            question: 'מה הסוג של: is_raining = False?',
+            options: ['int', 'str', 'bool', 'float'],
+            correctAnswer: 2,
+            explanation: 'True ו-False הם ערכים בוליאניים (bool).'
+          },
+          {
+            id: 'v12',
+            question: 'איך ממירים מספר לטקסט?',
+            options: ['int()', 'str()', 'text()', 'convert()'],
+            correctAnswer: 1,
+            explanation: 'הפונקציה str() ממירה כל ערך למחרוזת (טקסט).'
           }
         ]
       },
@@ -537,10 +649,10 @@ else:
       },
       {
         id: 'basics-6',
-        title: 'בוחן יסודות',
-        description: 'בואו נבדוק מה למדנו עד עכשיו!',
+        title: 'בוחן יסודות מקיף',
+        description: 'בואו נבדוק מה למדנו עד עכשיו! בוחן מקיף על כל היסודות.',
         type: 'quiz',
-        xpReward: 150,
+        xpReward: 250,
         quizQuestions: [
           {
             id: 'b1',
@@ -569,6 +681,83 @@ else:
             options: ['אין הבדל', '5 הוא מספר, "5" הוא טקסט', '"5" הוא מספר, 5 הוא טקסט', '5 גדול יותר'],
             correctAnswer: 1,
             explanation: '5 הוא מספר (integer) שאפשר לעשות איתו חישובים, ו-"5" הוא מחרוזת (string) שזה טקסט.'
+          },
+          {
+            id: 'b5',
+            question: 'מה ידפיס: name = "דני"; print("שלום " + name)?',
+            options: ['שלום name', 'שלום דני', 'שלום + name', 'שגיאה'],
+            correctAnswer: 1,
+            explanation: 'המשתנה name מכיל את הערך "דני", והוא מתחבר לטקסט "שלום ".'
+          },
+          {
+            id: 'b6',
+            question: 'מה יחזיר input() תמיד?',
+            options: ['מספר', 'מחרוזת (טקסט)', 'בוליאני', 'תלוי במה שהמשתמש מקליד'],
+            correctAnswer: 1,
+            explanation: 'input() תמיד מחזיר מחרוזת, גם אם המשתמש מקליד מספר.'
+          },
+          {
+            id: 'b7',
+            question: 'איך ממירים קלט מהמשתמש למספר שלם?',
+            options: ['number(input())', 'int(input())', 'input(int())', 'str(input())'],
+            correctAnswer: 1,
+            explanation: 'int() ממיר מחרוזת למספר שלם. עוטפים את input() ב-int().'
+          },
+          {
+            id: 'b8',
+            question: 'מה ידפיס: x = 10; y = 3; print(x + y)?',
+            options: ['103', '13', 'x + y', 'שגיאה'],
+            correctAnswer: 1,
+            explanation: 'x ו-y הם מספרים, אז + מבצע חיבור מתמטי.'
+          },
+          {
+            id: 'b9',
+            question: 'מה ידפיס: x = "10"; y = "3"; print(x + y)?',
+            options: ['103', '13', 'x + y', 'שגיאה'],
+            correctAnswer: 0,
+            explanation: 'x ו-y הם מחרוזות, אז + מחבר אותן כטקסט.'
+          },
+          {
+            id: 'b10',
+            question: 'איזה שם משתנה תקין?',
+            options: ['my-name', 'my name', 'my_name', '123name'],
+            correctAnswer: 2,
+            explanation: 'שם משתנה יכול להכיל אותיות, מספרים וקו תחתון, אבל לא מקף או רווח.'
+          },
+          {
+            id: 'b11',
+            question: 'מה ידפיס: print(5 * 3)?',
+            options: ['53', '15', '5 * 3', 'שגיאה'],
+            correctAnswer: 1,
+            explanation: '* הוא סימן הכפל בפייתון.'
+          },
+          {
+            id: 'b12',
+            question: 'מה ידפיס: print(10 / 4)?',
+            options: ['2', '2.5', '2.0', 'שגיאה'],
+            correctAnswer: 1,
+            explanation: 'חילוק רגיל (/) תמיד מחזיר מספר עשרוני.'
+          },
+          {
+            id: 'b13',
+            question: 'מה ידפיס: print(10 // 4)?',
+            options: ['2', '2.5', '2.0', 'שגיאה'],
+            correctAnswer: 0,
+            explanation: 'חילוק שלם (//) מחזיר רק את החלק השלם של התוצאה.'
+          },
+          {
+            id: 'b14',
+            question: 'מה ידפיס: print(10 % 3)?',
+            options: ['3', '1', '0', '3.33'],
+            correctAnswer: 1,
+            explanation: '% (מודולו) מחזיר את השארית של החילוק. 10 חלקי 3 = 3 עם שארית 1.'
+          },
+          {
+            id: 'b15',
+            question: 'מה ידפיס: print(2 ** 3)?',
+            options: ['6', '8', '23', 'שגיאה'],
+            correctAnswer: 1,
+            explanation: '** הוא סימן החזקה. 2 בחזקת 3 = 2×2×2 = 8.'
           }
         ]
       }
@@ -782,7 +971,7 @@ else:
         title: 'תנאים מורכבים',
         description: 'elif, else ותנאים משולבים',
         type: 'quiz',
-        xpReward: 100,
+        xpReward: 200,
         quizQuestions: [
           {
             id: 'c1',
@@ -804,6 +993,69 @@ else:
             options: ['A', 'B', 'C', 'A ו-B'],
             correctAnswer: 0,
             explanation: 'רק הקוד של התנאי הראשון שנכון ירוץ. כאן 5 > 3 נכון, אז רק A יודפס.'
+          },
+          {
+            id: 'c4',
+            question: 'מה ההבדל בין = ל-==?',
+            options: ['אין הבדל', '= להשוואה, == להקצאה', '= להקצאה, == להשוואה', 'שניהם להשוואה'],
+            correctAnswer: 2,
+            explanation: '= משמש להקצאת ערך למשתנה, == משמש להשוואה בין ערכים.'
+          },
+          {
+            id: 'c5',
+            question: 'מה יחזיר הביטוי: 5 != 3?',
+            options: ['True', 'False', '2', 'שגיאה'],
+            correctAnswer: 0,
+            explanation: '!= פירושו "לא שווה". 5 אכן לא שווה ל-3, אז התוצאה היא True.'
+          },
+          {
+            id: 'c6',
+            question: 'מה יחזיר: 10 >= 10?',
+            options: ['True', 'False', '10', '0'],
+            correctAnswer: 0,
+            explanation: '>= פירושו "גדול או שווה". 10 שווה ל-10, אז התוצאה היא True.'
+          },
+          {
+            id: 'c7',
+            question: 'מה ידפיס: x = 5; if x: print("yes")?',
+            options: ['yes', 'לא ידפיס כלום', 'שגיאה', '5'],
+            correctAnswer: 0,
+            explanation: 'בפייתון, כל מספר שונה מ-0 נחשב ל-True בתנאי.'
+          },
+          {
+            id: 'c8',
+            question: 'מה ידפיס: x = 0; if x: print("yes") else: print("no")?',
+            options: ['yes', 'no', 'שגיאה', '0'],
+            correctAnswer: 1,
+            explanation: 'המספר 0 נחשב ל-False בפייתון.'
+          },
+          {
+            id: 'c9',
+            question: 'מה ידפיס: if "": print("yes") else: print("no")?',
+            options: ['yes', 'no', 'שגיאה', '""'],
+            correctAnswer: 1,
+            explanation: 'מחרוזת ריקה "" נחשבת ל-False בפייתון.'
+          },
+          {
+            id: 'c10',
+            question: 'כמה תנאי elif אפשר לשים אחרי if?',
+            options: ['אחד בלבד', 'שניים בלבד', 'כמה שרוצים', 'אף אחד'],
+            correctAnswer: 2,
+            explanation: 'אפשר לשים כמה תנאי elif שרוצים אחרי if.'
+          },
+          {
+            id: 'c11',
+            question: 'האם חייבים else אחרי if?',
+            options: ['כן, תמיד', 'לא, זה אופציונלי', 'רק אם יש elif', 'רק אם התנאי מורכב'],
+            correctAnswer: 1,
+            explanation: 'else הוא אופציונלי. אפשר להשתמש ב-if בלי else.'
+          },
+          {
+            id: 'c12',
+            question: 'מה יקרה אם נשכח את ה-: אחרי if?',
+            options: ['הקוד ירוץ רגיל', 'שגיאת תחביר', 'התנאי יהיה תמיד False', 'התנאי יהיה תמיד True'],
+            correctAnswer: 1,
+            explanation: 'הנקודתיים : חובה אחרי if, elif ו-else. בלעדיהן תהיה שגיאה.'
           }
         ]
       },
@@ -1298,10 +1550,10 @@ while True:
       },
       {
         id: 'loops-quiz',
-        title: 'בוחן לולאות',
-        description: 'נראה אם הבנתם את העקרון',
+        title: 'בוחן לולאות מקיף',
+        description: 'נראה אם הבנתם את העקרון - בוחן מקיף על לולאות',
         type: 'quiz',
-        xpReward: 100,
+        xpReward: 200,
         quizQuestions: [
           {
             id: 'l1',
@@ -1323,6 +1575,69 @@ while True:
             options: ['ידפיס hello פעם אחת', 'ידפיס hello 5 פעמים', 'ידפיס hello לנצח', 'שגיאה'],
             correctAnswer: 2,
             explanation: 'True תמיד נכון, אז הלולאה תרוץ לנצח - זו לולאה אינסופית!'
+          },
+          {
+            id: 'l4',
+            question: 'מה ידפיס: for i in range(3): print(i)?',
+            options: ['1 2 3', '0 1 2', '0 1 2 3', '1 2'],
+            correctAnswer: 1,
+            explanation: 'range(3) מייצר 0, 1, 2 - שלושה מספרים שמתחילים מ-0.'
+          },
+          {
+            id: 'l5',
+            question: 'מה ידפיס: for i in range(2, 5): print(i)?',
+            options: ['2 3 4', '2 3 4 5', '0 1 2 3 4', '2 5'],
+            correctAnswer: 0,
+            explanation: 'range(2, 5) מייצר מספרים מ-2 עד 5 (לא כולל 5).'
+          },
+          {
+            id: 'l6',
+            question: 'מה ידפיס: for i in range(0, 10, 2): print(i)?',
+            options: ['0 2 4 6 8', '0 2 4 6 8 10', '2 4 6 8 10', '0 1 2 3 4'],
+            correctAnswer: 0,
+            explanation: 'הפרמטר השלישי (2) הוא הקפיצה. מתחילים מ-0 ומדלגים 2 כל פעם.'
+          },
+          {
+            id: 'l7',
+            question: 'כמה פעמים תרוץ הלולאה: for i in range(10): print(i)?',
+            options: ['9 פעמים', '10 פעמים', '11 פעמים', 'פעם אחת'],
+            correctAnswer: 1,
+            explanation: 'range(10) מייצר 10 מספרים (0-9), אז הלולאה תרוץ 10 פעמים.'
+          },
+          {
+            id: 'l8',
+            question: 'מה עושה break בתוך לולאה?',
+            options: ['שובר את המחשב', 'יוצא מהלולאה מיד', 'מדלג לסיבוב הבא', 'מפסיק את התוכנית'],
+            correctAnswer: 1,
+            explanation: 'break עוצר את הלולאה מיד ויוצא ממנה.'
+          },
+          {
+            id: 'l9',
+            question: 'מה עושה continue בתוך לולאה?',
+            options: ['ממשיך כרגיל', 'יוצא מהלולאה', 'מדלג לסיבוב הבא', 'מתחיל מההתחלה'],
+            correctAnswer: 2,
+            explanation: 'continue מדלג על שאר הקוד בסיבוב הנוכחי ועובר לסיבוב הבא.'
+          },
+          {
+            id: 'l10',
+            question: 'מה ידפיס: x = 0; while x < 3: print(x); x += 1?',
+            options: ['0 1 2', '0 1 2 3', '1 2 3', 'לולאה אינסופית'],
+            correctAnswer: 0,
+            explanation: 'הלולאה רצה כל עוד x < 3. מדפיסים 0, 1, 2 ואז x מגיע ל-3 והלולאה נעצרת.'
+          },
+          {
+            id: 'l11',
+            question: 'מה יקרה אם נשכח לעדכן את המשתנה בלולאת while?',
+            options: ['הלולאה תרוץ פעם אחת', 'לולאה אינסופית', 'שגיאה', 'הלולאה לא תרוץ'],
+            correctAnswer: 1,
+            explanation: 'אם התנאי תמיד נכון (כי המשתנה לא משתנה), נקבל לולאה אינסופית.'
+          },
+          {
+            id: 'l12',
+            question: 'מה ידפיס: for letter in "ABC": print(letter)?',
+            options: ['ABC', 'A B C', 'A\\nB\\nC', '[A, B, C]'],
+            correctAnswer: 2,
+            explanation: 'אפשר לעבור על מחרוזת עם for. כל אות מודפסת בשורה נפרדת.'
           }
         ]
       },
@@ -1719,10 +2034,10 @@ print(cart)  # ["חלב סויה", "לחם", "ביצים"]
       },
       {
         id: 'lists-quiz',
-        title: 'בוחן רשימות',
-        description: 'בואו נבדוק את הידע שלכם ברשימות',
+        title: 'בוחן רשימות מקיף',
+        description: 'בואו נבדוק את הידע שלכם ברשימות - בוחן מקיף',
         type: 'quiz',
-        xpReward: 125,
+        xpReward: 225,
         quizQuestions: [
           {
             id: 'ls1',
@@ -1744,6 +2059,90 @@ print(cart)  # ["חלב סויה", "לחם", "ביצים"]
             options: ['my_list.length', 'length(my_list)', 'len(my_list)', 'count(my_list)'],
             correctAnswer: 2,
             explanation: 'הפונקציה len() מחזירה את מספר הפריטים ברשימה.'
+          },
+          {
+            id: 'ls4',
+            question: 'מה ידפיס: nums = [1, 2, 3]; print(nums[-1])?',
+            options: ['1', '2', '3', 'שגיאה'],
+            correctAnswer: 2,
+            explanation: 'אינדקס שלילי מתחיל מהסוף. -1 הוא הפריט האחרון.'
+          },
+          {
+            id: 'ls5',
+            question: 'מה ידפיס: nums = [1, 2, 3, 4, 5]; print(nums[1:4])?',
+            options: ['[1, 2, 3, 4]', '[2, 3, 4]', '[2, 3, 4, 5]', '[1, 2, 3]'],
+            correctAnswer: 1,
+            explanation: 'חיתוך [1:4] לוקח מאינדקס 1 עד 4 (לא כולל 4).'
+          },
+          {
+            id: 'ls6',
+            question: 'מה ידפיס: nums = [1, 2, 3]; nums.append(4); print(nums)?',
+            options: ['[1, 2, 3]', '[4, 1, 2, 3]', '[1, 2, 3, 4]', '[1, 2, 4, 3]'],
+            correctAnswer: 2,
+            explanation: 'append() מוסיף את הפריט לסוף הרשימה.'
+          },
+          {
+            id: 'ls7',
+            question: 'איך מוסיפים פריט במיקום מסוים ברשימה?',
+            options: ['append()', 'add()', 'insert()', 'put()'],
+            correctAnswer: 2,
+            explanation: 'insert(index, item) מוסיף פריט במיקום מסוים.'
+          },
+          {
+            id: 'ls8',
+            question: 'מה ידפיס: nums = [1, 2, 3]; nums.remove(2); print(nums)?',
+            options: ['[1, 3]', '[1, 2]', '[2, 3]', 'שגיאה'],
+            correctAnswer: 0,
+            explanation: 'remove() מסיר את הפריט הראשון עם הערך המבוקש.'
+          },
+          {
+            id: 'ls9',
+            question: 'מה ידפיס: nums = [1, 2, 3]; x = nums.pop(); print(x)?',
+            options: ['1', '2', '3', '[1, 2]'],
+            correctAnswer: 2,
+            explanation: 'pop() מסיר ומחזיר את הפריט האחרון ברשימה.'
+          },
+          {
+            id: 'ls10',
+            question: 'איך בודקים אם פריט נמצא ברשימה?',
+            options: ['nums.contains(5)', 'nums.has(5)', '5 in nums', 'nums.find(5)'],
+            correctAnswer: 2,
+            explanation: 'האופרטור in בודק אם פריט נמצא ברשימה.'
+          },
+          {
+            id: 'ls11',
+            question: 'מה ידפיס: nums = [3, 1, 2]; nums.sort(); print(nums)?',
+            options: ['[3, 1, 2]', '[1, 2, 3]', '[3, 2, 1]', 'שגיאה'],
+            correctAnswer: 1,
+            explanation: 'sort() ממיין את הרשימה בסדר עולה.'
+          },
+          {
+            id: 'ls12',
+            question: 'מה ידפיס: nums = [1, 2, 3]; nums.reverse(); print(nums)?',
+            options: ['[1, 2, 3]', '[3, 2, 1]', '[3, 1, 2]', 'שגיאה'],
+            correctAnswer: 1,
+            explanation: 'reverse() הופך את סדר הפריטים ברשימה.'
+          },
+          {
+            id: 'ls13',
+            question: 'מה ידפיס: nums = [1, 2, 2, 3]; print(nums.count(2))?',
+            options: ['1', '2', '3', '4'],
+            correctAnswer: 1,
+            explanation: 'count() סופר כמה פעמים הפריט מופיע ברשימה.'
+          },
+          {
+            id: 'ls14',
+            question: 'איך יוצרים רשימה ריקה?',
+            options: ['list()', '[]', 'empty_list', 'שתי התשובות הראשונות נכונות'],
+            correctAnswer: 3,
+            explanation: 'אפשר ליצור רשימה ריקה עם [] או עם list().'
+          },
+          {
+            id: 'ls15',
+            question: 'מה ידפיס: nums = [1, 2, 3]; print(nums + [4, 5])?',
+            options: ['[1, 2, 3, 4, 5]', '[1, 2, 3, [4, 5]]', 'שגיאה', '[5, 7, 8]'],
+            correctAnswer: 0,
+            explanation: '+ מחבר שתי רשימות לרשימה אחת.'
           }
         ]
       },
@@ -2065,10 +2464,10 @@ print(school["students"]["דני"]["age"])  # 10
       },
       {
         id: 'dicts-quiz',
-        title: 'בוחן מילונים',
-        description: 'האם הבנתם איך עובדים מילונים?',
+        title: 'בוחן מילונים מקיף',
+        description: 'האם הבנתם איך עובדים מילונים? בוחן מקיף',
         type: 'quiz',
-        xpReward: 125,
+        xpReward: 225,
         quizQuestions: [
           {
             id: 'd1',
@@ -2083,6 +2482,97 @@ print(school["students"]["דני"]["age"])  # 10
             options: ['1', '2', 'a', 'b'],
             correctAnswer: 1,
             explanation: 'אנחנו מבקשים את הערך ששייך למפתח "b", והוא 2.'
+          },
+          {
+            id: 'd3',
+            question: 'איך יוצרים מילון ריק?',
+            options: ['dict()', '{}', 'empty_dict', 'שתי התשובות הראשונות נכונות'],
+            correctAnswer: 3,
+            explanation: 'אפשר ליצור מילון ריק עם {} או עם dict().'
+          },
+          {
+            id: 'd4',
+            question: 'מה יקרה אם ננסה לגשת למפתח שלא קיים?',
+            options: ['יחזיר None', 'יחזיר 0', 'שגיאת KeyError', 'יחזיר מחרוזת ריקה'],
+            correctAnswer: 2,
+            explanation: 'ניסיון לגשת למפתח שלא קיים עם [] יגרום לשגיאת KeyError.'
+          },
+          {
+            id: 'd5',
+            question: 'איך לגשת למפתח בצורה בטוחה (בלי שגיאה)?',
+            options: ['d.safe["key"]', 'd.get("key")', 'd.find("key")', 'd.search("key")'],
+            correctAnswer: 1,
+            explanation: 'get() מחזיר None אם המפתח לא קיים, במקום לזרוק שגיאה.'
+          },
+          {
+            id: 'd6',
+            question: 'מה ידפיס: d = {"a": 1}; d["b"] = 2; print(d)?',
+            options: ['{"a": 1}', '{"b": 2}', '{"a": 1, "b": 2}', 'שגיאה'],
+            correctAnswer: 2,
+            explanation: 'אפשר להוסיף מפתח חדש למילון על ידי הקצאה.'
+          },
+          {
+            id: 'd7',
+            question: 'איך מקבלים את כל המפתחות במילון?',
+            options: ['d.keys()', 'd.all_keys()', 'd.get_keys()', 'keys(d)'],
+            correctAnswer: 0,
+            explanation: 'המתודה keys() מחזירה את כל המפתחות במילון.'
+          },
+          {
+            id: 'd8',
+            question: 'איך מקבלים את כל הערכים במילון?',
+            options: ['d.vals()', 'd.values()', 'd.get_values()', 'values(d)'],
+            correctAnswer: 1,
+            explanation: 'המתודה values() מחזירה את כל הערכים במילון.'
+          },
+          {
+            id: 'd9',
+            question: 'איך מקבלים את כל הזוגות (מפתח, ערך)?',
+            options: ['d.pairs()', 'd.items()', 'd.all()', 'd.entries()'],
+            correctAnswer: 1,
+            explanation: 'המתודה items() מחזירה את כל הזוגות של מפתח-ערך.'
+          },
+          {
+            id: 'd10',
+            question: 'מה ידפיס: d = {"a": 1}; print(len(d))?',
+            options: ['1', '2', 'a', 'שגיאה'],
+            correctAnswer: 0,
+            explanation: 'len() מחזיר את מספר הזוגות (מפתח-ערך) במילון.'
+          },
+          {
+            id: 'd11',
+            question: 'איך בודקים אם מפתח קיים במילון?',
+            options: ['d.contains("key")', 'd.has("key")', '"key" in d', 'd.exists("key")'],
+            correctAnswer: 2,
+            explanation: 'האופרטור in בודק אם מפתח קיים במילון.'
+          },
+          {
+            id: 'd12',
+            question: 'מה ידפיס: d = {"a": 1, "b": 2}; del d["a"]; print(d)?',
+            options: ['{"a": 1, "b": 2}', '{"b": 2}', '{"a": 1}', 'שגיאה'],
+            correctAnswer: 1,
+            explanation: 'del מוחק את המפתח והערך שלו מהמילון.'
+          },
+          {
+            id: 'd13',
+            question: 'מה ידפיס: d = {"a": 1}; x = d.pop("a"); print(x)?',
+            options: ['{"a": 1}', '1', 'a', 'None'],
+            correctAnswer: 1,
+            explanation: 'pop() מוחק את המפתח ומחזיר את הערך שלו.'
+          },
+          {
+            id: 'd14',
+            question: 'האם מפתחות במילון יכולים להיות כפולים?',
+            options: ['כן', 'לא', 'רק אם הערכים שונים', 'רק אם הם מספרים'],
+            correctAnswer: 1,
+            explanation: 'מפתחות במילון חייבים להיות ייחודיים. אם מוסיפים מפתח שכבר קיים, הערך מתעדכן.'
+          },
+          {
+            id: 'd15',
+            question: 'איזה סוג לא יכול להיות מפתח במילון?',
+            options: ['מספר', 'מחרוזת', 'רשימה', 'tuple'],
+            correctAnswer: 2,
+            explanation: 'רשימות הן mutable (ניתנות לשינוי) ולכן לא יכולות להיות מפתחות.'
           }
         ]
       },
@@ -2405,10 +2895,10 @@ move_diagonal()
       },
       {
         id: 'functions-quiz',
-        title: 'בוחן פונקציות',
-        description: 'האם הבנתם איך יוצרים פונקציות?',
+        title: 'בוחן פונקציות מקיף',
+        description: 'האם הבנתם איך יוצרים פונקציות? בוחן מקיף',
         type: 'quiz',
-        xpReward: 125,
+        xpReward: 250,
         quizQuestions: [
           {
             id: 'f1',
@@ -2423,6 +2913,97 @@ move_diagonal()
             options: ['say_hello', 'call say_hello', 'say_hello()', 'def say_hello'],
             correctAnswer: 2,
             explanation: 'כדי לקרוא לפונקציה (להריץ אותה), חייבים להוסיף סוגריים () בסוף השם שלה.'
+          },
+          {
+            id: 'f3',
+            question: 'מה עושה return בפונקציה?',
+            options: ['מדפיס ערך', 'מחזיר ערך', 'מסיים את התוכנית', 'מתחיל את הפונקציה מחדש'],
+            correctAnswer: 1,
+            explanation: 'return מחזיר ערך מהפונקציה ומסיים את הריצה שלה.'
+          },
+          {
+            id: 'f4',
+            question: 'מה יחזיר: def add(a, b): return a + b; add(3, 5)?',
+            options: ['3', '5', '8', 'None'],
+            correctAnswer: 2,
+            explanation: 'הפונקציה מחברת את הפרמטרים ומחזירה את התוצאה.'
+          },
+          {
+            id: 'f5',
+            question: 'מה ההבדל בין פרמטר לארגומנט?',
+            options: ['אין הבדל', 'פרמטר בהגדרה, ארגומנט בקריאה', 'ארגומנט בהגדרה, פרמטר בקריאה', 'פרמטר למספרים, ארגומנט לטקסט'],
+            correctAnswer: 1,
+            explanation: 'פרמטר הוא המשתנה בהגדרת הפונקציה, ארגומנט הוא הערך שמעבירים בקריאה.'
+          },
+          {
+            id: 'f6',
+            question: 'מה יחזיר פונקציה בלי return?',
+            options: ['0', '""', 'None', 'שגיאה'],
+            correctAnswer: 2,
+            explanation: 'פונקציה בלי return מחזירה None באופן אוטומטי.'
+          },
+          {
+            id: 'f7',
+            question: 'מה ידפיס: def greet(name="עולם"): print(f"שלום {name}"); greet()?',
+            options: ['שלום', 'שלום עולם', 'שגיאה', 'None'],
+            correctAnswer: 1,
+            explanation: 'כשלא מעבירים ארגומנט, משתמשים בערך ברירת המחדל.'
+          },
+          {
+            id: 'f8',
+            question: 'כמה פרמטרים יכולה לקבל פונקציה?',
+            options: ['אחד בלבד', 'עד 10', 'כמה שרוצים', 'עד 5'],
+            correctAnswer: 2,
+            explanation: 'אפשר להגדיר כמה פרמטרים שרוצים בפונקציה.'
+          },
+          {
+            id: 'f9',
+            question: 'מה יקרה אם נקרא לפונקציה לפני שהגדרנו אותה?',
+            options: ['הקוד ירוץ רגיל', 'שגיאת NameError', 'הפונקציה תוגדר אוטומטית', 'יחזיר None'],
+            correctAnswer: 1,
+            explanation: 'חייבים להגדיר פונקציה לפני שקוראים לה.'
+          },
+          {
+            id: 'f10',
+            question: 'מה ידפיס: def f(): return 1; return 2; print(f())?',
+            options: ['1', '2', '1 2', 'שגיאה'],
+            correctAnswer: 0,
+            explanation: 'return מסיים את הפונקציה מיד. הקוד אחרי return לא ירוץ.'
+          },
+          {
+            id: 'f11',
+            question: 'האם אפשר לקרוא לפונקציה מתוך פונקציה אחרת?',
+            options: ['לא', 'כן', 'רק אם היא מוגדרת קודם', 'רק פונקציות מובנות'],
+            correctAnswer: 1,
+            explanation: 'אפשר לקרוא לכל פונקציה מתוך פונקציה אחרת.'
+          },
+          {
+            id: 'f12',
+            question: 'מה זה *args בפונקציה?',
+            options: ['שגיאה', 'מאפשר לקבל מספר לא ידוע של ארגומנטים', 'מכפיל את הארגומנטים', 'מציין ארגומנט חובה'],
+            correctAnswer: 1,
+            explanation: '*args מאפשר לפונקציה לקבל כמה ארגומנטים שרוצים.'
+          },
+          {
+            id: 'f13',
+            question: 'מה ידפיס: def double(x): return x * 2; print(double(double(3)))?',
+            options: ['6', '12', '9', 'שגיאה'],
+            correctAnswer: 1,
+            explanation: 'double(3) מחזיר 6, ואז double(6) מחזיר 12.'
+          },
+          {
+            id: 'f14',
+            question: 'מה ההבדל בין print() ל-return?',
+            options: ['אין הבדל', 'print מדפיס, return מחזיר ערך', 'return מדפיס, print מחזיר', 'שניהם מחזירים ערך'],
+            correctAnswer: 1,
+            explanation: 'print() מדפיס למסך, return מחזיר ערך שאפשר להשתמש בו.'
+          },
+          {
+            id: 'f15',
+            question: 'מה ידפיס: x = 10; def f(): x = 5; f(); print(x)?',
+            options: ['5', '10', '15', 'שגיאה'],
+            correctAnswer: 1,
+            explanation: 'x בתוך הפונקציה הוא משתנה מקומי, לא משפיע על x החיצוני.'
           }
         ]
       },

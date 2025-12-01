@@ -4,10 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { useUserStore } from '@/store/userStore';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
-import { Trophy, Flame, Star, Target, BookOpen, Medal, Activity, TrendingUp, Zap, Award, CheckCircle2, Rocket, Sparkles, ArrowRight, Code2, Library } from 'lucide-react';
+import { Trophy, Flame, Star, Target, BookOpen, Medal, Activity, TrendingUp, Zap, Award, CheckCircle2, Rocket, Sparkles, ArrowRight, Library } from 'lucide-react';
 import Link from 'next/link';
 import { getAllCourses } from '@/lib/curriculum';
 import clsx from 'clsx';
+import Avatar from '@/components/Avatar';
 
 export default function DashboardPage() {
   const { xp, completedLessons, streakDays, checkStreak } = useUserStore();
@@ -91,9 +92,12 @@ export default function DashboardPage() {
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="relative">
-                      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-3xl shadow-lg shadow-blue-500/50">
-                        🚀
-                      </div>
+                      <Avatar 
+                        photoURL={user.photoURL} 
+                        displayName={user.displayName || user.email} 
+                        size="xl"
+                        className="shadow-lg shadow-blue-500/50"
+                      />
                       <div className="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-4 border-[#0F172A] flex items-center justify-center">
                         <CheckCircle2 size={12} className="text-white" />
                       </div>

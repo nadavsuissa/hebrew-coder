@@ -106,16 +106,21 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'התוכן מכיל מילים לא ראויות' }, { status: 400 });
     }
 
+    const authorName = userData.displayName || userData.email?.split('@')[0] || 'Anonymous';
+    const authorPhotoURL = userData.photoURL || '';
+
     const threadData = {
       courseId,
       title: cleanTitle,
       content: cleanContent,
       authorId: userId,
-      authorName: userData.displayName || userData.email?.split('@')[0] || 'Anonymous',
+      authorName,
+      authorPhotoURL,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       lastReplyAt: new Date().toISOString(),
-      lastReplyAuthorName: userData.displayName || userData.email?.split('@')[0] || 'Anonymous',
+      lastReplyAuthorName: authorName,
+      lastReplyAuthorPhotoURL: authorPhotoURL,
       replyCount: 0,
       viewCount: 0,
       isLocked: false,

@@ -5,6 +5,7 @@ export interface ForumThread {
   content: string; // Initial post content
   authorId: string;
   authorName: string;
+  authorPhotoURL?: string;
   createdAt: string;
   updatedAt: string;
   replyCount: number;
@@ -13,6 +14,7 @@ export interface ForumThread {
   isPinned: boolean;
   lastReplyAt?: string;
   lastReplyAuthorName?: string;
+  lastReplyAuthorPhotoURL?: string;
   tags?: string[];
 }
 
@@ -22,6 +24,7 @@ export interface ForumPost {
   content: string;
   authorId: string;
   authorName: string;
+  authorPhotoURL?: string;
   createdAt: string;
   updatedAt: string;
   isEdited: boolean;
