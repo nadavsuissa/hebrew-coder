@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import { getCourse } from '@/lib/curriculum';
-import { MessageSquare, Plus, Search, Clock, Lock, Pin, Eye, MessageCircle, X, ArrowRight, Sparkles } from 'lucide-react';
+import { MessageSquare, Plus, Search, Clock, Lock, Pin, Eye, MessageCircle, X, ArrowRight, Sparkles, User } from 'lucide-react';
 import Link from 'next/link';
 import clsx from 'clsx';
 import { ForumThread } from '@/types/forum';
