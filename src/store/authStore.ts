@@ -74,6 +74,15 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           userRole = userData.role || 'user';
         }
 
+        // Update photoURL and displayName if they changed (e.g., user updated their Google profile)
+        if (user.photoURL !== userData.photoURL || user.displayName !== userData.displayName) {
+          await setDoc(userDocRef, {
+            photoURL: user.photoURL || '',
+            displayName: user.displayName || '',
+            lastLoginAt: new Date().toISOString()
+          }, { merge: true });
+        }
+
         // Update Auth Store
         set({
           purchasedCourses: userData.purchasedCourses || [],
@@ -99,6 +108,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           uid: user.uid,
           email: user.email,
           displayName: user.displayName || '',
+          photoURL: user.photoURL || '',
           role: userRole,
           createdAt: new Date().toISOString(),
           lastLoginAt: new Date().toISOString(),
