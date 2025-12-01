@@ -1,10 +1,18 @@
-export type LessonType = 'text' | 'video' | 'quiz' | 'game';
+import { GameConfig } from './games';
 
+/**
+ * Course Type Definitions
+ * All game handling is now unified through GameConfig
+ */
+
+export type LessonType = 'text' | 'video' | 'game' | 'quiz';
+
+// Re-export for backward compatibility with admin editor
 export interface QuizQuestion {
   id: string;
   question: string;
   options: string[];
-  correctAnswer: number; // index
+  correctAnswer: number;
   explanation?: string;
 }
 
@@ -13,12 +21,17 @@ export interface Lesson {
   title: string;
   description: string;
   type: LessonType;
-  content?: string; // Markdown or HTML for text lessons
-  videoUrl?: string;
-  quizQuestions?: QuizQuestion[];
-  gameLevelId?: number; // Legacy support
-  gameTemplateId?: string; // New game system
-  gameConfig?: Record<string, unknown>; // Specific configuration for the selected game template
+  
+  // Type-specific fields
+  content?: string;          // For text lessons (Markdown)
+  videoUrl?: string;         // For video lessons
+  gameConfig?: GameConfig;   // For game lessons (unified system!)
+  
+  // BACKWARD COMPATIBILITY (will be auto-converted)
+  gameLevelId?: number;      // @deprecated - auto-converts to gameConfig
+  gameTemplateId?: string;   // @deprecated - used by admin editor
+  quizQuestions?: QuizQuestion[]; // @deprecated - auto-converts to gameConfig
+  
   xpReward: number;
 }
 
@@ -41,14 +54,14 @@ export interface Course {
   createdBy?: string;
   createdAt?: string;
   updatedAt?: string;
-  features?: string[]; // Optional custom features list for the course card
+  features?: string[];
 }
 
 export type UserRole = 'user' | 'admin' | 'moderator';
 
 export interface UserProgress {
-  completedLessons: string[]; // Lesson IDs
-  quizScores: Record<string, number>; // lessonId -> score
+  completedLessons: string[];
+  quizScores: Record<string, number>;
   xp: number;
   streakDays: number;
   lastLoginDate: string;
@@ -65,4 +78,3 @@ export interface User {
   purchasedCourses: string[];
   progress: UserProgress;
 }
-

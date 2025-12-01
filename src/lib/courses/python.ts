@@ -195,7 +195,31 @@ print("שלום עולם!")
         title: 'אתגר: צעד ראשון',
         description: 'השתמשו במה שלמדתם כדי להזיז את הדמות.',
         type: 'game',
-        gameLevelId: 1,
+        gameConfig: {
+          type: 'rover',
+          title: "בדיקת מערכות",
+          description: "הרובר נחת על מאדים! 🪐 כדי להפעיל אותו, אנחנו צריכים לשלוח הודעה למרכז הבקרה.",
+          difficulty: 'easy',
+          initialCode: `# כתוב את הקוד שלך כאן\n`,
+          gridSize: { rows: 5, cols: 5 },
+          startPosition: { x: 2, y: 2 },
+          startDirection: 'down',
+          targets: [],
+          obstacles: [],
+          requiredOutput: "System Online",
+          instructions: [
+            "שלב 1: הקלד את המילה `print` (באותיות קטנות)",
+            "שלב 2: אחרי `print` הוסף סוגריים: `()`",
+            "שלב 3: בתוך הסוגריים, כתוב את הטקסט: \"System Online\" (עם מרכאות!)",
+            "שלב 4: לחץ על כפתור EXECUTE כדי להריץ את הקוד",
+            "שלב 5: בדוק שההודעה מופיעה במסך הטרמינל"
+          ],
+          hints: [
+            "💡 זכור: הטקסט חייב להיות בתוך מרכאות!",
+            "💡 דוגמה: print(\"Hello\")",
+            "💡 שים לב לאותיות גדולות וקטנות - \"System Online\" בדיוק כפי שכתוב"
+          ]
+        },
         xpReward: 150
       },
       {
