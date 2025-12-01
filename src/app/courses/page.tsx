@@ -4,7 +4,7 @@ import { courses } from '@/lib/curriculum';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Check, Star, Shield, Zap, ArrowLeft, GraduationCap, Brain } from 'lucide-react';
+import { Check, Star, Shield, Zap, GraduationCap, Brain } from 'lucide-react';
 import clsx from 'clsx';
 
 export default function CoursesPage() {
@@ -73,12 +73,6 @@ export default function CoursesPage() {
             // Calculate dynamic course statistics
             const totalLessons = course.modules.reduce((sum, m) => sum + m.lessons.length, 0);
             const totalModules = course.modules.length;
-            const totalXP = course.modules.reduce((sum, module) => 
-              sum + module.lessons.reduce((lessonSum, lesson) => lessonSum + (lesson.xpReward || 0), 0), 0
-            );
-            const textLessons = course.modules.reduce((sum, m) => 
-              sum + m.lessons.filter(l => l.type === 'text').length, 0
-            );
             const quizLessons = course.modules.reduce((sum, m) => 
               sum + m.lessons.filter(l => l.type === 'quiz').length, 0
             );

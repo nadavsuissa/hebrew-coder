@@ -66,7 +66,7 @@ export const GrassTile = ({ variant = 0 }: { variant?: number }) => {
   const opacity = 0.05 + (variant % 3) * 0.02;
   return (
     <div className="w-full h-full relative overflow-hidden bg-[#4ADE80] border-2 border-[#22C55E]/50 rounded-lg shadow-sm">
-      <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-black/5" />
+      <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-black/5" style={{ opacity }} />
       {/* Grass blades pattern */}
       <svg width="100%" height="100%" className="absolute bottom-0 opacity-30">
         <path d="M10 60 Q12 50 15 60" stroke="#15803D" fill="none" />

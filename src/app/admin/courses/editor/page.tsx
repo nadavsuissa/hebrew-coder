@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { ArrowLeft, Save, Eye, Settings, BookOpen, Layout } from 'lucide-react';
+import { ArrowLeft, Save, Eye, Settings, BookOpen } from 'lucide-react';
 import Link from 'next/link';
 import clsx from 'clsx';
-import { Course, Module } from '@/types/course';
+import { Course } from '@/types/course';
 import { CourseBasics } from './components/CourseBasics';
 import { CurriculumBuilder } from './components/CurriculumBuilder';
 
@@ -31,24 +31,7 @@ export default function CourseEditor() {
   const [saving, setSaving] = useState(false);
   const [canEdit, setCanEdit] = useState(true);
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
-    }
-  }, [user, loading, router]);
-
-  useEffect(() => {
-    if (courseId) {
-      loadCourse(courseId);
-    } else {
-      setCourseData(prev => ({
-        ...prev,
-        createdBy: user?.uid || ''
-      }));
-    }
-  }, [courseId, user]);
-
-  const loadCourse = async (id: string) => {
+  const loadCourse = useCallback(async (id: string) => {
     // Avoid reloading if we already have the data for this ID to prevent overwriting local state
     if (courseData.id === id) return;
 
@@ -65,7 +48,7 @@ export default function CourseEditor() {
 
       if (response.ok) {
         const data = await response.json();
-        const course = data.courses.find((c: any) => c.id === id);
+        const course = data.courses.find((c: Course) => c.id === id);
         
         if (course) {
           const isOwner = course.createdBy === user?.uid;
@@ -82,7 +65,24 @@ export default function CourseEditor() {
     } finally {
       setLoadingCourse(false);
     }
-  };
+  }, [user, router, courseData.id]);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
+
+  useEffect(() => {
+    if (courseId) {
+      loadCourse(courseId);
+    } else {
+      setCourseData(prev => ({
+        ...prev,
+        createdBy: user?.uid || ''
+      }));
+    }
+  }, [courseId, user, loadCourse]);
 
   const saveCourse = async () => {
     if (!canEdit) return;

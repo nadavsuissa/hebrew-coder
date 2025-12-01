@@ -1,45 +1,21 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
-import { BookOpen, Plus, Edit, Trash2, Eye, Users, BookOpen as BookIcon, Award, ArrowLeft } from 'lucide-react';
+import { BookOpen, Plus, Edit, Trash2, Eye, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import clsx from 'clsx';
-
-interface CourseData {
-  id: string;
-  title: string;
-  description: string;
-  icon: string;
-  color: string;
-  modules: any[];
-  createdBy: string;
-  published: boolean;
-  tags: string[];
-}
+import { Course, Lesson } from '@/types/course';
 
 export default function CoursesManagement() {
   const { user, loading } = useAuthStore();
   const router = useRouter();
-  const [courses, setCourses] = useState<CourseData[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
   const [loadingCourses, setLoadingCourses] = useState(true);
-  const [expandedCourses, setExpandedCourses] = useState<Set<string>>(new Set());
   const [userRole, setUserRole] = useState<'admin' | 'moderator'>('moderator');
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
-    }
-  }, [user, loading, router]);
-
-  useEffect(() => {
-    if (user) {
-      loadCourses();
-    }
-  }, [user]);
-
-  const loadCourses = async () => {
+  const loadCourses = useCallback(async () => {
     try {
       setLoadingCourses(true);
       const token = await user?.getIdToken();
@@ -61,7 +37,19 @@ export default function CoursesManagement() {
     } finally {
       setLoadingCourses(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
+
+  useEffect(() => {
+    if (user) {
+      loadCourses();
+    }
+  }, [user, loadCourses]);
 
   const deleteCourse = async (courseId: string) => {
     if (!window.confirm('האם אתה בטוח שברצונך למחוק קורס זה? הפעולה אינה הפיכה.')) {
@@ -94,23 +82,13 @@ export default function CoursesManagement() {
     }
   };
 
-  const toggleCourseExpansion = (courseId: string) => {
-    const newExpanded = new Set(expandedCourses);
-    if (newExpanded.has(courseId)) {
-      newExpanded.delete(courseId);
-    } else {
-      newExpanded.add(courseId);
-    }
-    setExpandedCourses(newExpanded);
-  };
-
-  const getTotalLessons = (course: CourseData) => {
+  const getTotalLessons = (course: Course) => {
     return course.modules.reduce((sum, module) => sum + module.lessons.length, 0);
   };
 
-  const getTotalXP = (course: CourseData) => {
+  const getTotalXP = (course: Course) => {
     return course.modules.reduce((sum, module) =>
-      sum + module.lessons.reduce((lessonSum: number, lesson: any) => lessonSum + (lesson.xpReward || 0), 0), 0);
+      sum + module.lessons.reduce((lessonSum: number, lesson: Lesson) => lessonSum + (lesson.xpReward || 0), 0), 0);
   };
 
   if (!user || loading || loadingCourses) {

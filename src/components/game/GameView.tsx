@@ -2,9 +2,8 @@ import React, { useEffect, useMemo } from 'react';
 import { useGameStore, GameFrame } from '@/store/gameStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Position, Direction } from '@/types/game';
-import { RoverAsset, CrystalAsset, RockAsset, MarsTile, TerminalAsset } from './SpaceAssets';
+import { RoverAsset, CrystalAsset, RockAsset, MarsTile } from './SpaceAssets';
 import { PlaybackControls } from './PlaybackControls';
-import clsx from 'clsx';
 
 const CELL_SIZE = 64;
 const GAP = 4;

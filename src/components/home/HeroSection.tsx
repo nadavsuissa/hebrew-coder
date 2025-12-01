@@ -34,7 +34,7 @@ export default function HeroSection() {
           <p className="text-xl md:text-2xl text-slate-300 max-w-3xl leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
             פלטפורמת לימוד אינטראקטיבית לילדים ונוער.
             <br />
-            <span className="text-slate-400">אנגלית, חשבון, מדעים, תנ"ך ותכנות - הכל במקום אחד!</span>
+            <span className="text-slate-400">אנגלית, חשבון, מדעים, תנ&quot;ך ותכנות - הכל במקום אחד!</span>
           </p>
 
           {/* CTA Buttons */}

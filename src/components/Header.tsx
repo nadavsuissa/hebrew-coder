@@ -12,16 +12,11 @@ import Avatar from './Avatar';
 
 export default function Header() {
   const { user, loading } = useAuthStore();
-  const [mounted, setMounted] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   // Close user menu when clicking outside
   useEffect(() => {

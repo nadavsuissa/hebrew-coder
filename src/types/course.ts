@@ -1,5 +1,3 @@
-import { Level } from './game';
-
 export type LessonType = 'text' | 'video' | 'quiz' | 'game';
 
 export interface QuizQuestion {
@@ -20,7 +18,7 @@ export interface Lesson {
   quizQuestions?: QuizQuestion[];
   gameLevelId?: number; // Legacy support
   gameTemplateId?: string; // New game system
-  gameConfig?: any; // Specific configuration for the selected game template
+  gameConfig?: Record<string, unknown>; // Specific configuration for the selected game template
   xpReward: number;
 }
 

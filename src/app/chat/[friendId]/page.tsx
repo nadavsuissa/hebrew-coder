@@ -16,7 +16,7 @@ interface Message {
   receiverId: string;
   content: string;
   messageType: string;
-  createdAt: string | any; // Firestore timestamp or ISO string
+  createdAt: string; // ISO string (converted from Firestore timestamp)
   read: boolean;
 }
 
@@ -187,7 +187,7 @@ export default function ChatPage() {
       <div className="min-h-screen bg-[#0B1120] flex items-center justify-center text-white">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500 mx-auto mb-4"></div>
-          <p>טוען צ'אט...</p>
+          <p>טוען צ&apos;אט...</p>
         </div>
       </div>
     );

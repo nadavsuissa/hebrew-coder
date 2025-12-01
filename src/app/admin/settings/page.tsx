@@ -1,8 +1,34 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Settings, Database, Shield, Mail, Bell, Palette, Globe, Save, Key } from 'lucide-react';
-import clsx from 'clsx';
+import React, { useState, ComponentType } from 'react';
+import { Settings, Database, Shield, Bell, Globe, Save, Key } from 'lucide-react';
+
+interface SettingCardProps {
+  icon: ComponentType<{ size?: number; className?: string }>;
+  title: string;
+  description: string;
+  children: React.ReactNode;
+}
+
+const SettingCard: React.FC<SettingCardProps> = ({
+  icon: Icon,
+  title,
+  description,
+  children
+}) => (
+  <div className="bg-slate-800/50 backdrop-blur-xl p-6 rounded-2xl border border-slate-700/50">
+    <div className="flex items-start gap-4">
+      <div className="p-3 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl">
+        <Icon className="text-blue-400" size={24} />
+      </div>
+      <div className="flex-1">
+        <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
+        <p className="text-slate-400 text-sm mb-4">{description}</p>
+        {children}
+      </div>
+    </div>
+  </div>
+);
 
 export default function AdminSettings() {
   const [settings, setSettings] = useState({
@@ -29,34 +55,9 @@ export default function AdminSettings() {
     // Here you would save to database
   };
 
-  const updateSetting = (key: string, value: any) => {
+  const updateSetting = (key: string, value: string | number | boolean) => {
     setSettings(prev => ({ ...prev, [key]: value }));
   };
-
-  const SettingCard = ({
-    icon: Icon,
-    title,
-    description,
-    children
-  }: {
-    icon: any;
-    title: string;
-    description: string;
-    children: React.ReactNode;
-  }) => (
-    <div className="bg-slate-800/50 backdrop-blur-xl p-6 rounded-2xl border border-slate-700/50">
-      <div className="flex items-start gap-4">
-        <div className="p-3 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl">
-          <Icon className="text-blue-400" size={24} />
-        </div>
-        <div className="flex-1">
-          <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
-          <p className="text-slate-400 text-sm mb-4">{description}</p>
-          {children}
-        </div>
-      </div>
-    </div>
-  );
 
   return (
     <div className="space-y-6">

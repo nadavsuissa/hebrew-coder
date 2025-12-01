@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { getLesson, getNextLessonInModule, getCourse } from '@/lib/curriculum';
+import { getLesson, getNextLessonInModule } from '@/lib/curriculum';
 import { useUserStore } from '@/store/userStore';
-import { ChevronRight, CheckCircle, XCircle, Play, ArrowLeft, Trophy, ChevronLeft, Code2 } from 'lucide-react';
+import { Lesson, QuizQuestion } from '@/types/course';
+import { ChevronRight, CheckCircle, XCircle, Trophy, ChevronLeft, Code2 } from 'lucide-react';
 import Link from 'next/link';
 import clsx from 'clsx';
 
@@ -14,7 +15,7 @@ export default function LessonPage() {
   const { courseId, moduleId, lessonId } = params;
   
   const { completeLesson, saveQuizScore, completedLessons } = useUserStore();
-  const [lesson, setLesson] = useState<any>(null);
+  const [lesson, setLesson] = useState<Lesson | null>(null);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [cards, setCards] = useState<Array<{ type: 'content' | 'code' | 'heading', content: string, title?: string }>>([]);
   const [quizState, setQuizState] = useState<{
@@ -31,6 +32,116 @@ export default function LessonPage() {
           router.push(`/learn/${courseId}/${moduleId}`);
       }
   }, [lesson, completeLesson, router, courseId, moduleId]);
+
+  const parseContentToCards = useCallback((content: string) => {
+    const lines = content.split('\n');
+    const newCards: Array<{ type: 'content' | 'code', content: string, title?: string }> = [];
+    let currentSection: string[] = [];
+    let currentCodeBlock: string[] = [];
+    let inCodeBlock = false;
+    let currentSectionTitle = '';
+    let hasContentInSection = false;
+
+    const saveCurrentSection = () => {
+        const sectionText = currentSection.join('\n').trim();
+        // Only save if there's actual content (not just whitespace)
+        if (sectionText.length > 0 && hasContentInSection) {
+            newCards.push({
+                type: 'content',
+                content: sectionText,
+                title: currentSectionTitle || undefined
+            });
+        }
+        currentSection = [];
+        currentSectionTitle = '';
+        hasContentInSection = false;
+    };
+
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const trimmedLine = line.trim();
+
+        // Check for code block markers
+        if (trimmedLine.startsWith('```')) {
+            if (inCodeBlock) {
+                // End code block
+                if (currentCodeBlock.length > 0) {
+                    // Save any pending text section first
+                    saveCurrentSection();
+                    // Add code block as separate card
+                    newCards.push({
+                        type: 'code',
+                        content: currentCodeBlock.join('\n').trim()
+                    });
+                }
+                currentCodeBlock = [];
+                inCodeBlock = false;
+            } else {
+                // Start code block - save current section first
+                saveCurrentSection();
+                inCodeBlock = true;
+            }
+            continue;
+        }
+
+        if (inCodeBlock) {
+            currentCodeBlock.push(line);
+            continue;
+        }
+
+        // Check for headings - these create new cards
+        if (trimmedLine.startsWith('## ') || trimmedLine.startsWith('### ')) {
+            // Save previous section before starting new one
+            saveCurrentSection();
+            // Start new section with this heading as title
+            currentSectionTitle = trimmedLine.replace(/^#+\s/, '');
+            hasContentInSection = false;
+        } else if (trimmedLine.startsWith('# ')) {
+            // Main heading - save previous and start new
+            saveCurrentSection();
+            currentSectionTitle = trimmedLine.replace('# ', '');
+            hasContentInSection = false;
+        } else {
+            // Regular content line
+            if (trimmedLine.length > 0) {
+                hasContentInSection = true;
+            }
+            currentSection.push(line);
+        }
+    }
+
+    // Save remaining content
+    saveCurrentSection();
+
+    // Handle remaining code block
+    if (inCodeBlock && currentCodeBlock.length > 0) {
+        newCards.push({
+            type: 'code',
+            content: currentCodeBlock.join('\n').trim()
+        });
+    }
+
+    // Filter out empty cards and ensure we have content
+    const validCards = newCards.filter(card => {
+        if (card.type === 'code') {
+            return card.content.trim().length > 0;
+        }
+        return card.content.trim().length > 0;
+    });
+
+    if (validCards.length > 0) {
+        setCards(validCards);
+        setCurrentCardIndex(0);
+    } else {
+        // Fallback: if no cards created, create one with all content
+        setCards([{
+            type: 'content',
+            content: content.trim(),
+            title: lesson?.title
+        }]);
+        setCurrentCardIndex(0);
+    }
+  }, [lesson?.title]);
 
   useEffect(() => {
       if (courseId && moduleId && lessonId) {
@@ -50,7 +161,7 @@ export default function LessonPage() {
               }
           }
       }
-  }, [courseId, moduleId, lessonId]);
+  }, [courseId, moduleId, lessonId, parseContentToCards]);
 
   // Handle Game Lesson Logic
   useEffect(() => {
@@ -83,115 +194,6 @@ export default function LessonPage() {
       return () => window.removeEventListener('keydown', handleKeyPress);
   }, [currentCardIndex, cards.length, lesson, handleCompleteText]);
 
-  const parseContentToCards = (content: string) => {
-      const lines = content.split('\n');
-      const newCards: Array<{ type: 'content' | 'code', content: string, title?: string }> = [];
-      let currentSection: string[] = [];
-      let currentCodeBlock: string[] = [];
-      let inCodeBlock = false;
-      let currentSectionTitle = '';
-      let hasContentInSection = false;
-
-      const saveCurrentSection = () => {
-          const sectionText = currentSection.join('\n').trim();
-          // Only save if there's actual content (not just whitespace)
-          if (sectionText.length > 0 && hasContentInSection) {
-              newCards.push({
-                  type: 'content',
-                  content: sectionText,
-                  title: currentSectionTitle || undefined
-              });
-          }
-          currentSection = [];
-          currentSectionTitle = '';
-          hasContentInSection = false;
-      };
-
-      for (let i = 0; i < lines.length; i++) {
-          const line = lines[i];
-          const trimmedLine = line.trim();
-          
-          // Check for code block markers
-          if (trimmedLine.startsWith('```')) {
-              if (inCodeBlock) {
-                  // End code block
-                  if (currentCodeBlock.length > 0) {
-                      // Save any pending text section first
-                      saveCurrentSection();
-                      // Add code block as separate card
-                      newCards.push({
-                          type: 'code',
-                          content: currentCodeBlock.join('\n').trim()
-                      });
-                  }
-                  currentCodeBlock = [];
-                  inCodeBlock = false;
-              } else {
-                  // Start code block - save current section first
-                  saveCurrentSection();
-                  inCodeBlock = true;
-              }
-              continue;
-          }
-
-          if (inCodeBlock) {
-              currentCodeBlock.push(line);
-              continue;
-          }
-
-          // Check for headings - these create new cards
-          if (trimmedLine.startsWith('## ') || trimmedLine.startsWith('### ')) {
-              // Save previous section before starting new one
-              saveCurrentSection();
-              // Start new section with this heading as title
-              currentSectionTitle = trimmedLine.replace(/^#+\s/, '');
-              hasContentInSection = false;
-          } else if (trimmedLine.startsWith('# ')) {
-              // Main heading - save previous and start new
-              saveCurrentSection();
-              currentSectionTitle = trimmedLine.replace('# ', '');
-              hasContentInSection = false;
-          } else {
-              // Regular content line
-              if (trimmedLine.length > 0) {
-                  hasContentInSection = true;
-              }
-              currentSection.push(line);
-          }
-      }
-
-      // Save remaining content
-      saveCurrentSection();
-
-      // Handle remaining code block
-      if (inCodeBlock && currentCodeBlock.length > 0) {
-          newCards.push({
-              type: 'code',
-              content: currentCodeBlock.join('\n').trim()
-          });
-      }
-
-      // Filter out empty cards and ensure we have content
-      const validCards = newCards.filter(card => {
-          if (card.type === 'code') {
-              return card.content.trim().length > 0;
-          }
-          return card.content.trim().length > 0;
-      });
-
-      if (validCards.length > 0) {
-          setCards(validCards);
-          setCurrentCardIndex(0);
-      } else {
-          // Fallback: if no cards created, create one with all content
-          setCards([{
-              type: 'content',
-              content: content.trim(),
-              title: lesson?.title
-          }]);
-          setCurrentCardIndex(0);
-      }
-  };
 
   const renderContent = (content: string) => {
       const lines = content.split('\n');
@@ -332,7 +334,6 @@ export default function LessonPage() {
 
   const isCompleted = completedLessons.includes(lesson.id);
   const isGameLesson = lesson.type === 'game' && lesson.gameLevelId;
-  const course = courseId ? getCourse(courseId as string) : null;
   const nextLesson = courseId && moduleId ? getNextLessonInModule(courseId as string, moduleId as string, lessonId as string) : null;
 
   // Show completion message for completed game lessons
@@ -347,7 +348,7 @@ export default function LessonPage() {
                   </div>
                   <h2 className="text-3xl font-bold mb-4 text-green-400">כל הכבוד! 🎉</h2>
                   <p className="text-slate-300 mb-8 text-lg">
-                      השיעור "{lesson.title}" הושלם בהצלחה!
+                      השיעור &quot;{lesson.title}&quot; הושלם בהצלחה!
                   </p>
                   <div className="flex gap-4 justify-center flex-col sm:flex-row">
                       {courseId && moduleId && (
@@ -441,7 +442,7 @@ export default function LessonPage() {
 
                       <div className="space-y-8">
                           <h3 className="text-2xl font-bold text-slate-200 mb-6 pr-2 border-r-4 border-blue-500">סיכום תשובות</h3>
-                          {lesson.quizQuestions.map((q: any, qIdx: number) => {
+                          {lesson.quizQuestions?.map((q: QuizQuestion, qIdx: number) => {
                               const userAnswer = quizState.answers[qIdx];
                               const isCorrect = userAnswer === q.correctAnswer;
                               

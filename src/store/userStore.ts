@@ -13,7 +13,7 @@ interface UserStore extends UserProgress {
 }
 
 // Helper to sync with Firestore
-const syncToFirestore = async (data: Partial<any>) => {
+const syncToFirestore = async (data: Record<string, unknown>) => {
   const user = auth.currentUser;
   if (!user) return;
 
@@ -62,7 +62,7 @@ export const useUserStore = create<UserStore>()(
         } catch (err) {
             // Rollback
             set(prevState);
-            console.error("Failed to save progress, rolling back.");
+            console.error("Failed to save progress, rolling back:", err);
             // Ideally trigger a toast here
         }
       },
@@ -81,7 +81,7 @@ export const useUserStore = create<UserStore>()(
             });
         } catch (err) {
              set(prevState);
-             console.error("Failed to save quiz score, rolling back.");
+             console.error("Failed to save quiz score, rolling back:", err);
         }
       },
 
@@ -95,7 +95,7 @@ export const useUserStore = create<UserStore>()(
             await syncToFirestore({
                 xp: increment(amount)
             });
-        } catch (err) {
+        } catch {
             set(prevState);
         }
       },
@@ -125,7 +125,7 @@ export const useUserStore = create<UserStore>()(
                 streakDays: newStreakDays,
                 lastLoginDate: today
             });
-        } catch (err) {
+        } catch {
             // For streak, maybe we don't rollback UI immediately to avoid jarring experience, 
             // but technically we should.
             set(prevState);

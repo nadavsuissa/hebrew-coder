@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { User } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 interface UserData {
   id: string;
@@ -11,7 +10,7 @@ interface UserData {
   role?: string;
   xp?: number;
   isBanned?: boolean;
-  createdAt?: any;
+  createdAt?: string;
 }
 
 export default function UsersPage() {

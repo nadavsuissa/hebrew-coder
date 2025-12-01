@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useParams } from 'next/navigation';
-import { getCourse, getModule, getNextLessonInModule } from '@/lib/curriculum';
+import { getCourse, getModule } from '@/lib/curriculum';
 import { useUserStore } from '@/store/userStore';
 import Link from 'next/link';
 import { CheckCircle, Lock, PlayCircle, BookOpen, HelpCircle, Trophy, ChevronRight, ArrowLeft } from 'lucide-react';
@@ -14,9 +14,9 @@ export default function ModulePage() {
   const { completedLessons } = useUserStore();
 
   const course = courseId ? getCourse(courseId as string) : null;
-  const module = courseId && moduleId ? getModule(courseId as string, moduleId as string) : null;
+  const currentModule = courseId && moduleId ? getModule(courseId as string, moduleId as string) : null;
 
-  if (!course || !module) {
+  if (!course || !currentModule) {
     return (
       <div className="min-h-screen bg-[#0B1120] text-white flex items-center justify-center">
         <div className="text-center">
@@ -30,14 +30,14 @@ export default function ModulePage() {
   }
 
   const getModuleProgress = () => {
-    const completed = module.lessons.filter(l => completedLessons.includes(l.id)).length;
-    const total = module.lessons.length;
+    const completed = currentModule.lessons.filter(l => completedLessons.includes(l.id)).length;
+    const total = currentModule.lessons.length;
     return { completed, total, percentage: total > 0 ? Math.round((completed / total) * 100) : 0 };
   };
 
   const getNextLessonId = () => {
-    const firstIncomplete = module.lessons.find(lesson => !completedLessons.includes(lesson.id));
-    return firstIncomplete?.id || module.lessons[module.lessons.length - 1]?.id || module.lessons[0]?.id;
+    const firstIncomplete = currentModule.lessons.find(lesson => !completedLessons.includes(lesson.id));
+    return firstIncomplete?.id || currentModule.lessons[currentModule.lessons.length - 1]?.id || currentModule.lessons[0]?.id;
   };
 
   const progress = getModuleProgress();
@@ -62,9 +62,9 @@ export default function ModulePage() {
                   "text-3xl font-bold bg-clip-text text-transparent",
                   `bg-gradient-to-r ${course.color || 'from-blue-400 via-purple-400 to-pink-400'}`
                 )}>
-                  {module.title}
+                  {currentModule.title}
                 </h1>
-                <p className="text-slate-400 mt-1">{module.description}</p>
+                <p className="text-slate-400 mt-1">{currentModule.description}</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
@@ -100,15 +100,15 @@ export default function ModulePage() {
       {/* Lessons List */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {module.lessons.map((lesson, index) => {
+          {currentModule.lessons.map((lesson, index) => {
             const isCompleted = completedLessons.includes(lesson.id);
-            const isLocked = index > 0 && !completedLessons.includes(module.lessons[index - 1].id);
+            const isLocked = index > 0 && !completedLessons.includes(currentModule.lessons[index - 1].id);
             const Icon = lesson.type === 'game' ? PlayCircle : lesson.type === 'quiz' ? HelpCircle : BookOpen;
             
             return (
               <Link
                 key={lesson.id}
-                href={isLocked ? '#' : `/learn/${course.id}/${module.id}/${lesson.id}`}
+                href={isLocked ? '#' : `/learn/${course.id}/${currentModule.id}/${lesson.id}`}
                 className={clsx(
                   "group relative rounded-2xl border-2 transition-all duration-300 overflow-hidden",
                   isLocked
@@ -210,7 +210,7 @@ export default function ModulePage() {
         {!isModuleCompleted && (
           <div className="mt-8 flex justify-center">
             <Link
-              href={`/learn/${course.id}/${module.id}/${nextLessonId}`}
+              href={`/learn/${course.id}/${currentModule.id}/${nextLessonId}`}
               className={clsx(
                 "px-8 py-4 text-white font-bold text-lg rounded-2xl shadow-xl transition-all hover:scale-105 flex items-center gap-2",
                 `bg-gradient-to-r ${course.color || 'from-blue-500 to-purple-500'} hover:opacity-90`

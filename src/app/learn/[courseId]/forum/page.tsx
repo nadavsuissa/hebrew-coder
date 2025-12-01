@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import React, { useEffect, useState, useCallback } from 'react';
+import { useParams } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import { getCourse } from '@/lib/curriculum';
-import { MessageSquare, Plus, Search, Clock, Lock, Pin, Eye, MessageCircle, X, ArrowRight, Sparkles, User } from 'lucide-react';
+import { MessageSquare, Plus, Search, Clock, Lock, Pin, MessageCircle, X, ArrowRight, Sparkles, User } from 'lucide-react';
 import Link from 'next/link';
 import clsx from 'clsx';
 import { ForumThread } from '@/types/forum';
@@ -13,7 +13,6 @@ import Avatar from '@/components/Avatar';
 export default function CourseForum() {
   const params = useParams();
   const courseId = params.courseId as string;
-  const router = useRouter();
   const { user } = useAuthStore();
   const course = getCourse(courseId);
 
@@ -26,13 +25,7 @@ export default function CourseForum() {
   const [submitting, setSubmitting] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    if (user) {
-      loadThreads();
-    }
-  }, [user, courseId]);
-
-  const loadThreads = async () => {
+  const loadThreads = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -56,7 +49,13 @@ export default function CourseForum() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user, courseId]);
+
+  useEffect(() => {
+    if (user) {
+      loadThreads();
+    }
+  }, [user, loadThreads]);
 
   const handleCreateThread = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,13 +80,11 @@ export default function CourseForum() {
       });
 
       if (response.ok) {
-        const data = await response.json();
+        await response.json();
         setShowNewThreadModal(false);
         setNewThreadTitle('');
         setNewThreadContent('');
         loadThreads(); // Reload threads
-        // Optionally redirect to new thread
-        // router.push(`/learn/${courseId}/forum/${data.thread.id}`);
       } else {
         const error = await response.json();
         alert(error.error || 'Failed to create thread');

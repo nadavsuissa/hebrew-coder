@@ -1,6 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useGameStore, GameFrame, GameObject } from '@/store/gameStore';
-import { Level, Position, Direction } from '@/types/game';
 
 // Global worker instance to persist across re-renders
 let workerInstance: Worker | null = null;

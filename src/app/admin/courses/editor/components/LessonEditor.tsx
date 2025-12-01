@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { ComponentType } from 'react';
 import { Lesson, LessonType, QuizQuestion } from '@/types/course';
 import { ArrowRight, Plus, Trash2, Video, FileText, HelpCircle, Gamepad2, CheckCircle2 } from 'lucide-react';
 import clsx from 'clsx';
-import { GAME_TEMPLATES, GameTemplate, getGameTemplate, getTemplatesByCategory } from '@/lib/games/templates';
+import { GameTemplate, getGameTemplate, getTemplatesByCategory } from '@/lib/games/templates';
 
 interface LessonEditorProps {
   lesson: Lesson;
@@ -10,7 +10,7 @@ interface LessonEditorProps {
   onBack: () => void;
 }
 
-const LESSON_TYPES: { value: LessonType; label: string; icon: any }[] = [
+const LESSON_TYPES: { value: LessonType; label: string; icon: ComponentType<{ size?: number; className?: string }> }[] = [
   { value: 'text', label: 'טקסט', icon: FileText },
   { value: 'video', label: 'וידאו', icon: Video },
   { value: 'quiz', label: 'שאלון', icon: HelpCircle },
@@ -18,15 +18,7 @@ const LESSON_TYPES: { value: LessonType; label: string; icon: any }[] = [
 ];
 
 export const LessonEditor: React.FC<LessonEditorProps> = ({ lesson, onUpdate, onBack }) => {
-  const [selectedGameTemplate, setSelectedGameTemplate] = useState<GameTemplate | undefined>(
-    lesson.gameTemplateId ? getGameTemplate(lesson.gameTemplateId) : undefined
-  );
-
-  useEffect(() => {
-    if (lesson.gameTemplateId) {
-      setSelectedGameTemplate(getGameTemplate(lesson.gameTemplateId));
-    }
-  }, [lesson.gameTemplateId]);
+  const selectedGameTemplate: GameTemplate | undefined = lesson.gameTemplateId ? getGameTemplate(lesson.gameTemplateId) : undefined;
 
   const addQuestion = () => {
     const newQuestion: QuizQuestion = {
@@ -51,7 +43,7 @@ export const LessonEditor: React.FC<LessonEditorProps> = ({ lesson, onUpdate, on
     onUpdate({ quizQuestions: newQuestions });
   };
 
-  const handleGameConfigChange = (field: string, value: any) => {
+  const handleGameConfigChange = (field: string, value: string | number | unknown[]) => {
     const newConfig = { ...(lesson.gameConfig || selectedGameTemplate?.defaultConfig || {}), [field]: value };
     onUpdate({ gameConfig: newConfig });
   };
@@ -59,8 +51,7 @@ export const LessonEditor: React.FC<LessonEditorProps> = ({ lesson, onUpdate, on
   const handleGameTemplateSelect = (templateId: string) => {
     const template = getGameTemplate(templateId);
     if (template) {
-      setSelectedGameTemplate(template);
-      onUpdate({ 
+      onUpdate({
         gameTemplateId: templateId,
         gameConfig: template.defaultConfig
       });
@@ -260,7 +251,7 @@ export const LessonEditor: React.FC<LessonEditorProps> = ({ lesson, onUpdate, on
                         {field.type === 'code' && (
                           <div className="relative group">
                             <textarea
-                              value={lesson.gameConfig?.[field.name] || ''}
+                              value={(lesson.gameConfig?.[field.name] as string) || ''}
                               onChange={(e) => handleGameConfigChange(field.name, e.target.value)}
                               className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-green-400 font-mono text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/50 min-h-[150px] leading-relaxed"
                               dir="ltr"
@@ -276,7 +267,7 @@ export const LessonEditor: React.FC<LessonEditorProps> = ({ lesson, onUpdate, on
                         {(field.type === 'text' || field.type === 'number') && (
                           <input
                             type={field.type}
-                            value={lesson.gameConfig?.[field.name] || ''}
+                            value={(lesson.gameConfig?.[field.name] as string | number) || ''}
                             onChange={(e) => handleGameConfigChange(field.name, field.type === 'number' ? Number(e.target.value) : e.target.value)}
                             className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/50 transition-all"
                             placeholder={field.placeholder}
@@ -287,7 +278,7 @@ export const LessonEditor: React.FC<LessonEditorProps> = ({ lesson, onUpdate, on
                         {field.type === 'select' && (
                           <div className="relative">
                             <select
-                              value={lesson.gameConfig?.[field.name] || ''}
+                              value={(lesson.gameConfig?.[field.name] as string) || ''}
                               onChange={(e) => handleGameConfigChange(field.name, e.target.value)}
                               className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-purple-500 appearance-none"
                             >
@@ -303,7 +294,7 @@ export const LessonEditor: React.FC<LessonEditorProps> = ({ lesson, onUpdate, on
 
                         {field.type === 'array' && (
                           <div className="bg-slate-900/30 rounded-xl border border-slate-700/30 p-4 space-y-3">
-                            {(lesson.gameConfig?.[field.name] || []).map((item: any, index: number) => (
+                            {((lesson.gameConfig?.[field.name] as Array<Record<string, unknown>>) || []).map((item: Record<string, unknown>, index: number) => (
                               <div key={index} className="flex gap-3 items-start bg-slate-800/50 p-3 rounded-lg group hover:border-slate-600 border border-transparent transition-colors">
                                 <div className="flex items-center justify-center w-6 h-6 bg-slate-700 rounded-full text-xs font-mono text-slate-400 mt-2">
                                   {index + 1}
@@ -314,9 +305,9 @@ export const LessonEditor: React.FC<LessonEditorProps> = ({ lesson, onUpdate, on
                                       <label className="text-xs text-slate-500 mb-1 block">{subField.label}</label>
                                       {subField.type === 'select' ? (
                                         <select
-                                          value={item[subField.name] || ''}
+                                          value={String(item[subField.name] || '')}
                                           onChange={(e) => {
-                                            const newArray = [...(lesson.gameConfig?.[field.name] || [])];
+                                            const newArray = [...((lesson.gameConfig?.[field.name] as Array<Record<string, unknown>>) || [])];
                                             newArray[index] = { ...newArray[index], [subField.name]: e.target.value };
                                             handleGameConfigChange(field.name, newArray);
                                           }}
@@ -329,9 +320,9 @@ export const LessonEditor: React.FC<LessonEditorProps> = ({ lesson, onUpdate, on
                                       ) : (
                                         <input
                                           type={subField.type}
-                                          value={item[subField.name] || ''}
+                                          value={String(item[subField.name] || '')}
                                           onChange={(e) => {
-                                            const newArray = [...(lesson.gameConfig?.[field.name] || [])];
+                                            const newArray = [...((lesson.gameConfig?.[field.name] as Array<Record<string, unknown>>) || [])];
                                             newArray[index] = { ...newArray[index], [subField.name]: e.target.value };
                                             handleGameConfigChange(field.name, newArray);
                                           }}
@@ -345,7 +336,7 @@ export const LessonEditor: React.FC<LessonEditorProps> = ({ lesson, onUpdate, on
                                 </div>
                                 <button
                                   onClick={() => {
-                                    const newArray = [...(lesson.gameConfig?.[field.name] || [])];
+                                    const newArray = [...((lesson.gameConfig?.[field.name] as Array<Record<string, unknown>>) || [])];
                                     newArray.splice(index, 1);
                                     handleGameConfigChange(field.name, newArray);
                                   }}
@@ -360,7 +351,7 @@ export const LessonEditor: React.FC<LessonEditorProps> = ({ lesson, onUpdate, on
                             <button
                               onClick={() => {
                                 const newItem = field.itemFields?.reduce((acc, f) => ({ ...acc, [f.name]: f.defaultValue || '' }), {});
-                                handleGameConfigChange(field.name, [...(lesson.gameConfig?.[field.name] || []), newItem]);
+                                handleGameConfigChange(field.name, [...((lesson.gameConfig?.[field.name] as Array<Record<string, unknown>>) || []), newItem]);
                               }}
                               className="w-full py-3 border-2 border-dashed border-slate-700 hover:border-purple-500/50 rounded-xl text-slate-400 hover:text-purple-400 hover:bg-purple-500/5 transition-all flex items-center justify-center gap-2 text-sm font-medium"
                             >

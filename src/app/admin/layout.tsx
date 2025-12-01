@@ -14,11 +14,7 @@ export default function AdminLayout({
 }) {
   const { user, loading, isAdmin } = useAuthStore();
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const [mounted] = useState(true);
 
   useEffect(() => {
     if (!loading && (!user || !isAdmin())) {

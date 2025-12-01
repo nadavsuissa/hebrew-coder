@@ -54,7 +54,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const userDocRef = doc(db, 'users', user.uid);
       const userDoc = await getDoc(userDocRef);
 
-      let userData: any = {};
+      let userData: Record<string, unknown> = {};
       let userRole: UserRole = 'user';
 
       if (userDoc.exists()) {
@@ -64,18 +64,18 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         if (user.email === 'nadavsuissa@gmail.com') {
           userRole = 'admin';
           // Ensure admin role is set in database
-          if (userData.role !== 'admin') {
+          if ((userData.role as string) !== 'admin') {
             await setDoc(userDocRef, {
               ...userData,
               role: 'admin'
             }, { merge: true });
           }
         } else {
-          userRole = userData.role || 'user';
+          userRole = ((userData.role as string) || 'user') as UserRole;
         }
 
         // Update photoURL and displayName if they changed (e.g., user updated their Google profile)
-        if (user.photoURL !== userData.photoURL || user.displayName !== userData.displayName) {
+        if (user.photoURL !== (userData.photoURL as string) || user.displayName !== (userData.displayName as string)) {
           await setDoc(userDocRef, {
             photoURL: user.photoURL || '',
             displayName: user.displayName || '',
@@ -85,15 +85,15 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
         // Update Auth Store
         set({
-          purchasedCourses: userData.purchasedCourses || [],
+          purchasedCourses: (userData.purchasedCourses as string[]) || [],
           userRole
         });
 
         // Sync User Store (XP, Progress, etc.)
         useUserStore.setState({
-            xp: userData.xp || 0,
-            completedLessons: userData.completedLessons || [],
-            streakDays: userData.streakDays || 1,
+            xp: (userData.xp as number) || 0,
+            completedLessons: (userData.completedLessons as string[]) || [],
+            streakDays: (userData.streakDays as number) || 1,
             // We might want to sync other fields if they exist in Firestore
         });
 

@@ -1,10 +1,9 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, ComponentType } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { auth } from '@/lib/firebase';
-import { Users, BookOpen, TrendingUp, Activity, Calendar, Award, Star, Target } from 'lucide-react';
-import { getAllCourses } from '@/lib/curriculum'; // You can remove this if getAllCourses is no longer used
+import { Users, BookOpen, TrendingUp, Activity, Award } from 'lucide-react';
 import clsx from 'clsx';
 
 interface UserStats {
@@ -27,8 +26,27 @@ interface SystemStats {
   coursePurchases: number;
 }
 
+interface RecentUser {
+  id: string;
+  email?: string;
+  displayName?: string;
+  createdAt: string;
+  xp?: number;
+  lastLoginAt?: string;
+  completedLessons?: string[];
+  purchasedCourses?: string[];
+}
+
+interface CourseModule {
+  lessons?: unknown[];
+}
+
+interface ApiCourse {
+  modules?: CourseModule[];
+}
+
 export default function AdminDashboard() {
-  const { user } = useAuthStore();
+  const { } = useAuthStore();
   const [userStats, setUserStats] = useState<UserStats>({
     totalUsers: 0,
     activeUsers: 0,
@@ -47,7 +65,7 @@ export default function AdminDashboard() {
     coursePurchases: 0
   });
   const [loading, setLoading] = useState(true);
-  const [recentUsers, setRecentUsers] = useState<any[]>([]);
+  const [recentUsers, setRecentUsers] = useState<RecentUser[]>([]);
 
   useEffect(() => {
     loadDashboardData();
@@ -86,13 +104,13 @@ export default function AdminDashboard() {
       today.setHours(0, 0, 0, 0);
 
       const totalUsers = users.length;
-      const newUsersToday = users.filter((u: any) => {
+      const newUsersToday = users.filter((u: RecentUser) => {
         const createdAt = new Date(u.createdAt);
         return createdAt >= today;
       }).length;
 
-      const totalXP = users.reduce((sum: number, u: any) => sum + (u.xp || 0), 0);
-      const activeUsers = users.filter((u: any) => {
+      const totalXP = users.reduce((sum: number, u: RecentUser) => sum + (u.xp || 0), 0);
+      const activeUsers = users.filter((u: RecentUser) => {
         const lastLogin = new Date(u.lastLoginAt || u.createdAt);
         const weekAgo = new Date();
         weekAgo.setDate(weekAgo.getDate() - 7);
@@ -111,10 +129,10 @@ export default function AdminDashboard() {
 
       // Calculate course stats
       const totalCourses = courses.length;
-      const totalLessons = courses.reduce((sum: number, course: any) => 
-        sum + (course.modules?.reduce((mSum: number, module: any) => mSum + (module.lessons?.length || 0), 0) || 0), 0);
+      const totalLessons = courses.reduce((sum: number, course: ApiCourse) =>
+        sum + (course.modules?.reduce((mSum: number, module: CourseModule) => mSum + (module.lessons?.length || 0), 0) || 0), 0);
 
-      const completedLessons = users.reduce((sum: number, user: any) => sum + (user.completedLessons?.length || 0), 0);
+      const completedLessons = users.reduce((sum: number, user: RecentUser) => sum + (user.completedLessons?.length || 0), 0);
       // Prevent division by zero
       const potentialTotalLessons = totalUsers * totalLessons;
       const averageCompletion = potentialTotalLessons > 0 ? Math.round((completedLessons / potentialTotalLessons) * 100) : 0;
@@ -130,7 +148,7 @@ export default function AdminDashboard() {
       setSystemStats({
         totalRevenue: 0, // Will be updated when Stripe is integrated
         activeSubscriptions: 0,
-        coursePurchases: users.reduce((sum: number, user: any) => sum + (user.purchasedCourses?.length || 0), 0)
+        coursePurchases: users.reduce((sum: number, user: RecentUser) => sum + (user.purchasedCourses?.length || 0), 0)
       });
 
     } catch (error) {
@@ -156,7 +174,7 @@ export default function AdminDashboard() {
     gradient,
     trend
   }: {
-    icon: any;
+    icon: ComponentType<{ size?: number; className?: string }>;
     label: string;
     value: string | number;
     subtext?: string;
@@ -267,7 +285,7 @@ export default function AdminDashboard() {
           </div>
 
           <div className="space-y-4">
-            {recentUsers.map((userData, index) => (
+            {recentUsers.map((userData) => (
               <div key={userData.id} className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-sm font-bold">

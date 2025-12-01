@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useUserStore } from '@/store/userStore';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
-import { Trophy, Flame, Star, Target, BookOpen, Medal, Activity, TrendingUp, Zap, Award, CheckCircle2, Rocket, Sparkles, ArrowRight, Library } from 'lucide-react';
+import { Trophy, Flame, Star, Target, BookOpen, Medal, Activity, TrendingUp, Zap, Award, CheckCircle2, Rocket, ArrowRight, Library } from 'lucide-react';
 import Link from 'next/link';
 import { getAllCourses } from '@/lib/curriculum';
 import clsx from 'clsx';
@@ -14,10 +14,9 @@ export default function DashboardPage() {
   const { xp, completedLessons, streakDays, checkStreak } = useUserStore();
   const { user, loading, purchasedCourses } = useAuthStore();
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
+  const [mounted] = useState(true);
 
   useEffect(() => {
-    setMounted(true);
     checkStreak();
   }, [checkStreak]);
 
@@ -217,7 +216,7 @@ export default function DashboardPage() {
             
             {courseProgress.length > 0 ? (
               <div className="space-y-4">
-                {courseProgress.map((course, idx) => (
+                {courseProgress.map((course) => (
                   <div key={course.id} className="group">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-3">

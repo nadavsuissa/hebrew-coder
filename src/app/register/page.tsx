@@ -6,7 +6,8 @@ import { auth, db, googleProvider } from '@/lib/firebase';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowRight, Rocket, ArrowLeft } from 'lucide-react';
+import { Rocket, ArrowLeft } from 'lucide-react';
+import { FirebaseError } from 'firebase/app';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
@@ -46,9 +47,10 @@ export default function RegisterPage() {
       });
 
       router.push('/dashboard');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setError(getErrorMessage(err.code));
+      const errorCode = err instanceof FirebaseError ? err.code : 'unknown';
+      setError(getErrorMessage(errorCode));
     } finally {
       setLoading(false);
     }
@@ -76,7 +78,7 @@ export default function RegisterPage() {
       }
 
       router.push('/dashboard');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
       setError('הרשמה עם גוגל נכשלה');
     } finally {

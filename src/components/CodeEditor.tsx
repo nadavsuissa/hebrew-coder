@@ -10,14 +10,14 @@ import clsx from 'clsx';
 // Dynamically import Monaco to avoid SSR issues
 import dynamic from 'next/dynamic';
 import { loader } from '@monaco-editor/react';
+import type { Monaco } from '@monaco-editor/react';
+import type { editor } from 'monaco-editor';
 
-// Configure Monaco loader to use CDN and handle dependencies properly
+// Configure Monaco loader to use CDN
 loader.config({
   paths: {
     vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.54.0/min/vs',
-    'stackframe': 'https://cdn.jsdelivr.net/npm/stackframe@1.3.4/dist/stackframe.min',
-    'error-stack-parser': 'https://cdn.jsdelivr.net/npm/error-stack-parser@2.1.4/dist/error-stack-parser.min',
-  } as any,
+  },
 });
 
 const MonacoEditor = dynamic(() => import('@monaco-editor/react'), {
@@ -33,15 +33,14 @@ export const CodeEditor: React.FC = () => {
   const { code, setCode, resetPlayback, isGenerating } = useGameStore();
   const { runCode, isLoading } = usePyodide();
   const [isEditorReady, setIsEditorReady] = useState(false);
-  const editorRef = useRef<any>(null);
+  const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
 
   // Pre-configure Monaco loader before component mounts
   useEffect(() => {
     // Only run on client side
-    if (typeof window !== 'undefined' && !(window as any).MonacoEnvironment) {
+    if (typeof window !== 'undefined' && !(window as Window & { MonacoEnvironment?: unknown }).MonacoEnvironment) {
       // Configure Monaco Environment for workers
-      // @ts-ignore
-      window.MonacoEnvironment = {
+      (window as Window & { MonacoEnvironment: unknown }).MonacoEnvironment = {
         getWorkerUrl: function (_moduleId: string, label: string) {
           // Use jsDelivr CDN - match the Monaco version from @monaco-editor/react
           const baseUrl = 'https://cdn.jsdelivr.net/npm/monaco-editor@0.54.0/min/vs';
@@ -68,7 +67,7 @@ export const CodeEditor: React.FC = () => {
     }
   }, []);
 
-  const handleEditorDidMount = (editor: any, monaco: any) => {
+  const handleEditorDidMount = (editor: editor.IStandaloneCodeEditor, monaco: Monaco) => {
       editorRef.current = editor;
       setIsEditorReady(true);
       

@@ -1,15 +1,15 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useGameStore } from '@/store/gameStore';
 import { useUserStore } from '@/store/userStore';
 import { getLevel } from '@/lib/levels';
-import { getLessonByGameLevelId, getNextLessonInModule, getCourse } from '@/lib/curriculum';
+import { getLessonByGameLevelId, getNextLessonInModule } from '@/lib/curriculum';
 import { CodeEditor } from '@/components/CodeEditor';
 import { GameView } from '@/components/GameView';
 import { MathGame, MathGameConfig } from '@/components/MathGame';
-import { ChevronLeft, Trophy, Target, Map, ListOrdered, Lightbulb, Sparkles, BookOpen, Rocket } from 'lucide-react';
+import { ChevronLeft, Trophy, Target, Sparkles, BookOpen, Rocket } from 'lucide-react';
 import clsx from 'clsx';
 import Link from 'next/link';
 
@@ -20,58 +20,54 @@ export default function PlayPage() {
   const { levelId } = params;
   const { setLevel, currentLevel, trace, currentStep } = useGameStore();
   const { completeLesson } = useUserStore();
-  const [isClient, setIsClient] = useState(false);
-  const [hasCompleted, setHasCompleted] = useState(false);
-  const [isMathGame, setIsMathGame] = useState(false);
-  const [mathGameConfig, setMathGameConfig] = useState<MathGameConfig | null>(null);
+  const hasCompletedRef = useRef(false);
+  // Calculate math game state based on levelId
+  const id = levelId ? Number(levelId) : null;
+  const isMathGame = id ? ((id >= 16 && id <= 21) || (id >= 501 && id <= 505)) : false;
 
-  // Check if this is a math game (levels 16-21)
+  let mathGameConfig: MathGameConfig | null = null;
+  if (isMathGame && id) {
+    const lessonData = getLessonByGameLevelId(id);
+    if (lessonData) {
+      const { lesson } = lessonData;
+      // Map level ID to math game type
+      const typeMap: Record<number, MathGameConfig['type']> = {
+        16: 'place-value',
+        17: 'addition',
+        18: 'multiplication',
+        19: 'fractions',
+        20: 'measurement',
+        21: 'data',
+        // Grade 5
+        501: 'fractions',
+        502: 'multiplication',
+        503: 'data',
+        504: 'measurement',
+        505: 'place-value'
+      };
+
+      mathGameConfig = {
+        id,
+        type: typeMap[id] || 'addition',
+        title: lesson.title,
+        description: lesson.description,
+        difficulty: 'easy'
+      };
+    }
+  }
+
+  // Load regular game levels (not math games)
   useEffect(() => {
-    setIsClient(true);
-    if (levelId) {
+    if (levelId && !isMathGame) {
         const id = Number(levelId);
-        
-        // Math games are levels 16-21 and 501-505
-        if ((id >= 16 && id <= 21) || (id >= 501 && id <= 505)) {
-          setIsMathGame(true);
-          const lessonData = getLessonByGameLevelId(id);
-          if (lessonData) {
-            const { lesson } = lessonData;
-            // Map level ID to math game type
-            const typeMap: Record<number, MathGameConfig['type']> = {
-              16: 'place-value',
-              17: 'addition',
-              18: 'multiplication',
-              19: 'fractions',
-              20: 'measurement',
-              21: 'data',
-              // Grade 5
-              501: 'fractions',
-              502: 'multiplication',
-              503: 'data',
-              504: 'measurement',
-              505: 'place-value'
-            };
-            
-            setMathGameConfig({
-              id,
-              type: typeMap[id] || 'addition',
-              title: lesson.title,
-              description: lesson.description,
-              difficulty: 'easy'
-            });
-          }
+        const level = getLevel(id);
+        if (level) {
+            setLevel(level);
         } else {
-          setIsMathGame(false);
-          const level = getLevel(id);
-          if (level) {
-              setLevel(level);
-          } else {
-              router.push('/levels');
-          }
+            router.push('/levels');
         }
     }
-  }, [levelId, setLevel, router, searchParams]);
+  }, [levelId, isMathGame, setLevel, router]);
 
   // Calculate win state (before early return to ensure hooks order)
   const currentFrame = currentLevel ? trace[currentStep] : null;
@@ -95,8 +91,8 @@ export default function PlayPage() {
   // Handle win completion - save progress and determine next step
   // This useEffect must be called before any early returns to maintain hooks order
   useEffect(() => {
-    if (isWin && !hasCompleted && currentLevel) {
-      setHasCompleted(true);
+    if (isWin && !hasCompletedRef.current && currentLevel) {
+      hasCompletedRef.current = true;
       
       const returnTo = searchParams.get('returnTo');
       
@@ -104,7 +100,7 @@ export default function PlayPage() {
         // If we came from a lesson page, complete that lesson and return to it
         const match = returnTo.match(/\/learn\/([^/]+)\/([^/]+)\/([^/]+)/);
         if (match) {
-          const [, courseId, moduleId, lessonId] = match;
+          const [, , , lessonId] = match;
           const lessonData = getLessonByGameLevelId(currentLevel.id);
           if (lessonData && lessonData.lesson.id === lessonId) {
             completeLesson(lessonId, lessonData.lesson.xpReward);
@@ -136,19 +132,19 @@ export default function PlayPage() {
         }
       }
     }
-  }, [isWin, hasCompleted, currentLevel, searchParams, completeLesson, router]);
+  }, [isWin, currentLevel, searchParams, completeLesson, router]);
 
   // Handle math game completion
   const handleMathGameComplete = () => {
-    if (!hasCompleted) {
-      setHasCompleted(true);
+    if (!hasCompletedRef.current) {
+      hasCompletedRef.current = true;
       
       const returnTo = searchParams.get('returnTo');
       
       if (returnTo) {
         const match = returnTo.match(/\/learn\/([^/]+)\/([^/]+)\/([^/]+)/);
         if (match) {
-          const [, courseId, moduleId, lessonId] = match;
+          const [, , , lessonId] = match;
           const lessonData = getLessonByGameLevelId(Number(levelId));
           if (lessonData && lessonData.lesson.id === lessonId) {
             completeLesson(lessonId, lessonData.lesson.xpReward);
@@ -197,7 +193,7 @@ export default function PlayPage() {
     );
   }
 
-  if (!isClient || !currentLevel) return <div className="h-screen bg-[#0B1120] text-white flex items-center justify-center font-mono">INITIALIZING...</div>;
+  if (!currentLevel) return <div className="h-screen bg-[#0B1120] text-white flex items-center justify-center font-mono">INITIALIZING...</div>;
 
   return (
     <div className="h-screen w-screen bg-slate-900 text-slate-100 overflow-hidden relative font-sans">

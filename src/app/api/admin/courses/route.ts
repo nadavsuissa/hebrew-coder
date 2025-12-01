@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import * as admin from 'firebase-admin';
-import { Course, Module, Lesson, LessonType, QuizQuestion } from '@/types/course';
+import { Query, QueryDocumentSnapshot } from 'firebase-admin/firestore';
+import { Course } from '@/types/course';
 
 export async function GET(request: NextRequest) {
   try {
@@ -46,7 +47,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get courses based on permissions
-    let coursesQuery: any = db.collection('courses');
+    let coursesQuery: Query = db.collection('courses');
 
     if (isModerator && !isAdmin) {
       // Moderators can only see their own courses
@@ -54,7 +55,7 @@ export async function GET(request: NextRequest) {
     }
 
     const coursesSnapshot = await coursesQuery.get();
-    const courses = coursesSnapshot.docs.map((doc: any) => ({
+    const courses = coursesSnapshot.docs.map((doc: QueryDocumentSnapshot) => ({
       id: doc.id,
       ...doc.data()
     }));

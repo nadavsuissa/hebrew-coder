@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
-import * as admin from 'firebase-admin';
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const db = getAdminDb();
   if (!db) {
     return NextResponse.json({ error: 'Database not initialized' }, { status: 500 });
@@ -54,6 +53,7 @@ export async function PATCH(req: NextRequest) {
         return NextResponse.json({ success: true });
 
     } catch (error) {
+        console.error('Error updating user:', error);
         return NextResponse.json({ error: 'Failed to update user' }, { status: 500 });
     }
 }

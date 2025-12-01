@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { getAllCourses } from '@/lib/curriculum';
 import { useUserStore } from '@/store/userStore';
 import { useAuthStore } from '@/store/authStore';
@@ -13,11 +13,6 @@ export default function CourseIndexPage() {
   const { completedLessons } = useUserStore();
   const { purchasedCourses, user, loading: authLoading } = useAuthStore();
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -25,7 +20,7 @@ export default function CourseIndexPage() {
     }
   }, [user, authLoading, router]);
 
-  if (!mounted || authLoading || !user) {
+  if (authLoading || !user) {
     return (
       <div className="min-h-screen bg-[#0B1120] flex items-center justify-center text-white">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>

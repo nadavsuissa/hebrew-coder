@@ -8,9 +8,9 @@ import {
   Search, 
   Scissors, 
   Binary, 
-  GitBranch, 
   Layers,
-  Zap
+  Zap,
+  type LucideIcon
 } from 'lucide-react';
 
 export interface GameTemplate {
@@ -18,8 +18,8 @@ export interface GameTemplate {
   title: string;
   description: string;
   category: 'syntax' | 'logic' | 'data' | 'algorithm';
-  icon: any;
-  defaultConfig: any;
+  icon: LucideIcon;
+  defaultConfig: Record<string, unknown>;
   fields: GameConfigField[];
 }
 
@@ -30,7 +30,7 @@ export interface GameConfigField {
   placeholder?: string;
   options?: { label: string; value: string }[];
   itemFields?: GameConfigField[];
-  defaultValue?: any;
+  defaultValue?: unknown;
 }
 
 export const GAME_TEMPLATES: GameTemplate[] = [

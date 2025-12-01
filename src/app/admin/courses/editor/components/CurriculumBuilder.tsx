@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Module, Lesson, LessonType } from '@/types/course';
-import { Plus, Trash2, Edit, GripVertical, ChevronRight, ChevronDown, FileText, Video, HelpCircle, Gamepad2 } from 'lucide-react';
+import { Module, Lesson } from '@/types/course';
+import { Plus, Trash2, Edit, ChevronDown, FileText, Video, HelpCircle, Gamepad2 } from 'lucide-react';
 import clsx from 'clsx';
 import { LessonEditor } from './LessonEditor';
 
@@ -47,8 +47,8 @@ export const CurriculumBuilder: React.FC<CurriculumBuilderProps> = ({ modules, o
   };
 
   const addLesson = (moduleId: string) => {
-    const module = modules.find(m => m.id === moduleId);
-    if (!module) return;
+    const targetModule = modules.find(m => m.id === moduleId);
+    if (!targetModule) return;
 
     const newLesson: Lesson = {
       id: `lesson_${Date.now()}`,

@@ -43,22 +43,22 @@ export function getAllModules(): Module[] {
 export const courseCurriculum: Module[] = getAllModules();
 
 export function getLesson(courseId: string, moduleId: string, lessonId: string) {
-  const module = getModule(courseId, moduleId);
-  return module?.lessons.find(l => l.id === lessonId);
+  const courseModule = getModule(courseId, moduleId);
+  return courseModule?.lessons.find(l => l.id === lessonId);
 }
 
 // פונקציה זו נשמרת לתאימות לאחור (ללא courseId)
 export function getLessonLegacy(moduleId: string, lessonId: string) {
-  const module = getAllModules().find(m => m.id === moduleId);
-  return module?.lessons.find(l => l.id === lessonId);
+  const courseModule = getAllModules().find(m => m.id === moduleId);
+  return courseModule?.lessons.find(l => l.id === lessonId);
 }
 
 export function getLessonByGameLevelId(gameLevelId: number) {
   for (const course of courses) {
-    for (const module of course.modules) {
-      const lesson = module.lessons.find(l => l.type === 'game' && l.gameLevelId === gameLevelId);
+    for (const courseModule of course.modules) {
+      const lesson = courseModule.lessons.find(l => l.type === 'game' && l.gameLevelId === gameLevelId);
       if (lesson) {
-        return { course, module, lesson };
+        return { course, module: courseModule, lesson };
       }
     }
   }
@@ -66,26 +66,26 @@ export function getLessonByGameLevelId(gameLevelId: number) {
 }
 
 export function getNextLessonInModule(courseId: string, moduleId: string, currentLessonId: string) {
-  const module = getModule(courseId, moduleId);
-  if (!module) return null;
+  const courseModule = getModule(courseId, moduleId);
+  if (!courseModule) return null;
 
-  const currentIndex = module.lessons.findIndex(l => l.id === currentLessonId);
-  if (currentIndex === -1 || currentIndex === module.lessons.length - 1) {
+  const currentIndex = courseModule.lessons.findIndex(l => l.id === currentLessonId);
+  if (currentIndex === -1 || currentIndex === courseModule.lessons.length - 1) {
     return null; // No next lesson
   }
 
-  return module.lessons[currentIndex + 1];
+  return courseModule.lessons[currentIndex + 1];
 }
 
 // פונקציה זו נשמרת לתאימות לאחור (ללא courseId)
 export function getNextLessonInModuleLegacy(moduleId: string, currentLessonId: string) {
-  const module = getAllModules().find(m => m.id === moduleId);
-  if (!module) return null;
+  const courseModule = getAllModules().find(m => m.id === moduleId);
+  if (!courseModule) return null;
 
-  const currentIndex = module.lessons.findIndex(l => l.id === currentLessonId);
-  if (currentIndex === -1 || currentIndex === module.lessons.length - 1) {
+  const currentIndex = courseModule.lessons.findIndex(l => l.id === currentLessonId);
+  if (currentIndex === -1 || currentIndex === courseModule.lessons.length - 1) {
     return null;
   }
 
-  return module.lessons[currentIndex + 1];
+  return courseModule.lessons[currentIndex + 1];
 }

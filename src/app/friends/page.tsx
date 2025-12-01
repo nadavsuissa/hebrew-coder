@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
-import { Users, UserPlus, MessageSquare, Search, Check, X, UserMinus, Clock, UserCheck, Heart, Sparkles, Trophy } from 'lucide-react';
+import { Users, UserPlus, MessageSquare, Search, Check, X, UserMinus, Clock, UserCheck, Trophy } from 'lucide-react';
 import clsx from 'clsx';
 import Avatar from '@/components/Avatar';
 
@@ -40,6 +40,13 @@ interface FriendsData {
   receivedRequests: FriendRequest[];
 }
 
+interface SearchResult {
+  id: string;
+  displayName?: string;
+  email: string;
+  photoURL?: string;
+}
+
 export default function FriendsPage() {
   const { user, loading } = useAuthStore();
   const router = useRouter();
@@ -50,25 +57,11 @@ export default function FriendsPage() {
   });
   const [loadingFriends, setLoadingFriends] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [searching, setSearching] = useState(false);
   const [activeTab, setActiveTab] = useState<'friends' | 'requests' | 'add' | 'leaderboard'>('friends');
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
-    }
-  }, [user, loading, router]);
-
-  useEffect(() => {
-    if (user) {
-      loadFriends();
-      const interval = setInterval(loadFriends, 30000);
-      return () => clearInterval(interval);
-    }
-  }, [user]);
-
-  const loadFriends = async () => {
+  const loadFriends = useCallback(async () => {
     try {
       const token = await user?.getIdToken();
       if (!token) return;
@@ -86,7 +79,21 @@ export default function FriendsPage() {
     } finally {
       setLoadingFriends(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
+
+  useEffect(() => {
+    if (user) {
+      loadFriends();
+      const interval = setInterval(loadFriends, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [user, loadFriends]);
 
   const searchUsers = async (query: string) => {
     if (!query.trim() || query.length < 3) {
@@ -106,8 +113,8 @@ export default function FriendsPage() {
       if (response.ok) {
           const data = await response.json();
           // Filter out existing friends and self
-          const filtered = data.users.filter((u: any) => 
-              u.id !== user?.uid && 
+          const filtered = data.users.filter((u: SearchResult) =>
+              u.id !== user?.uid &&
               !friendsData.friends.some(f => f.id === u.id)
           );
           setSearchResults(filtered);
@@ -290,7 +297,7 @@ export default function FriendsPage() {
             ].map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setActiveTab(tab.id as 'friends' | 'requests' | 'add' | 'leaderboard')}
                 className={clsx(
                   "flex-1 min-w-[120px] flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all whitespace-nowrap",
                   activeTab === tab.id
@@ -354,7 +361,7 @@ export default function FriendsPage() {
                           className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 rounded-lg transition-colors"
                         >
                           <MessageSquare size={16} />
-                          <span>צ'אט</span>
+                          <span>צ&apos;אט</span>
                         </button>
                         <button
                           onClick={() => removeFriend(friend.id)}

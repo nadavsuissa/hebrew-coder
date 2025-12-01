@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import { getCourse } from '@/lib/curriculum';
 import { useUserStore } from '@/store/userStore';
 import Link from 'next/link';
-import { CheckCircle, Lock, PlayCircle, BookOpen, HelpCircle, Trophy, ChevronRight, ArrowLeft, MessageSquare } from 'lucide-react';
+import { Lock, PlayCircle, BookOpen, HelpCircle, Trophy, ChevronRight, ArrowLeft, MessageSquare } from 'lucide-react';
 import clsx from 'clsx';
 
 export default function CourseModulesPage() {
@@ -114,8 +114,6 @@ export default function CourseModulesPage() {
             const isModuleLocked = moduleIndex > 0 && 
               !course.modules[moduleIndex - 1].lessons.every(l => completedLessons.includes(l.id));
             const isModuleCompleted = progress.percentage === 100;
-            const firstIncomplete = module.lessons.find(lesson => !completedLessons.includes(lesson.id));
-            const nextLessonId = firstIncomplete?.id || module.lessons[0]?.id;
 
             return (
               <div

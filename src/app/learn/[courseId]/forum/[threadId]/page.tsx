@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { useParams } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import { getCourse } from '@/lib/curriculum';
-import { ArrowLeft, Clock, User, MessageSquare, Send, Lock, Shield, Trash2, Share2, MoreVertical, Heart, Reply } from 'lucide-react';
+import { ArrowLeft, Clock, Send, Lock, Share2, MoreVertical, Heart, Reply } from 'lucide-react';
 import Link from 'next/link';
 import clsx from 'clsx';
 import { ForumThread, ForumPost } from '@/types/forum';
@@ -13,8 +13,7 @@ export default function ThreadView() {
   const params = useParams();
   const courseId = params.courseId as string;
   const threadId = params.threadId as string;
-  const router = useRouter();
-  const { user, isAdmin } = useAuthStore();
+  const { user } = useAuthStore();
   const course = getCourse(courseId);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -28,13 +27,7 @@ export default function ThreadView() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  useEffect(() => {
-    if (user && threadId) {
-      loadThreadData();
-    }
-  }, [user, threadId]);
-
-  const loadThreadData = async () => {
+  const loadThreadData = useCallback(async () => {
     try {
       setLoading(true);
       const token = await user?.getIdToken();
@@ -69,7 +62,13 @@ export default function ThreadView() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user, threadId]);
+
+  useEffect(() => {
+    if (user && threadId) {
+      loadThreadData();
+    }
+  }, [user, threadId, loadThreadData]);
 
   const handleReply = async (e: React.FormEvent) => {
     e.preventDefault();

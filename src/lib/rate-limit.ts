@@ -1,5 +1,4 @@
 import { getAdminDb } from './firebase-admin';
-import { FieldValue } from 'firebase-admin/firestore';
 
 const RATES = {
   chat: { limit: 10, window: 60 * 1000 }, // 10 messages per minute
