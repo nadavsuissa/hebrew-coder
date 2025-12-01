@@ -8,6 +8,7 @@ import { bibleGrade3Course } from './courses/bible-grade3';
 import { englishGrade3Course } from './courses/english-grade3';
 import { hebrewGrade3Course } from './courses/hebrew-grade3';
 import { scienceGrade3Course } from './courses/science-grade3';
+import { historyGrade6Course } from './courses/history-grade6';
 
 // Create courses array from imported course objects
 export const courses: Course[] = [
@@ -18,6 +19,7 @@ export const courses: Course[] = [
   englishGrade3Course,
   hebrewGrade3Course,
   scienceGrade3Course,
+  historyGrade6Course,
 ];
 
 export function getCourse(courseId: string): Course | undefined {

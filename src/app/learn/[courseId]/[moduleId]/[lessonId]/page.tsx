@@ -44,21 +44,23 @@ export default function LessonPage() {
                       showResult: false,
                       score: 0
                   });
-              } else if (l.type === 'game' && l.gameLevelId) {
-                  // If already completed, show completion message
-                  if (completedLessons.includes(l.id)) {
-                      // Don't redirect, show completion state
-                      return;
-                  }
-                  // Redirect to game
-                  router.replace(`/play/${l.gameLevelId}?returnTo=/learn/${courseId}/${moduleId}/${lessonId}`);
               } else if (l.type === 'text' && l.content) {
                   // Parse content into cards
                   parseContentToCards(l.content);
               }
           }
       }
-  }, [courseId, moduleId, lessonId, router, completedLessons]);
+  }, [courseId, moduleId, lessonId]);
+
+  // Handle Game Lesson Logic
+  useEffect(() => {
+      if (lesson && lesson.type === 'game' && lesson.gameLevelId && courseId && moduleId && lessonId) {
+          // If not completed, redirect to game
+          if (!completedLessons.includes(lesson.id)) {
+              router.replace(`/play/${lesson.gameLevelId}?returnTo=/learn/${courseId}/${moduleId}/${lessonId}`);
+          }
+      }
+  }, [lesson, completedLessons, router, courseId, moduleId, lessonId]);
 
   // Keyboard navigation
   useEffect(() => {
