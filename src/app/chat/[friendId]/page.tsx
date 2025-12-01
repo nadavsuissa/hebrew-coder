@@ -3,9 +3,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter, useParams } from 'next/navigation';
-import { ArrowLeft, Send, User, MessageSquare, Heart } from 'lucide-react';
+import { ArrowLeft, Send, MessageSquare, Heart } from 'lucide-react';
 import Link from 'next/link';
 import clsx from 'clsx';
+import Avatar from '@/components/Avatar';
 import { db } from '@/lib/firebase';
 import { collection, query, where, orderBy, limit, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
 
@@ -209,9 +210,11 @@ export default function ChatPage() {
 
               <div className="flex items-center gap-3">
                 <div className="relative">
-                  <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
-                    {friend.displayName[0].toUpperCase()}
-                  </div>
+                  <Avatar 
+                    photoURL={friend.photoURL} 
+                    displayName={friend.displayName} 
+                    size="md" 
+                  />
                   {friend.isOnline && (
                     <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-slate-900"></div>
                   )}
@@ -268,9 +271,11 @@ export default function ChatPage() {
                     isOwnMessage ? "ml-auto flex-row-reverse" : "mr-auto"
                   )}>
                     {!isOwnMessage && (
-                      <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0 text-lg">
-                        {friend.photoURL || friend.displayName[0].toUpperCase()}
-                      </div>
+                      <Avatar 
+                        photoURL={friend.photoURL} 
+                        displayName={friend.displayName} 
+                        size="sm" 
+                      />
                     )}
 
                     <div className={clsx(

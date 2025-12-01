@@ -8,6 +8,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { Code2, Menu, X, LogOut, User, Library, BookOpen, Shield, Users, Settings, ChevronDown } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import clsx from 'clsx';
+import Avatar from './Avatar';
 
 export default function Header() {
   const { user, loading } = useAuthStore();
@@ -103,9 +104,11 @@ export default function Header() {
                       onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                       className="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-800 transition-colors text-slate-300 hover:text-white"
                     >
-                      <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xl">
-                        {user.photoURL || (user.displayName || user.email?.split('@')[0] || 'U')[0].toUpperCase()}
-                      </div>
+                      <Avatar 
+                        photoURL={user.photoURL} 
+                        displayName={user.displayName || user.email} 
+                        size="sm" 
+                      />
                       <span className="text-sm hidden lg:block">
                         {user.displayName || user.email?.split('@')[0]}
                       </span>
@@ -268,4 +271,3 @@ export default function Header() {
     </header>
   );
 }
-
