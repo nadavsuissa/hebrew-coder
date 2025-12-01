@@ -17,6 +17,26 @@ const MathGame = dynamic(() => import('./math/MathGame').then(mod => ({ default:
   loading: () => <GameLoading />
 });
 
+const FractionPizzaGame = dynamic(() => import('./math/FractionPizzaGame').then(mod => ({ default: mod.FractionPizzaGame })), {
+  loading: () => <GameLoading />
+});
+
+const MathRaceGame = dynamic(() => import('./math/MathRaceGame').then(mod => ({ default: mod.MathRaceGame })), {
+  loading: () => <GameLoading />
+});
+
+const NumberLineGame = dynamic(() => import('./math/NumberLineGame').then(mod => ({ default: mod.NumberLineGame })), {
+  loading: () => <GameLoading />
+});
+
+const EquationBalanceGame = dynamic(() => import('./math/EquationBalanceGame').then(mod => ({ default: mod.EquationBalanceGame })), {
+  loading: () => <GameLoading />
+});
+
+const GeometryBuilderGame = dynamic(() => import('./math/GeometryBuilderGame').then(mod => ({ default: mod.GeometryBuilderGame })), {
+  loading: () => <GameLoading />
+});
+
 const QuizGame = dynamic(() => import('./quiz/QuizGame').then(mod => ({ default: mod.QuizGame })), {
   loading: () => <GameLoading />
 });
@@ -116,6 +136,21 @@ export function GameRenderer({ config, onComplete, backUrl }: GameRendererProps)
     
     case 'math':
       return <MathGame config={config} onComplete={onComplete} backUrl={backUrl} />;
+    
+    case 'fraction-pizza':
+      return <FractionPizzaGame config={config} onComplete={onComplete} backUrl={backUrl} />;
+    
+    case 'math-race':
+      return <MathRaceGame config={config} onComplete={onComplete} backUrl={backUrl} />;
+    
+    case 'number-line':
+      return <NumberLineGame config={config} onComplete={onComplete} backUrl={backUrl} />;
+    
+    case 'equation-balance':
+      return <EquationBalanceGame config={config} onComplete={onComplete} backUrl={backUrl} />;
+    
+    case 'geometry-builder':
+      return <GeometryBuilderGame config={config} onComplete={onComplete} backUrl={backUrl} />;
     
     case 'quiz':
       return <QuizGame config={config} onComplete={onComplete} backUrl={backUrl} />;

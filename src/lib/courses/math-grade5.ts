@@ -68,10 +68,22 @@ export const mathGrade5Modules: Module[] = [
       },
       {
         id: 'math-grade5-fractions-game-1',
-        title: 'משחק השברים',
-        description: 'זהו את השברים והערכים שלהם במשחק מהיר',
+        title: '🍕 פיצה של שברים',
+        description: 'למד שברים בצורה ויזואלית וכיפית עם פיצות!',
         type: 'game',
-        gameLevelId: 501,
+        gameConfig: {
+          type: 'fraction-pizza',
+          title: 'פיצה של שברים',
+          description: 'השווה שברים באמצעות פיצות',
+          difficulty: 'easy',
+          wholeNumber: 1,
+          fractions: [
+            { numerator: 1, denominator: 2 },
+            { numerator: 1, denominator: 4 }
+          ],
+          question: 'איזה שבר גדול יותר? בחר את הפיצה עם יותר חתיכות מלאות!',
+          correctAnswer: 0
+        },
         xpReward: 150
       },
       {
@@ -204,10 +216,23 @@ export const mathGrade5Modules: Module[] = [
       },
       {
         id: 'math-grade5-decimals-game-1',
-        title: 'משחק העשרוניים',
-        description: 'תרגול מהנה של ערך המקום במספרים עשרוניים',
+        title: '📏 קפיצות על קו המספרים',
+        description: 'תרגול מהנה של מספרים עשרוניים וערך מקום',
         type: 'game',
-        gameLevelId: 505,
+        gameConfig: {
+          type: 'number-line',
+          title: 'קפיצות על קו המספרים',
+          description: 'קפוץ למספר הנכון על הקו',
+          difficulty: 'medium',
+          startNumber: 0,
+          endNumber: 10,
+          targetNumber: 2.5,
+          operations: [
+            { operator: '+', value: 1 },
+            { operator: '+', value: 0.5 },
+            { operator: '+', value: 1 }
+          ]
+        },
         xpReward: 150
       },
       {
@@ -667,10 +692,19 @@ export const mathGrade5Modules: Module[] = [
       },
       {
         id: 'math-grade5-ops-game-1',
-        title: 'אלוף החילוק',
-        description: 'משחק מאתגר לשיפור מיומנויות הכפל והחילוק',
+        title: '🏃 מירוץ כפל וחילוק',
+        description: 'משחק מהירות מאתגר! כמה תרגילים תפתור בזמן?',
         type: 'game',
-        gameLevelId: 502,
+        gameConfig: {
+          type: 'math-race',
+          title: 'מירוץ כפל וחילוק',
+          description: 'פתור תרגילים נגד השעון!',
+          difficulty: 'medium',
+          operation: 'multiplication',
+          numberRange: { min: 2, max: 12 },
+          questionsCount: 15,
+          timeLimit: 90
+        },
         xpReward: 150
       },
       {
@@ -1084,10 +1118,47 @@ export const mathGrade5Modules: Module[] = [
       },
       {
         id: 'math-grade5-data-game-1',
-        title: 'משחק הנתונים',
-        description: 'חשבו את הממוצע ומצאו את הנתונים החסרים',
+        title: '📊 חידון ניתוח נתונים',
+        description: 'חשבו ממוצע, חציון ושכיח במשחק אינטראקטיבי!',
         type: 'game',
-        gameLevelId: 503,
+        gameConfig: {
+          type: 'math',
+          title: 'אתגר ניתוח נתונים',
+          description: 'פתרו שאלות על ממוצע, חציון ושכיח',
+          difficulty: 'medium',
+          questions: [
+            {
+              question: 'מה הממוצע של המספרים: 10, 20, 30, 40?',
+              options: ['20', '25', '30', '35'],
+              correct: 1,
+              explanation: '(10+20+30+40) : 4 = 100 : 4 = 25'
+            },
+            {
+              question: 'מה החציון של: 5, 10, 15, 20, 25?',
+              options: ['10', '15', '20', '12.5'],
+              correct: 1,
+              explanation: 'המספר באמצע כשמסודרים הוא 15'
+            },
+            {
+              question: 'מה השכיח של: 3, 5, 5, 7, 5, 9?',
+              options: ['3', '5', '7', '9'],
+              correct: 1,
+              explanation: '5 מופיע 3 פעמים - הכי הרבה'
+            },
+            {
+              question: 'מה הממוצע של: 15, 25, 35?',
+              options: ['20', '25', '30', '22.5'],
+              correct: 1,
+              explanation: '(15+25+35) : 3 = 75 : 3 = 25'
+            },
+            {
+              question: 'הממוצע של 4 מספרים הוא 20. סכום 3 מהם הוא 55. מה הרביעי?',
+              options: ['15', '20', '25', '30'],
+              correct: 2,
+              explanation: 'סכום כולם: 20×4=80. הרביעי: 80-55=25'
+            }
+          ]
+        },
         xpReward: 150
       },
       {
@@ -1757,10 +1828,19 @@ export const mathGrade5Modules: Module[] = [
       },
       {
         id: 'math-grade5-area-game-1',
-        title: 'בנאי השטחים',
-        description: 'משחק בנייה וחישוב שטחים',
+        title: '📐 בונה הצורות הגיאומטריות',
+        description: 'בנה צורות ולמד על שטח והיקף בצורה אינטראקטיבית!',
         type: 'game',
-        gameLevelId: 504,
+        gameConfig: {
+          type: 'geometry-builder',
+          title: 'בונה צורות',
+          description: 'בנה צורות גיאומטריות ולמד על התכונות שלהן',
+          difficulty: 'medium',
+          shapeType: 'rectangle',
+          properties: { length: 6, width: 4 },
+          question: 'בנה מלבן באורך 6 ס"מ ורוחב 4 ס"מ. מה השטח?',
+          visualize: true
+        },
         xpReward: 150
       },
       {
