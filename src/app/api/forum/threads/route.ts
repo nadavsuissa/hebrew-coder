@@ -107,7 +107,8 @@ export async function POST(request: NextRequest) {
     }
 
     const authorName = userData.displayName || userData.email?.split('@')[0] || 'Anonymous';
-    const authorPhotoURL = userData.photoURL || '';
+    // Use photo from DB, or fall back to token picture (Google profile), or empty
+    const authorPhotoURL = userData.photoURL || decodedToken.picture || '';
 
     const threadData = {
       courseId,

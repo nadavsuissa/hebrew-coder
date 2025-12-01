@@ -221,7 +221,7 @@ export default function CourseForum() {
                     {/* Avatar / Icon */}
                     <div className="hidden sm:flex flex-col items-center gap-2 min-w-[60px]">
                        <Avatar 
-                         photoURL={thread.authorPhotoURL} 
+                         photoURL={user && thread.authorId === user.uid ? user.photoURL : thread.authorPhotoURL} 
                          displayName={thread.authorName} 
                          size="lg"
                          className="shadow-md border border-white/5 transition-transform group-hover:scale-105"
