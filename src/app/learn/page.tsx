@@ -6,7 +6,7 @@ import { useUserStore } from '@/store/userStore';
 import { useAuthStore } from '@/store/authStore';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { BookOpen, Trophy, ChevronRight, ShoppingCart } from 'lucide-react';
+import { BookOpen, Trophy, ChevronRight, ShoppingCart, Play, CheckCircle, Target, Award, Zap, Star } from 'lucide-react';
 import clsx from 'clsx';
 
 export default function CourseIndexPage() {
@@ -120,100 +120,193 @@ export default function CourseIndexPage() {
 
       {/* Courses Grid */}
       <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {courses.map((course) => {
             const progress = getCourseProgress(course);
             const isCourseCompleted = progress.percentage === 100;
             const totalModules = course.modules.length;
-            
+
             return (
               <Link
                 key={course.id}
                 href={`/learn/${course.id}`}
-                className={clsx(
-                  "group relative rounded-3xl border-2 transition-all duration-300 overflow-hidden",
-                  isCourseCompleted
-                    ? "bg-gradient-to-br from-green-900/20 to-emerald-900/20 border-green-500/50 hover:border-green-400 hover:shadow-2xl hover:shadow-green-500/20"
-                    : `bg-gradient-to-br ${course.color || 'from-blue-900/20 to-purple-900/20'} border-slate-700 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/20 hover:-translate-y-2`
-                )}
+                className="group relative block"
               >
-                {/* Course Icon */}
+                {/* Main Card Container */}
                 <div className={clsx(
-                  "absolute top-6 right-6 w-16 h-16 rounded-2xl flex items-center justify-center text-4xl shadow-lg",
-                  isCourseCompleted
-                    ? "bg-green-500/20"
-                    : "bg-slate-800/50"
+                  "relative rounded-3xl overflow-hidden transition-all duration-500 transform",
+                  "bg-slate-900/40 backdrop-blur-xl border border-slate-700/50",
+                  "hover:border-slate-600/70 hover:shadow-2xl hover:shadow-slate-900/50",
+                  "hover:-translate-y-3 hover:scale-[1.02]",
+                  isCourseCompleted && "ring-2 ring-green-500/30"
                 )}>
-                  {course.icon || '📚'}
-                </div>
-
-                {/* Content */}
-                <div className="p-8">
-                  {/* Course Title */}
-                  <h2 className="text-3xl font-bold mb-3 text-white group-hover:text-blue-300 transition-colors pr-20">
-                    {course.title}
-                  </h2>
-                  <p className="text-slate-400 text-base mb-6 min-h-[3rem]">
-                    {course.description}
-                  </p>
-
-                  {/* Progress Bar */}
-                  <div className="mb-6">
-                    <div className="flex items-center justify-between text-sm text-slate-400 mb-2">
-                      <span>התקדמות כללית</span>
-                      <span className="font-bold text-slate-300">{progress.percentage}%</span>
-                    </div>
-                    <div className="w-full h-3 bg-slate-700 rounded-full overflow-hidden">
-                      <div
-                        className={clsx(
-                          "h-full transition-all duration-500",
-                          isCourseCompleted 
-                            ? "bg-gradient-to-r from-green-500 to-emerald-500" 
-                            : `bg-gradient-to-r ${course.color || 'from-blue-500 to-purple-500'}`
-                        )}
-                        style={{ width: `${progress.percentage}%` }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Course Stats */}
-                  <div className="grid grid-cols-3 gap-4 mb-6">
-                    <div className="bg-slate-800/50 rounded-xl p-4 text-center">
-                      <div className="text-2xl font-bold text-blue-400">{totalModules}</div>
-                      <div className="text-xs text-slate-400 mt-1">מודולים</div>
-                    </div>
-                    <div className="bg-slate-800/50 rounded-xl p-4 text-center">
-                      <div className="text-2xl font-bold text-purple-400">{progress.total}</div>
-                      <div className="text-xs text-slate-400 mt-1">שיעורים</div>
-                    </div>
-                    <div className="bg-slate-800/50 rounded-xl p-4 text-center">
-                      <div className="text-2xl font-bold text-yellow-400">{progress.completed}</div>
-                      <div className="text-xs text-slate-400 mt-1">הושלמו</div>
-                    </div>
-                  </div>
-
-                  {/* Action Button */}
+                  {/* Background Gradient Overlay */}
                   <div className={clsx(
-                    "flex items-center justify-between w-full py-4 px-6 rounded-xl font-bold transition-all",
+                    "absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500",
                     isCourseCompleted
-                      ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white"
-                      : `bg-gradient-to-r ${course.color || 'from-blue-500 to-purple-500'} text-white hover:opacity-90`
-                  )}>
-                    <span>
-                      {isCourseCompleted ? 'קורס הושלם!' : progress.completed > 0 ? `המשך לימוד (${progress.completed}/${progress.total})` : 'התחל ללמוד'}
-                    </span>
-                    <ChevronRight size={20} />
-                  </div>
-                </div>
+                      ? "bg-gradient-to-br from-green-600/10 via-emerald-600/5 to-teal-600/10"
+                      : `bg-gradient-to-br ${course.color || 'from-blue-600/10 via-purple-600/5 to-pink-600/10'}`
+                  )} />
 
-                {/* Completion Badge */}
-                {isCourseCompleted && (
-                  <div className="absolute top-6 left-6">
-                    <div className="bg-green-500 rounded-full p-3 shadow-lg">
-                      <Trophy size={24} className="text-white" />
+                  {/* Floating Decorative Elements */}
+                  <div className="absolute -top-10 -right-10 w-32 h-32 opacity-5 group-hover:opacity-10 transition-opacity duration-500">
+                    <div className="w-full h-full rounded-full bg-gradient-to-br from-white to-transparent" />
+                  </div>
+                  <div className="absolute -bottom-8 -left-8 w-24 h-24 opacity-5 group-hover:opacity-10 transition-opacity duration-500">
+                    <div className="w-full h-full rounded-full bg-gradient-to-tr from-white to-transparent" />
+                  </div>
+
+                  {/* Content Container */}
+                  <div className="relative p-8">
+                    {/* Header Section with Icon and Title */}
+                    <div className="flex items-start justify-between mb-6">
+                      {/* Course Icon */}
+                      <div className={clsx(
+                        "relative w-16 h-16 rounded-2xl flex items-center justify-center text-3xl",
+                        "bg-gradient-to-br shadow-xl transition-all duration-300 group-hover:scale-110",
+                        isCourseCompleted
+                          ? "from-green-500/20 to-emerald-500/20 shadow-green-500/20"
+                          : `from-slate-700/80 to-slate-800/80 shadow-slate-500/20`
+                      )}>
+                        <span className="filter drop-shadow-sm">{course.icon || '📚'}</span>
+
+                        {/* Subtle glow effect */}
+                        <div className={clsx(
+                          "absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300",
+                          isCourseCompleted
+                            ? "bg-gradient-to-br from-green-400/20 to-emerald-400/20"
+                            : "bg-gradient-to-br from-blue-400/20 to-purple-400/20"
+                        )} />
+                      </div>
+
+                      {/* Completion Badge */}
+                      {isCourseCompleted && (
+                        <div className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 border border-green-500/30 rounded-full">
+                          <CheckCircle size={16} className="text-green-400" />
+                          <span className="text-sm font-medium text-green-400">הושלם</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Course Title */}
+                    <h2 className="text-2xl font-bold text-white mb-3 group-hover:text-blue-300 transition-colors duration-300 leading-tight">
+                      {course.title}
+                    </h2>
+
+                    {/* Course Description */}
+                    <p className="text-slate-400 text-sm mb-6 leading-relaxed line-clamp-2">
+                      {course.description}
+                    </p>
+
+                    {/* Progress Section */}
+                    <div className="mb-8">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-sm font-medium text-slate-300">התקדמות בקורס</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-bold text-white">{progress.percentage}%</span>
+                          {isCourseCompleted && <Star size={14} className="text-yellow-400 fill-yellow-400" />}
+                        </div>
+                      </div>
+
+                      {/* Progress Bar */}
+                      <div className="relative">
+                        <div className="w-full h-2 bg-slate-700/50 rounded-full overflow-hidden">
+                          <div
+                            className={clsx(
+                              "h-full transition-all duration-700 ease-out rounded-full",
+                              isCourseCompleted
+                                ? "bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 shadow-lg shadow-green-500/30"
+                                : `bg-gradient-to-r ${course.color || 'from-blue-500 via-purple-500 to-pink-500'} shadow-lg shadow-blue-500/20`
+                            )}
+                            style={{ width: `${progress.percentage}%` }}
+                          />
+                        </div>
+
+                        {/* Animated progress glow */}
+                        <div
+                          className={clsx(
+                            "absolute top-0 h-2 rounded-full transition-all duration-700 ease-out opacity-0 group-hover:opacity-100",
+                            isCourseCompleted
+                              ? "bg-gradient-to-r from-green-400 to-emerald-400 shadow-lg shadow-green-400/40"
+                              : "bg-gradient-to-r from-blue-400 to-purple-400 shadow-lg shadow-blue-400/40"
+                          )}
+                          style={{ width: `${progress.percentage}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Stats Grid */}
+                    <div className="grid grid-cols-3 gap-4 mb-8">
+                      <div className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-4 text-center border border-slate-700/50 group-hover:border-slate-600/50 transition-colors duration-300">
+                        <div className="flex items-center justify-center mb-2">
+                          <Target size={16} className="text-blue-400" />
+                        </div>
+                        <div className="text-lg font-bold text-white mb-1">{totalModules}</div>
+                        <div className="text-xs text-slate-400 font-medium">מודולים</div>
+                      </div>
+
+                      <div className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-4 text-center border border-slate-700/50 group-hover:border-slate-600/50 transition-colors duration-300">
+                        <div className="flex items-center justify-center mb-2">
+                          <BookOpen size={16} className="text-purple-400" />
+                        </div>
+                        <div className="text-lg font-bold text-white mb-1">{progress.total}</div>
+                        <div className="text-xs text-slate-400 font-medium">שיעורים</div>
+                      </div>
+
+                      <div className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-4 text-center border border-slate-700/50 group-hover:border-slate-600/50 transition-colors duration-300">
+                        <div className="flex items-center justify-center mb-2">
+                          <Award size={16} className="text-yellow-400" />
+                        </div>
+                        <div className="text-lg font-bold text-white mb-1">{progress.completed}</div>
+                        <div className="text-xs text-slate-400 font-medium">הושלמו</div>
+                      </div>
+                    </div>
+
+                    {/* Action Button */}
+                    <div className={clsx(
+                      "relative overflow-hidden rounded-2xl font-bold transition-all duration-300 group/btn",
+                      "bg-gradient-to-r shadow-lg",
+                      isCourseCompleted
+                        ? "from-green-500 to-emerald-500 shadow-green-500/25 hover:shadow-green-500/40"
+                        : `from-blue-500 to-purple-500 shadow-blue-500/25 hover:shadow-blue-500/40 hover:shadow-xl`
+                    )}>
+                      <div className="relative px-6 py-4 bg-black/20 backdrop-blur-sm">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            {isCourseCompleted ? (
+                              <CheckCircle size={20} className="text-white" />
+                            ) : progress.completed > 0 ? (
+                              <Play size={20} className="text-white" />
+                            ) : (
+                              <Zap size={20} className="text-white" />
+                            )}
+                            <span className="text-white font-bold">
+                              {isCourseCompleted
+                                ? 'קורס הושלם!'
+                                : progress.completed > 0
+                                  ? `המשך לימוד`
+                                  : 'התחל ללמוד'
+                              }
+                            </span>
+                          </div>
+                          <ChevronRight size={20} className="text-white group-hover/btn:translate-x-1 transition-transform duration-300" />
+                        </div>
+                      </div>
+
+                      {/* Button hover effect */}
+                      <div className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-white/10 to-transparent" />
                     </div>
                   </div>
-                )}
+
+                  {/* Completion Trophy Overlay */}
+                  {isCourseCompleted && (
+                    <div className="absolute top-6 left-6 animate-pulse">
+                      <div className="bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full p-3 shadow-2xl shadow-yellow-500/30">
+                        <Trophy size={20} className="text-white drop-shadow-sm" />
+                      </div>
+                    </div>
+                  )}
+                </div>
               </Link>
             );
           })}
