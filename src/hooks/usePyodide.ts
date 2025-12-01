@@ -37,7 +37,7 @@ export const usePyodide = () => {
                 playerPos: startPos,
                 playerDir: currentLevel.startDirection,
                 objects: [
-                     ...currentLevel.targets.map((t, i) => ({ id: `banana-${i}`, type: 'banana' as const, pos: t, state: 'open' as const })),
+                     ...currentLevel.targets.map((t, i) => ({ id: `crystal-${i}`, type: 'crystal' as const, pos: t, state: 'open' as const })),
                      ...currentLevel.obstacles.map((o, i) => ({ id: `wall-${i}`, type: 'wall' as const, pos: o }))
                 ],
                 log: null,
@@ -64,7 +64,7 @@ export const usePyodide = () => {
 
     // Prepare context for the worker
     const initialObjects: GameObject[] = [
-        ...currentLevel.targets.map((t, i) => ({ id: `banana-${i}`, type: 'banana' as const, pos: { ...t }, state: 'open' as const })),
+        ...currentLevel.targets.map((t, i) => ({ id: `crystal-${i}`, type: 'crystal' as const, pos: { ...t }, state: 'open' as const })),
         ...currentLevel.obstacles.map((o, i) => ({ id: `wall-${i}`, type: 'wall' as const, pos: { ...o } }))
     ];
 

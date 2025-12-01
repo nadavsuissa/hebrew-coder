@@ -5,7 +5,7 @@ import { Level, Position, Direction } from '@/types/game';
 
 export interface GameObject {
   id: string;
-  type: 'player' | 'banana' | 'wall' | 'door' | 'key' | 'water';
+  type: 'player' | 'crystal' | 'wall' | 'door' | 'key' | 'water';
   pos: Position;
   state?: 'closed' | 'open' | 'locked' | 'collected';
   color?: string;

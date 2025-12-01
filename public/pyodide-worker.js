@@ -91,7 +91,7 @@ self.onmessage = async (event) => {
             simState.playerPos = newPos;
              // Check Interactions (Collect)
             simState.objects = simState.objects.map(obj => {
-                if (obj.type === 'banana' && obj.state === 'open' && obj.pos.x === newPos.x && obj.pos.y === newPos.y) {
+                if (obj.type === 'crystal' && obj.state === 'open' && obj.pos.x === newPos.x && obj.pos.y === newPos.y) {
                     return { ...obj, state: 'collected' };
                 }
                 return obj;

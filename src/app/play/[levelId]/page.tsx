@@ -85,7 +85,7 @@ export default function PlayPage() {
         progressText = isWin ? "UPLINK ESTABLISHED" : "WAITING FOR SIGNAL";
     } else {
         const collectedCount = currentFrame 
-          ? currentFrame.objects.filter(o => o.type === 'banana' && o.state === 'collected').length
+          ? currentFrame.objects.filter(o => o.type === 'crystal' && o.state === 'collected').length
           : 0;
         isWin = collectedCount === currentLevel.targets.length;
         progressText = `DATA COLLECTED: ${collectedCount}/${currentLevel.targets.length}`;

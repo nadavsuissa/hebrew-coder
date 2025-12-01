@@ -93,7 +93,7 @@ export const GameView: React.FC = () => {
           playerPos: startPos,
           playerDir: currentLevel.startDirection,
           objects: [
-              ...targets.map((t, i) => ({ id: `crystal-${i}`, type: 'banana' as const, pos: t, state: 'open' as const })),
+              ...targets.map((t, i) => ({ id: `crystal-${i}`, type: 'crystal' as const, pos: t, state: 'open' as const })),
               ...currentLevel.obstacles.map((o, i) => ({ id: `rock-${i}`, type: 'wall' as const, pos: { ...o } }))
           ],
           log: null,
@@ -165,7 +165,7 @@ export const GameView: React.FC = () => {
 
             {/* Dynamic Objects Layer */}
             <AnimatePresence>
-                {displayState?.objects.filter(o => o.type === 'banana').map((obj) => {
+                {displayState?.objects.filter(o => o.type === 'crystal').map((obj) => {
                     const leftPos = obj.pos.x * (CELL_SIZE + GAP);
                     const topPos = obj.pos.y * (CELL_SIZE + GAP);
                     
