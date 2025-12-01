@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
             id: doc.id,
             displayName: data.displayName || 'Unknown',
             email: data.email,
-            photoURL: data.photoURL
+            photoURL: data.photoURL || '🐵'
         });
     });
 

@@ -5,8 +5,8 @@ import { useAuthStore } from '@/store/authStore';
 import { auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
 import { useRouter, usePathname } from 'next/navigation';
-import { Code2, Menu, X, LogOut, User, Library, BookOpen, Shield, Users } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Code2, Menu, X, LogOut, User, Library, BookOpen, Shield, Users, Settings, ChevronDown } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 
 export default function Header() {
@@ -15,9 +15,23 @@ export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  // Close user menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const handleLogout = async () => {
@@ -84,17 +98,63 @@ export default function Header() {
             {!loading && (
               <>
                 {user ? (
-                  <div className="flex items-center gap-4">
-                     <div className="text-sm text-slate-300">
-                        שלום, {user.displayName || user.email?.split('@')[0]}
-                     </div>
+                  <div className="relative" ref={userMenuRef}>
                     <button
-                      onClick={handleLogout}
-                      className="p-2 hover:bg-red-500/10 text-slate-400 hover:text-red-400 rounded-lg transition-colors"
-                      title="התנתק"
+                      onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                      className="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-800 transition-colors text-slate-300 hover:text-white"
                     >
-                      <LogOut size={20} />
+                      <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xl">
+                        {user.photoURL || (user.displayName || user.email?.split('@')[0] || 'U')[0].toUpperCase()}
+                      </div>
+                      <span className="text-sm hidden lg:block">
+                        {user.displayName || user.email?.split('@')[0]}
+                      </span>
+                      <ChevronDown size={16} className={clsx("transition-transform", isUserMenuOpen && "rotate-180")} />
                     </button>
+
+                    {/* User Dropdown Menu */}
+                    {isUserMenuOpen && (
+                      <div className="absolute right-0 mt-2 w-48 bg-slate-800 border border-slate-700 rounded-xl shadow-xl z-50">
+                        <div className="p-3 border-b border-slate-700">
+                          <div className="text-sm text-slate-300 truncate">
+                            {user.displayName || user.email?.split('@')[0]}
+                          </div>
+                          <div className="text-xs text-slate-500 truncate">
+                            {user.email}
+                          </div>
+                        </div>
+                        <div className="py-1">
+                          <Link
+                            href="/dashboard"
+                            onClick={() => setIsUserMenuOpen(false)}
+                            className="flex items-center gap-3 px-3 py-2 text-sm text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
+                          >
+                            <User size={16} />
+                            אזור אישי
+                          </Link>
+                          <Link
+                            href="/profile"
+                            onClick={() => setIsUserMenuOpen(false)}
+                            className="flex items-center gap-3 px-3 py-2 text-sm text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
+                          >
+                            <Settings size={16} />
+                            הגדרות פרופיל
+                          </Link>
+                        </div>
+                        <div className="border-t border-slate-700">
+                          <button
+                            onClick={() => {
+                              setIsUserMenuOpen(false);
+                              handleLogout();
+                            }}
+                            className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors"
+                          >
+                            <LogOut size={16} />
+                            התנתק
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div className="flex items-center gap-3">
@@ -153,13 +213,34 @@ export default function Header() {
               {!loading && (
                 <>
                   {user ? (
-                    <button
-                      onClick={handleLogout}
-                      className="w-full flex items-center gap-3 p-3 rounded-lg text-base font-medium text-red-400 hover:bg-red-500/10"
-                    >
-                      <LogOut size={20} />
-                      התנתק
-                    </button>
+                    <div className="space-y-1">
+                      <Link
+                        href="/dashboard"
+                        onClick={() => setIsMenuOpen(false)}
+                        className="w-full flex items-center gap-3 p-3 rounded-lg text-base font-medium text-slate-400 hover:bg-slate-800 hover:text-white"
+                      >
+                        <User size={20} />
+                        אזור אישי
+                      </Link>
+                      <Link
+                        href="/profile"
+                        onClick={() => setIsMenuOpen(false)}
+                        className="w-full flex items-center gap-3 p-3 rounded-lg text-base font-medium text-slate-400 hover:bg-slate-800 hover:text-white"
+                      >
+                        <Settings size={20} />
+                        הגדרות פרופיל
+                      </Link>
+                      <button
+                        onClick={() => {
+                          setIsMenuOpen(false);
+                          handleLogout();
+                        }}
+                        className="w-full flex items-center gap-3 p-3 rounded-lg text-base font-medium text-red-400 hover:bg-red-500/10"
+                      >
+                        <LogOut size={20} />
+                        התנתק
+                      </button>
+                    </div>
                   ) : (
                     <div className="flex flex-col gap-2 p-2">
                       <Link

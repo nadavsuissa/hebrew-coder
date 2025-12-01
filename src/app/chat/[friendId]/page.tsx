@@ -23,6 +23,7 @@ interface Friend {
   id: string;
   displayName: string;
   email: string;
+  photoURL: string;
   isOnline: boolean;
 }
 
@@ -267,8 +268,8 @@ export default function ChatPage() {
                     isOwnMessage ? "ml-auto flex-row-reverse" : "mr-auto"
                   )}>
                     {!isOwnMessage && (
-                      <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
-                        {friend.displayName[0].toUpperCase()}
+                      <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0 text-lg">
+                        {friend.photoURL || friend.displayName[0].toUpperCase()}
                       </div>
                     )}
 

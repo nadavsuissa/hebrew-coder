@@ -72,6 +72,7 @@ export async function GET(request: NextRequest) {
       id: friendId,
       displayName: friendData?.displayName || friendData?.email?.split('@')[0] || 'Unknown',
       email: friendData?.email,
+      photoURL: friendData?.photoURL || '🐵',
       isOnline: false // We'll implement presence later
     };
 

@@ -10,6 +10,7 @@ interface Friend {
   id: string;
   displayName: string;
   email: string;
+  photoURL: string;
   xp: number;
   lastLoginAt: string;
   isOnline: boolean;
@@ -21,11 +22,13 @@ interface FriendRequest {
     id: string;
     displayName: string;
     email: string;
+    photoURL: string;
   };
   fromUser?: {
     id: string;
     displayName: string;
     email: string;
+    photoURL: string;
   };
   createdAt: string;
 }
@@ -327,8 +330,8 @@ export default function FriendsPage() {
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center gap-3">
                           <div className="relative">
-                            <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg group-hover:scale-110 transition-transform">
-                              {friend.displayName[0].toUpperCase()}
+                            <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg group-hover:scale-110 transition-transform text-xl">
+                              {friend.photoURL || friend.displayName[0].toUpperCase()}
                             </div>
                             {friend.isOnline && (
                               <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-slate-800"></div>
@@ -385,8 +388,8 @@ export default function FriendsPage() {
                                         {index + 1}
                                     </div>
                                     <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
-                                            {friend.displayName[0].toUpperCase()}
+                                        <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                            {friend.photoURL || friend.displayName[0].toUpperCase()}
                                         </div>
                                         <span className="font-medium">{friend.displayName}</span>
                                     </div>
@@ -419,8 +422,8 @@ export default function FriendsPage() {
                         <div key={request.id} className="bg-slate-800/50 backdrop-blur-xl p-4 rounded-xl border border-slate-700/50">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center text-white font-bold">
-                                {request.fromUser?.displayName[0].toUpperCase()}
+                              <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                {request.fromUser?.photoURL || request.fromUser?.displayName[0].toUpperCase()}
                               </div>
                               <div>
                                 <p className="font-semibold text-white">{request.fromUser?.displayName}</p>
@@ -462,8 +465,8 @@ export default function FriendsPage() {
                         <div key={request.id} className="bg-slate-800/50 backdrop-blur-xl p-4 rounded-xl border border-slate-700/50 opacity-75">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-full flex items-center justify-center text-white font-bold">
-                                {request.toUser?.displayName[0].toUpperCase()}
+                              <div className="w-10 h-10 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                {request.toUser?.photoURL || request.toUser?.displayName[0].toUpperCase()}
                               </div>
                               <div>
                                 <p className="font-semibold text-white">{request.toUser?.displayName}</p>
@@ -518,8 +521,8 @@ export default function FriendsPage() {
                       {searchResults.map((user) => (
                         <div key={user.id} className="flex items-center justify-between p-3 bg-slate-900/30 rounded-lg hover:bg-slate-900/50 transition-colors">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
-                              {user.displayName[0].toUpperCase()}
+                            <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                              {user.photoURL || user.displayName[0].toUpperCase()}
                             </div>
                             <div>
                               <p className="font-semibold text-white">{user.displayName}</p>

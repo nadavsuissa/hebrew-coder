@@ -47,6 +47,7 @@ export async function GET(request: NextRequest) {
         id: friendId,
         displayName: userData?.displayName || userData?.email?.split('@')[0] || 'Unknown',
         email: userData?.email,
+        photoURL: userData?.photoURL || '🐵',
         xp: userData?.xp || 0,
         lastLoginAt: userData?.lastLoginAt,
         isOnline: false // We'll implement this later with presence
@@ -75,7 +76,8 @@ export async function GET(request: NextRequest) {
         toUser: {
           id: data.toUserId,
           displayName: userData?.displayName || userData?.email?.split('@')[0] || 'Unknown',
-          email: userData?.email
+          email: userData?.email,
+          photoURL: userData?.photoURL || '🐵'
         },
         createdAt: data.createdAt
       };
@@ -90,7 +92,8 @@ export async function GET(request: NextRequest) {
         fromUser: {
           id: data.fromUserId,
           displayName: userData?.displayName || userData?.email?.split('@')[0] || 'Unknown',
-          email: userData?.email
+          email: userData?.email,
+          photoURL: userData?.photoURL || '🐵'
         },
         createdAt: data.createdAt
       };
