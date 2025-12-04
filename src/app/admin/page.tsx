@@ -447,13 +447,13 @@ export default function AdminDashboard() {
             </Link>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left">
+            <table className="w-full text-sm text-right table-fixed">
               <thead className="text-xs text-slate-400 uppercase bg-slate-800/50">
                 <tr>
-                  <th className="px-4 py-3 rounded-tr-lg text-right">משתמש</th>
-                  <th className="px-4 py-3 text-right">סטטוס</th>
-                  <th className="px-4 py-3 text-right">תאריך הצטרפות</th>
-                  <th className="px-4 py-3 rounded-tl-lg text-right">XP</th>
+                  <th className="px-4 py-3 rounded-tr-lg text-right w-[40%]">משתמש</th>
+                  <th className="px-4 py-3 text-right w-[15%]">סטטוס</th>
+                  <th className="px-4 py-3 text-right w-[25%]">תאריך הצטרפות</th>
+                  <th className="px-4 py-3 rounded-tl-lg text-right w-[20%]">XP</th>
                 </tr>
               </thead>
               <tbody>
@@ -461,12 +461,12 @@ export default function AdminDashboard() {
                   <tr key={user.id} className="border-b border-slate-700/50 hover:bg-slate-800/30 transition-colors">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center text-xs font-bold text-white">
+                        <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0">
                           {(user.displayName?.[0] || user.email?.[0] || '?').toUpperCase()}
                         </div>
-                        <div>
-                          <div className="font-medium text-white">{user.displayName || 'משתמש ללא שם'}</div>
-                          <div className="text-xs text-slate-500">{user.email}</div>
+                        <div className="truncate min-w-0">
+                          <div className="font-medium text-white truncate">{user.displayName || 'משתמש ללא שם'}</div>
+                          <div className="text-xs text-slate-500 truncate">{user.email}</div>
                         </div>
                       </div>
                     </td>

@@ -14,10 +14,15 @@ export async function GET() {
     // if (!decodedToken.admin) return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
 
     const snapshot = await db.collection('users').limit(50).get();
-    const users = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
+    const users = snapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+        createdAt: data.createdAt?.toDate?.() ? data.createdAt.toDate().toISOString() : data.createdAt || new Date().toISOString(),
+        lastLoginAt: data.lastLoginAt?.toDate?.() ? data.lastLoginAt.toDate().toISOString() : data.lastLoginAt
+      };
+    });
 
     return NextResponse.json({ users });
   } catch (error) {
