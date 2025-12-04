@@ -26,7 +26,7 @@ export default function LessonPage() {
   // Handle Text Lesson Completion
   const handleCompleteText = useCallback(() => {
       if (lesson && lesson.type === 'text' && courseId && moduleId) {
-          completeLesson(lesson.id, lesson.xpReward);
+          completeLesson(lesson.id, lesson.xpReward, courseId as string);
           router.push(`/learn/${courseId}/${moduleId}`);
       }
   }, [lesson, completeLesson, router, courseId, moduleId]);
@@ -34,7 +34,7 @@ export default function LessonPage() {
   // Handle Game Completion
   const handleGameComplete = useCallback((data?: GameCompletionData) => {
     if (lesson && courseId && moduleId) {
-      completeLesson(lesson.id, lesson.xpReward);
+      completeLesson(lesson.id, lesson.xpReward, courseId as string);
       
       // Navigate to next lesson or back to module
       const nextLesson = getNextLessonInModule(courseId as string, moduleId as string, lessonId as string);

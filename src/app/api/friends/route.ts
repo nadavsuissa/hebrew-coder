@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import * as admin from 'firebase-admin';
+import { createNotification } from '@/lib/server-notifications';
 
 export async function GET(request: NextRequest) {
   try {
@@ -178,6 +179,25 @@ export async function POST(request: NextRequest) {
         createdAt: new Date().toISOString()
       });
 
+      // Get sender details for notification
+      const senderDoc = await db.collection('users').doc(userId).get();
+      const senderData = senderDoc.data();
+      const senderName = senderData?.displayName || 'User';
+
+      // Create Notification
+      await createNotification({
+        userId: targetUserId,
+        type: 'friend_request',
+        title: 'בקשת חברות חדשה',
+        message: `${senderName} שלח/ה לך בקשת חברות`,
+        link: '/friends',
+        metadata: {
+          fromUserId: userId,
+          fromUserName: senderName,
+          fromUserPhoto: senderData?.photoURL
+        }
+      });
+
       return NextResponse.json({ success: true });
 
     } else if (action === 'accept_request') {
@@ -206,6 +226,25 @@ export async function POST(request: NextRequest) {
         users: [requestData.fromUserId, requestData.toUserId],
         status: 'accepted',
         createdAt: new Date().toISOString()
+      });
+
+      // Get acceptor details for notification
+      const acceptorDoc = await db.collection('users').doc(userId).get();
+      const acceptorData = acceptorDoc.data();
+      const acceptorName = acceptorData?.displayName || 'User';
+
+      // Create Notification for the requester
+      await createNotification({
+        userId: requestData.fromUserId,
+        type: 'friend_accept',
+        title: 'בקשת החברות אושרה',
+        message: `${acceptorName} אישר/ה את בקשת החברות שלך`,
+        link: `/friends`, // or /chat/${userId}
+        metadata: {
+          fromUserId: userId,
+          fromUserName: acceptorName,
+          fromUserPhoto: acceptorData?.photoURL
+        }
       });
 
       return NextResponse.json({ success: true });

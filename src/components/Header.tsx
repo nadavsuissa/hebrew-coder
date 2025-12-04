@@ -9,6 +9,7 @@ import { Code2, Menu, X, LogOut, User, Library, BookOpen, Shield, Users, Setting
 import { useState, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import Avatar from './Avatar';
+import NotificationBell from './NotificationBell';
 
 export default function Header() {
   const { user, loading } = useAuthStore();
@@ -94,7 +95,9 @@ export default function Header() {
             {!loading && (
               <>
                 {user ? (
-                  <div className="relative" ref={userMenuRef}>
+                  <>
+                    <NotificationBell />
+                    <div className="relative" ref={userMenuRef}>
                     <button
                       onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                       className="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-800 transition-colors text-slate-300 hover:text-white"
@@ -176,6 +179,7 @@ export default function Header() {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center gap-2">
+            {user && <NotificationBell />}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-slate-400 hover:text-white p-2"

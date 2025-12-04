@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import * as admin from 'firebase-admin';
+import { createNotification } from '@/lib/server-notifications';
 
 export async function GET(request: NextRequest) {
   try {
@@ -158,6 +159,45 @@ export async function POST(request: NextRequest) {
     };
 
     const messageRef = await db.collection('messages').add(messageData);
+
+    // Check for existing chat notification from this sender
+    const notificationsSnapshot = await db.collection('notifications')
+      .where('userId', '==', friendId)
+      .where('type', '==', 'chat_message')
+      .where('read', '==', false)
+      .where('metadata.fromUserId', '==', userId)
+      .get();
+
+    // Get sender name for notification
+    const senderDoc = await db.collection('users').doc(userId).get();
+    const senderData = senderDoc.data();
+    const senderName = senderData?.displayName || 'User';
+
+    if (notificationsSnapshot.empty) {
+      // Create new notification
+      await createNotification({
+        userId: friendId,
+        type: 'chat_message',
+        title: `הודעה חדשה מ-${senderName}`,
+        message: content.length > 50 ? content.substring(0, 50) + '...' : content,
+        link: `/chat/${userId}`,
+        metadata: {
+          fromUserId: userId,
+          fromUserName: senderName,
+          fromUserPhoto: senderData?.photoURL,
+          conversationId
+        }
+      });
+    } else {
+      // Update existing notification (optional: could increment a counter or update message snippet)
+      // For now, we just update the timestamp to bring it to top and update message
+      const notifDoc = notificationsSnapshot.docs[0];
+      await notifDoc.ref.update({
+        message: content.length > 50 ? content.substring(0, 50) + '...' : content,
+        createdAt: new Date().toISOString(),
+        // Maybe increment count? not implemented in type yet
+      });
+    }
 
     return NextResponse.json({
       success: true,

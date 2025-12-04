@@ -5,7 +5,7 @@ import { auth, db } from '@/lib/firebase';
 import { doc, updateDoc, arrayUnion, increment, setDoc, getDoc } from 'firebase/firestore';
 
 interface UserStore extends UserProgress {
-  completeLesson: (lessonId: string, xp: number) => Promise<void>;
+  completeLesson: (lessonId: string, xp: number, courseId?: string) => Promise<void>;
   saveQuizScore: (lessonId: string, score: number) => Promise<void>;
   addXp: (amount: number) => Promise<void>;
   checkStreak: () => Promise<void>;
@@ -42,7 +42,7 @@ export const useUserStore = create<UserStore>()(
       lastLoginDate: new Date().toISOString().split('T')[0],
       unlockedBadges: [],
 
-      completeLesson: async (lessonId, xp) => {
+      completeLesson: async (lessonId, xp, courseId) => {
         const state = get();
         if (state.completedLessons.includes(lessonId)) return;
 
@@ -55,15 +55,32 @@ export const useUserStore = create<UserStore>()(
         });
 
         try {
-            await syncToFirestore({
-                completedLessons: arrayUnion(lessonId),
-                xp: increment(xp)
-            });
+            // Call API to record completion and trigger notifications/achievements
+            const token = await auth.currentUser?.getIdToken();
+            if (token && courseId) {
+                await fetch('/api/progress/complete', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        lessonId,
+                        courseId,
+                        xpEarned: xp
+                    })
+                });
+            } else {
+                // Fallback to direct Firestore if offline or no API (legacy support)
+                await syncToFirestore({
+                    completedLessons: arrayUnion(lessonId),
+                    xp: increment(xp)
+                });
+            }
         } catch (err) {
             // Rollback
             set(prevState);
             console.error("Failed to save progress, rolling back:", err);
-            // Ideally trigger a toast here
         }
       },
 

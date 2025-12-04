@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import * as admin from 'firebase-admin';
 import { filterContent } from '@/lib/moderation';
+import { createNotification } from '@/lib/server-notifications';
 
 // Initialize Firebase Admin if not already done
 if (!admin.apps.length) {
@@ -130,6 +131,24 @@ export async function POST(request: NextRequest) {
       lastReplyAt: new Date().toISOString(),
       lastReplyAuthorName: userData.displayName || userData.email?.split('@')[0] || 'Anonymous'
     });
+
+    // Send notification to thread author (if not self)
+    const threadAuthorId = threadDoc.data()?.authorId;
+    if (threadAuthorId && threadAuthorId !== userId) {
+        const threadTitle = threadDoc.data()?.title;
+        await createNotification({
+            userId: threadAuthorId,
+            type: 'system_update', // Reusing this or we could add 'forum_reply' type
+            title: 'תגובה חדשה בדיון שלך',
+            message: `נוספה תגובה חדשה בדיון: ${threadTitle}`,
+            link: `/learn/${courseId}/forum/thread/${threadId}`,
+            metadata: {
+                threadId,
+                replyAuthorId: userId,
+                replyAuthorName: userData.displayName || 'Anonymous'
+            }
+        });
+    }
 
     return NextResponse.json({ 
       success: true, 
