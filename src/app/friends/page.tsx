@@ -248,67 +248,68 @@ export default function FriendsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0B1120] via-[#0F172A] to-[#1a1f3a] text-white relative overflow-hidden">
-      {/* Animated background */}
+      {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-pink-600/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[100px] animate-pulse" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
 
       <div className="relative z-10 p-4 sm:p-6 lg:p-8">
         <div className="max-w-6xl mx-auto space-y-8">
 
-          {/* Header */}
-          <div className="bg-gradient-to-r from-pink-600/20 via-purple-600/20 to-indigo-600/20 backdrop-blur-xl p-8 rounded-3xl border border-white/10 shadow-2xl">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl flex items-center justify-center text-3xl shadow-lg">
-                  👥
-                </div>
-                <div>
-                  <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">
-                    החברים שלי
-                  </h1>
-                  <p className="text-slate-300 mt-1">
-                    התחבר עם חברים, התחרה בטבלה ולמד יחד
-                  </p>
-                </div>
+          {/* Header Section */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-white/5">
+            <div className="flex items-center gap-5">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-3xl shadow-lg shadow-blue-500/20 transform hover:scale-105 transition-transform duration-300">
+                👥
               </div>
+              <div>
+                <h1 className="text-4xl font-bold text-white tracking-tight">
+                  החברים שלי
+                </h1>
+                <p className="text-slate-400 mt-2 text-lg font-light">
+                  התחבר, למד והתחרה עם חברים לדרך
+                </p>
+              </div>
+            </div>
 
-              <div className="flex items-center gap-4">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-pink-400">{friendsData.friends.length}</div>
-                  <div className="text-xs text-slate-500">חברים</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-400">{friendsData.receivedRequests.length}</div>
-                  <div className="text-xs text-slate-500">בקשות</div>
-                </div>
+            <div className="flex gap-6 bg-white/5 p-2 rounded-2xl backdrop-blur-sm border border-white/5">
+              <div className="px-6 py-2 text-center border-l border-white/10">
+                <div className="text-2xl font-bold text-blue-400">{friendsData.friends.length}</div>
+                <div className="text-xs text-slate-400 uppercase tracking-wider font-medium">חברים</div>
+              </div>
+              <div className="px-6 py-2 text-center">
+                <div className="text-2xl font-bold text-purple-400">{friendsData.receivedRequests.length}</div>
+                <div className="text-xs text-slate-400 uppercase tracking-wider font-medium">בקשות</div>
               </div>
             </div>
           </div>
 
-          {/* Tabs */}
-          <div className="flex gap-2 bg-slate-800/50 backdrop-blur-xl p-2 rounded-2xl border border-slate-700/50 overflow-x-auto">
+          {/* Navigation Tabs */}
+          <div className="flex flex-wrap gap-2">
             {[
-              { id: 'friends', label: 'חברים', icon: Users, count: friendsData.friends.length },
+              { id: 'friends', label: 'החברים שלי', icon: Users, count: friendsData.friends.length },
               { id: 'leaderboard', label: 'טבלת מובילים', icon: Trophy },
-              { id: 'requests', label: 'בקשות', icon: UserPlus, count: friendsData.receivedRequests.length },
-              { id: 'add', label: 'הוסף חברים', icon: Search }
+              { id: 'requests', label: 'בקשות חברות', icon: UserPlus, count: friendsData.receivedRequests.length },
+              { id: 'add', label: 'חיפוש חברים', icon: Search }
             ].map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as 'friends' | 'requests' | 'add' | 'leaderboard')}
+                onClick={() => setActiveTab(tab.id as any)}
                 className={clsx(
-                  "flex-1 min-w-[120px] flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all whitespace-nowrap",
+                  "flex items-center gap-2 px-6 py-3 rounded-xl transition-all duration-300 font-medium text-sm",
                   activeTab === tab.id
-                    ? "bg-gradient-to-r from-pink-600 to-purple-600 text-white shadow-lg"
-                    : "text-slate-400 hover:text-white hover:bg-slate-700/50"
+                    ? "bg-blue-600 text-white shadow-lg shadow-blue-600/25 scale-105"
+                    : "bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white"
                 )}
               >
                 <tab.icon size={18} />
                 <span>{tab.label}</span>
                 {tab.count !== undefined && tab.count > 0 && (
-                  <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                  <span className={clsx(
+                    "px-2 py-0.5 rounded-full text-xs font-bold",
+                    activeTab === tab.id ? "bg-white/20 text-white" : "bg-blue-500/20 text-blue-400"
+                  )}>
                     {tab.count}
                   </span>
                 )}
@@ -316,59 +317,66 @@ export default function FriendsPage() {
             ))}
           </div>
 
-          {/* Content */}
-          <div className="space-y-6">
+          {/* Main Content Area */}
+          <div className="min-h-[400px]">
             {activeTab === 'friends' && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {friendsData.friends.length === 0 ? (
-                  <div className="col-span-full text-center py-12">
-                    <Users className="mx-auto mb-4 text-slate-600" size={64} />
-                    <h3 className="text-xl font-semibold text-slate-400 mb-2">אין לך חברים עדיין</h3>
-                    <p className="text-slate-500 mb-4">התחל להוסיף חברים כדי ללמוד יחד!</p>
+                  <div className="col-span-full flex flex-col items-center justify-center py-20 text-center bg-white/5 rounded-3xl border border-white/5 border-dashed">
+                    <div className="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center mb-6">
+                      <Users className="text-slate-600" size={32} />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-2">עדיין אין חברים</h3>
+                    <p className="text-slate-400 mb-8 max-w-sm mx-auto">הוסף חברים כדי לראות את ההתקדמות שלהם, להתחרות בטבלה וללמוד יחד!</p>
                     <button
                       onClick={() => setActiveTab('add')}
-                      className="px-6 py-3 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 rounded-xl font-bold shadow-lg transition-all hover:scale-105"
+                      className="px-8 py-3 bg-blue-600 hover:bg-blue-500 rounded-xl font-semibold shadow-lg shadow-blue-600/20 transition-all hover:scale-105 flex items-center gap-2"
                     >
-                      הוסף חברים
+                      <UserPlus size={20} />
+                      מצא חברים חדשים
                     </button>
                   </div>
                 ) : (
                   friendsData.friends.map((friend) => (
-                    <div key={friend.id} className="bg-slate-800/50 backdrop-blur-xl p-6 rounded-2xl border border-slate-700/50 hover:border-pink-500/30 transition-all group">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-center gap-3">
+                    <div key={friend.id} className="group bg-slate-800/40 backdrop-blur-sm p-6 rounded-2xl border border-white/5 hover:border-blue-500/30 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/5">
+                      <div className="flex items-start justify-between mb-6">
+                        <div className="flex items-center gap-4">
                           <div className="relative">
                             <Avatar 
                               photoURL={friend.photoURL} 
                               displayName={friend.displayName} 
                               size="lg" 
-                              className="shadow-lg group-hover:scale-110 transition-transform"
+                              className="ring-4 ring-slate-900 group-hover:ring-blue-500/20 transition-all"
                             />
-                            {friend.isOnline && (
-                              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-slate-800"></div>
-                            )}
+                            <div className={clsx(
+                              "absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-4 border-slate-900",
+                              friend.isOnline ? "bg-green-500" : "bg-slate-500"
+                            )} />
                           </div>
                           <div>
-                            <h3 className="font-semibold text-white">{friend.displayName}</h3>
-                            <p className="text-sm text-blue-400 font-mono font-bold">{friend.xp} XP</p>
+                            <h3 className="font-bold text-lg text-white group-hover:text-blue-400 transition-colors">{friend.displayName}</h3>
+                            <div className="flex items-center gap-2 mt-1">
+                              <Trophy size={14} className="text-yellow-500" />
+                              <span className="text-sm font-mono font-medium text-yellow-500">{friend.xp.toLocaleString()} XP</span>
+                            </div>
                           </div>
                         </div>
                       </div>
 
-                      <div className="flex gap-2">
+                      <div className="grid grid-cols-2 gap-3">
                         <button
                           onClick={() => startChat(friend.id)}
-                          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 rounded-lg transition-colors"
+                          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 rounded-xl transition-colors font-medium"
                         >
-                          <MessageSquare size={16} />
-                          <span>צ&apos;אט</span>
+                          <MessageSquare size={18} />
+                          <span>הודעה</span>
                         </button>
                         <button
                           onClick={() => removeFriend(friend.id)}
-                          className="p-2 text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
-                          title="הסר חבר"
+                          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-700/30 hover:bg-red-500/10 text-slate-400 hover:text-red-400 rounded-xl transition-colors font-medium"
                         >
-                          <UserMinus size={16} />
+                          <UserMinus size={18} />
+                          <span>הסר</span>
                         </button>
                       </div>
                     </div>
@@ -378,43 +386,74 @@ export default function FriendsPage() {
             )}
 
             {activeTab === 'leaderboard' && (
-                <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-slate-700/50 overflow-hidden">
-                    <div className="p-6 border-b border-slate-700/50">
-                        <h3 className="text-xl font-bold flex items-center gap-2">
-                            <Trophy className="text-yellow-400" />
-                            מובילים בניקוד
-                        </h3>
-                    </div>
-                    <div className="divide-y divide-slate-700/50">
-                        {[...friendsData.friends].sort((a, b) => b.xp - a.xp).map((friend, index) => (
-                            <div key={friend.id} className="p-4 flex items-center justify-between hover:bg-slate-700/30 transition-colors">
-                                <div className="flex items-center gap-4">
-                                    <div className={clsx(
-                                        "w-8 h-8 flex items-center justify-center font-bold rounded-full",
-                                        index === 0 ? "bg-yellow-500 text-black" : 
-                                        index === 1 ? "bg-slate-400 text-black" :
-                                        index === 2 ? "bg-orange-600 text-white" :
-                                        "bg-slate-800 text-slate-500"
-                                    )}>
-                                        {index + 1}
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <Avatar 
-                                          photoURL={friend.photoURL} 
-                                          displayName={friend.displayName} 
-                                          size="md" 
-                                        />
-                                        <span className="font-medium">{friend.displayName}</span>
-                                    </div>
-                                </div>
-                                <div className="font-mono font-bold text-blue-400">
-                                    {friend.xp} XP
-                                </div>
+                <div className="bg-slate-800/40 backdrop-blur-sm rounded-3xl border border-white/5 overflow-hidden">
+                    <div className="p-8 border-b border-white/5 bg-gradient-to-r from-slate-800/50 to-transparent">
+                        <div className="flex items-center gap-3 mb-2">
+                            <div className="p-2 bg-yellow-500/10 rounded-lg">
+                                <Trophy className="text-yellow-500" size={24} />
                             </div>
-                        ))}
+                            <h3 className="text-2xl font-bold text-white">טבלת המובילים</h3>
+                        </div>
+                        <p className="text-slate-400">התחרה עם החברים שלך על המקום הראשון!</p>
+                    </div>
+                    
+                    <div className="divide-y divide-white/5">
+                        {[...friendsData.friends, { ...user, displayName: user?.displayName || 'אני', xp: user?.xp || 0, photoURL: user?.photoURL } as any]
+                            .sort((a, b) => (b.xp || 0) - (a.xp || 0))
+                            .map((person, index) => {
+                                const isTop3 = index < 3;
+                                const isMe = person.uid === user?.uid || person.id === user?.uid;
+                                
+                                return (
+                                    <div key={person.id || person.uid} 
+                                        className={clsx(
+                                            "p-6 flex items-center justify-between transition-colors",
+                                            isMe ? "bg-blue-500/5 hover:bg-blue-500/10" : "hover:bg-white/5"
+                                        )}
+                                    >
+                                        <div className="flex items-center gap-6">
+                                            <div className={clsx(
+                                                "w-10 h-10 flex items-center justify-center font-bold text-lg rounded-xl",
+                                                index === 0 ? "bg-gradient-to-br from-yellow-300 to-yellow-600 text-white shadow-lg shadow-yellow-500/20" : 
+                                                index === 1 ? "bg-gradient-to-br from-slate-300 to-slate-500 text-white shadow-lg shadow-slate-500/20" :
+                                                index === 2 ? "bg-gradient-to-br from-orange-300 to-orange-600 text-white shadow-lg shadow-orange-500/20" :
+                                                "bg-slate-800 text-slate-500"
+                                            )}>
+                                                {index + 1}
+                                            </div>
+                                            <div className="flex items-center gap-4">
+                                                <Avatar 
+                                                  photoURL={person.photoURL} 
+                                                  displayName={person.displayName} 
+                                                  size="md"
+                                                  className={isTop3 ? "ring-2 ring-white/20" : ""}
+                                                />
+                                                <div>
+                                                    <span className={clsx("font-medium text-lg", isMe && "text-blue-400")}>
+                                                        {person.displayName} {isMe && "(אני)"}
+                                                    </span>
+                                                    {isTop3 && (
+                                                        <div className="text-xs text-yellow-500 font-medium mt-0.5">
+                                                            {index === 0 ? '🏆 אלוף הקוד' : index === 1 ? '🥈 מקום שני' : '🥉 מקום שלישי'}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="text-right">
+                                            <div className="font-mono font-bold text-xl text-blue-400">
+                                                {person.xp?.toLocaleString()} 
+                                            </div>
+                                            <div className="text-xs text-slate-500 uppercase tracking-wider font-medium">נקודות XP</div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        
                         {friendsData.friends.length === 0 && (
-                             <div className="p-8 text-center text-slate-500">
-                                 הוסף חברים כדי לראות מי מוביל!
+                             <div className="p-12 text-center text-slate-500">
+                                 <Trophy className="mx-auto mb-4 opacity-20" size={48} />
+                                 <p>הוסף חברים כדי לראות מי מוביל בטבלה!</p>
                              </div>
                         )}
                     </div>
@@ -422,135 +461,146 @@ export default function FriendsPage() {
             )}
 
             {activeTab === 'requests' && (
-              <div className="space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Received Requests */}
-                {friendsData.receivedRequests.length > 0 && (
-                  <div>
-                    <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                      <UserCheck className="text-green-400" size={24} />
-                      בקשות שקיבלתי
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-4">
+                  <h3 className="text-xl font-bold flex items-center gap-2 text-green-400 pb-4 border-b border-white/5">
+                    <UserCheck size={24} />
+                    בקשות שקיבלתי
+                    <span className="bg-green-500/10 text-green-400 px-2 py-0.5 rounded text-sm mr-auto">
+                      {friendsData.receivedRequests.length}
+                    </span>
+                  </h3>
+                  
+                  {friendsData.receivedRequests.length > 0 ? (
+                    <div className="space-y-3">
                       {friendsData.receivedRequests.map((request) => (
-                        <div key={request.id} className="bg-slate-800/50 backdrop-blur-xl p-4 rounded-xl border border-slate-700/50">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                              <Avatar 
-                                photoURL={request.fromUser?.photoURL} 
-                                displayName={request.fromUser?.displayName} 
-                                size="md" 
-                              />
-                              <div>
-                                <p className="font-semibold text-white">{request.fromUser?.displayName}</p>
-                                <p className="text-sm text-slate-400">{request.fromUser?.email}</p>
-                              </div>
+                        <div key={request.id} className="bg-slate-800/40 p-4 rounded-xl border border-slate-700/50 flex items-center justify-between group hover:bg-slate-800/60 transition-colors">
+                          <div className="flex items-center gap-3">
+                            <Avatar 
+                              photoURL={request.fromUser?.photoURL} 
+                              displayName={request.fromUser?.displayName} 
+                              size="md" 
+                            />
+                            <div>
+                              <p className="font-bold text-white">{request.fromUser?.displayName}</p>
+                              <p className="text-xs text-slate-400">{request.fromUser?.email}</p>
                             </div>
-                            <div className="flex gap-2">
-                              <button
-                                onClick={() => acceptFriendRequest(request.id)}
-                                className="p-2 bg-green-600/20 hover:bg-green-600/30 text-green-400 rounded-lg transition-colors"
-                                title="קבל"
-                              >
-                                <Check size={16} />
-                              </button>
-                              <button
-                                onClick={() => declineFriendRequest(request.id)}
-                                className="p-2 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors"
-                                title="דחה"
-                              >
-                                <X size={16} />
-                              </button>
-                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => acceptFriendRequest(request.id)}
+                              className="p-2.5 bg-green-500/10 hover:bg-green-500/20 text-green-400 rounded-xl transition-colors"
+                              title="קבל חברות"
+                            >
+                              <Check size={18} />
+                            </button>
+                            <button
+                              onClick={() => declineFriendRequest(request.id)}
+                              className="p-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl transition-colors"
+                              title="דחה בקשה"
+                            >
+                              <X size={18} />
+                            </button>
                           </div>
                         </div>
                       ))}
                     </div>
-                  </div>
-                )}
+                  ) : (
+                    <div className="text-center py-12 bg-white/5 rounded-2xl border border-white/5 border-dashed">
+                        <p className="text-slate-500">אין בקשות חברות חדשות</p>
+                    </div>
+                  )}
+                </div>
 
                 {/* Sent Requests */}
-                {friendsData.sentRequests.length > 0 && (
-                  <div>
-                    <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                      <Clock className="text-yellow-400" size={24} />
-                      בקשות ששלחתי
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-4">
+                  <h3 className="text-xl font-bold flex items-center gap-2 text-yellow-400 pb-4 border-b border-white/5">
+                    <Clock size={24} />
+                    בקשות ששלחתי
+                    <span className="bg-yellow-500/10 text-yellow-400 px-2 py-0.5 rounded text-sm mr-auto">
+                      {friendsData.sentRequests.length}
+                    </span>
+                  </h3>
+
+                  {friendsData.sentRequests.length > 0 ? (
+                    <div className="space-y-3">
                       {friendsData.sentRequests.map((request) => (
-                        <div key={request.id} className="bg-slate-800/50 backdrop-blur-xl p-4 rounded-xl border border-slate-700/50 opacity-75">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                              <Avatar 
-                                photoURL={request.toUser?.photoURL} 
-                                displayName={request.toUser?.displayName} 
-                                size="md" 
-                              />
-                              <div>
-                                <p className="font-semibold text-white">{request.toUser?.displayName}</p>
-                                <p className="text-sm text-slate-400">{request.toUser?.email}</p>
-                              </div>
+                        <div key={request.id} className="bg-white/5 p-4 rounded-xl border border-white/5 flex items-center justify-between opacity-75 hover:opacity-100 transition-opacity">
+                          <div className="flex items-center gap-3">
+                            <Avatar 
+                              photoURL={request.toUser?.photoURL} 
+                              displayName={request.toUser?.displayName} 
+                              size="md" 
+                            />
+                            <div>
+                              <p className="font-bold text-white">{request.toUser?.displayName}</p>
+                              <p className="text-xs text-slate-400">{request.toUser?.email}</p>
                             </div>
-                            <div className="text-sm text-slate-500">ממתין לאישור</div>
+                          </div>
+                          <div className="text-xs font-medium bg-yellow-500/10 text-yellow-400 px-3 py-1 rounded-full">
+                            ממתין לאישור
                           </div>
                         </div>
                       ))}
                     </div>
-                  </div>
-                )}
-
-                {friendsData.receivedRequests.length === 0 && friendsData.sentRequests.length === 0 && (
-                  <div className="text-center py-12">
-                    <UserPlus className="mx-auto mb-4 text-slate-600" size={64} />
-                    <h3 className="text-xl font-semibold text-slate-400 mb-2">אין בקשות חברות</h3>
-                    <p className="text-slate-500">כשתקבל או תשלח בקשות חברות, הן יופיעו כאן</p>
-                  </div>
-                )}
+                  ) : (
+                    <div className="text-center py-12 bg-white/5 rounded-2xl border border-white/5 border-dashed">
+                        <p className="text-slate-500">לא נשלחו בקשות לאחרונה</p>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
 
             {activeTab === 'add' && (
-              <div className="space-y-6">
-                <div className="bg-slate-800/50 backdrop-blur-xl p-6 rounded-2xl border border-slate-700/50">
-                  <h3 className="text-xl font-semibold mb-4">חפש חברים</h3>
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" size={20} />
+              <div className="max-w-2xl mx-auto">
+                <div className="bg-slate-800/40 backdrop-blur-sm p-8 rounded-3xl border border-white/5 shadow-2xl">
+                  <div className="text-center mb-8">
+                    <div className="w-16 h-16 bg-blue-600/20 rounded-2xl flex items-center justify-center mx-auto mb-4 text-blue-400">
+                        <Search size={32} />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white">מצא חברים חדשים</h3>
+                    <p className="text-slate-400 mt-2">חפש משתמשים לפי שם או דוא״ל והזמן אותם ללמוד יחד</p>
+                  </div>
+
+                  <div className="relative mb-8">
+                    <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-400" size={20} />
                     <input
                       type="text"
-                      placeholder="הקלד שם (מינימום 3 תווים)..."
+                      placeholder="הקלד שם לחיפוש..."
                       value={searchQuery}
                       onChange={(e) => {
                         setSearchQuery(e.target.value);
-                        // Debounce needed ideally, but simple implementation for now
                         if (e.target.value.length >= 3) searchUsers(e.target.value);
                       }}
-                      className="w-full pl-10 pr-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500"
+                      className="w-full pr-12 pl-4 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                     />
                   </div>
 
-                  {searching && (
-                    <div className="text-center py-4">
-                      <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-pink-500 mx-auto"></div>
+                  {searching ? (
+                    <div className="text-center py-8">
+                      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
+                      <p className="text-slate-500 mt-4 text-sm">מחפש...</p>
                     </div>
-                  )}
-
-                  {searchResults.length > 0 && (
-                    <div className="mt-4 space-y-2">
+                  ) : searchResults.length > 0 ? (
+                    <div className="space-y-3">
                       {searchResults.map((user) => (
-                        <div key={user.id} className="flex items-center justify-between p-3 bg-slate-900/30 rounded-lg hover:bg-slate-900/50 transition-colors">
-                          <div className="flex items-center gap-3">
+                        <div key={user.id} className="flex items-center justify-between p-4 bg-slate-900/30 rounded-xl hover:bg-slate-900/50 transition-all border border-white/5 hover:border-blue-500/20 group">
+                          <div className="flex items-center gap-4">
                             <Avatar 
                               photoURL={user.photoURL} 
                               displayName={user.displayName} 
                               size="md" 
                             />
                             <div>
-                              <p className="font-semibold text-white">{user.displayName}</p>
+                              <p className="font-bold text-white group-hover:text-blue-400 transition-colors">{user.displayName}</p>
                               <p className="text-sm text-slate-400">{user.email}</p>
                             </div>
                           </div>
                           <button
                             onClick={() => sendFriendRequest(user.id)}
-                            className="px-4 py-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 rounded-lg font-medium transition-all hover:scale-105 flex items-center gap-2"
+                            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 rounded-xl font-medium shadow-lg shadow-blue-600/20 transition-all hover:scale-105 flex items-center gap-2 text-sm"
                           >
                             <UserPlus size={16} />
                             <span>הוסף</span>
@@ -558,14 +608,11 @@ export default function FriendsPage() {
                         </div>
                       ))}
                     </div>
-                  )}
-
-                  {searchQuery.length >= 3 && !searching && searchResults.length === 0 && (
-                    <div className="text-center py-8">
-                      <Search className="mx-auto mb-4 text-slate-600" size={48} />
-                      <p className="text-slate-500">לא נמצאו משתמשים</p>
+                  ) : searchQuery.length >= 3 ? (
+                    <div className="text-center py-12">
+                      <p className="text-slate-500">לא נמצאו משתמשים תואמים</p>
                     </div>
-                  )}
+                  ) : null}
                 </div>
               </div>
             )}

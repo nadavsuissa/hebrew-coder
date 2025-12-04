@@ -380,9 +380,9 @@ export default function AdminDashboard() {
         </div>
 
         {/* Pie Chart - Course Popularity */}
-        <div className="bg-slate-800/50 backdrop-blur-sm p-6 rounded-2xl border border-slate-700/50">
+        <div className="bg-slate-800/50 backdrop-blur-sm p-6 rounded-2xl border border-slate-700/50 flex flex-col h-full">
           <h3 className="text-lg font-bold text-white mb-6">פופולריות קורסים</h3>
-          <div className="h-[300px] w-full relative">
+          <div className="flex-1 min-h-[250px] relative">
             {coursePopularityData.length > 0 && coursePopularityData.some(d => (d.value || 0) > 0) ? (
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -393,7 +393,9 @@ export default function AdminDashboard() {
                     innerRadius={60}
                     outerRadius={80}
                     paddingAngle={5}
+                    cornerRadius={4}
                     dataKey="value"
+                    stroke="none"
                   >
                     {coursePopularityData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -403,6 +405,14 @@ export default function AdminDashboard() {
                     contentStyle={{ backgroundColor: '#0F172A', border: '1px solid #1E293B', borderRadius: '8px' }}
                     itemStyle={{ color: '#fff' }}
                   />
+                  <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle">
+                    <tspan x="50%" dy="-0.5em" fontSize="24" fontWeight="bold" fill="#fff">
+                      {coursePopularityData.reduce((acc, curr) => acc + (curr.value || 0), 0)}
+                    </tspan>
+                    <tspan x="50%" dy="1.5em" fontSize="12" fill="#94a3b8">
+                      רכישות
+                    </tspan>
+                  </text>
                 </PieChart>
               </ResponsiveContainer>
             ) : (
@@ -417,21 +427,29 @@ export default function AdminDashboard() {
                     fill="#1E293B"
                     dataKey="value"
                     stroke="none"
+                    cornerRadius={4}
                   />
                 </PieChart>
                 <p className="mt-4 text-sm">אין מספיק נתונים להצגה</p>
               </div>
             )}
+          </div>
             
-            {/* Legend */}
-            <div className="mt-4 flex flex-wrap gap-2 justify-center">
-              {coursePopularityData.map((entry, index) => (
-                <div key={index} className="flex items-center gap-1.5">
-                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
-                  <span className="text-xs text-slate-400">{entry.name}</span>
+          {/* Legend */}
+          <div className="mt-6 space-y-3">
+            {coursePopularityData.map((entry, index) => (
+              <div key={index} className="flex items-center justify-between p-2 rounded-lg hover:bg-white/5 transition-colors">
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 rounded-full shadow-[0_0_8px]" style={{ backgroundColor: COLORS[index % COLORS.length], boxShadow: `0 0 8px ${COLORS[index % COLORS.length]}` }}></div>
+                  <span className="text-sm text-slate-300">{entry.name}</span>
                 </div>
-              ))}
-            </div>
+                <div className="flex items-center gap-4">
+                  <div className="text-xs font-medium text-white bg-slate-700/50 px-2 py-1 rounded-full min-w-[2rem] text-center">
+                    {entry.value}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

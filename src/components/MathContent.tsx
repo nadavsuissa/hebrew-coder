@@ -34,3 +34,4 @@ export function renderMath(content: string): { __html: string } {
   return { __html: formatMathContent(content) };
 }
 
+
