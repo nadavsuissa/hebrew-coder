@@ -82,6 +82,7 @@ export default function ChatPage() {
     const q = query(
         messagesRef, 
         where('conversationId', '==', conversationId),
+        where('participants', 'array-contains', user.uid),
         orderBy('createdAt', 'asc'),
         limit(100)
     );
@@ -135,6 +136,7 @@ export default function ChatPage() {
           conversationId,
           senderId: user.uid,
           receiverId: friendId,
+          participants: [user.uid, friendId],
           content: message.trim(),
           messageType: 'text',
           createdAt: serverTimestamp(),

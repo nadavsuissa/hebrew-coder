@@ -150,6 +150,7 @@ export async function POST(request: NextRequest) {
       conversationId,
       senderId: userId,
       receiverId: friendId,
+      participants: [userId, friendId],
       content,
       messageType,
       createdAt: new Date().toISOString(),

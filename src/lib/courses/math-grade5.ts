@@ -1,4 +1,5 @@
 import { Module, Course } from '@/types/course';
+import { createFractionMultiplicationLesson, createFractionAdditionSubtractionLesson } from '@/lib/math-content-helpers';
 
 export const mathGrade5Modules: Module[] = [
   {
@@ -122,32 +123,7 @@ export const mathGrade5Modules: Module[] = [
         description: 'איך מחברים שברים עם מכנים שווים ושונים?',
         type: 'text',
         xpReward: 70,
-        content: `# חיבור וחיסור שברים ➕➖
-
-## כשהמכנים שווים (קל!)
-כשהמכנה (המספר למטה) זהה, זה אומר שגודל החלקים זהה.
-אז פשוט מחברים או מחסרים את המונים (למעלה), והמכנה נשאר אותו דבר.
-
-> **דוגמה:**
-> 2/7 + 3/7 = ?
-> המכנה הוא 7. המונים הם 2 ו-3.
-> 2 + 3 = 5.
-> התשובה: **5/7**.
-
-## כשהמכנים שונים (מאתגר!)
-אי אפשר לחבר תפוחים ותפוזים, ואי אפשר לחבר שלישים ורבעים ישירות.
-חייבים קודם למצוא **מכנה משותף**!
-
-**השלבים:**
-1. מוצאים מספר ששני המכנים מתחלקים בו (למשל ע"י הרחבה).
-2. מרחיבים את השברים כך שיהיה להם אותו מכנה.
-3. מחברים את המונים החדשים.
-
-> **דוגמה:** 1/2 + 1/4
-> נהפוך את 1/2 לרבעים: נרחיב פי 2 ונקבל 2/4.
-> עכשיו התרגיל הוא: 2/4 + 1/4
-> התשובה: **3/4**.
-`
+        content: createFractionAdditionSubtractionLesson()
       },
       {
         id: 'math-grade5-fractions-quiz-advanced',
@@ -267,49 +243,11 @@ export const mathGrade5Modules: Module[] = [
       },
       {
         id: 'math-grade5-fractions-advanced-1',
-        title: 'כפל וחילוק שברים',
-        description: 'פעולות מתקדמות בשברים - הכפלה וחילוק',
+        title: 'כפל וחילוק שברים - המסע המופלא!',
+        description: 'גלו את הקסם של הכפל וחילוק שברים עם פיצות, עוגות וכיף!',
         type: 'text',
         xpReward: 80,
-        content: `# כפל וחילוק שברים 🔢
-
-## כפל שברים
-כפל שברים הוא למעשה פשוט יותר מחיבור! אין צורך במכנה משותף.
-הכלל הזהב: **מכפילים מונה במונה, מכנה במכנה**.
-
-> **דוגמה:**
-> 1/2 × 3/4 = ?
-> מונה: 1 × 3 = 3
-> מכנה: 2 × 4 = 8
-> **תשובה: 3/8**
-
-### כפל שבר במספר שלם
-מספר שלם אפשר לחשוב עליו כשבר עם מכנה 1.
-למשל: 5 = 5/1
-
-> **דוגמה:**
-> 2/3 × 5 = 2/3 × 5/1
-> = (2×5)/(3×1)
-> = 10/3 = 3 ו-1/3
-
-## חילוק שברים
-חילוק בשברים הוא טריק מגניב: **הופכים את השבר השני והופכים לכפל!**
-למה? כי לחלק ב-1/2 זה כמו לכפול ב-2.
-
-השלבים:
-1. משאירים את השבר הראשון כמו שהוא.
-2. **הופכים** את השבר השני (מונה הופך למכנה ולהיפך).
-3. **כופלים** במקום לחלק.
-
-> **דוגמה:**
-> 3/4 : 2/5 = ?
-> הופכים את 2/5 ל-5/2
-> עכשיו: 3/4 × 5/2
-> = (3×5)/(4×2)
-> = 15/8 = 1 ו-7/8
-
-💡 **טיפ לזכירה:** "חילוק זה הכפלה בהופכי!"
-`
+        content: createFractionMultiplicationLesson()
       },
       {
         id: 'math-grade5-fractions-quiz-multiply',

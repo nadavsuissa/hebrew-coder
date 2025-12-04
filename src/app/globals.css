@@ -84,3 +84,155 @@ body {
 .scrollbar-track-transparent::-webkit-scrollbar-track {
     background: transparent;
 }
+
+/* Math Rendering Styles */
+.math-fraction {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 0.9em;
+  border-bottom: 1px solid currentColor;
+  position: relative;
+  margin: 0 2px;
+}
+
+.fraction-numerator {
+  display: block;
+  text-align: center;
+  padding-bottom: 2px;
+}
+
+.fraction-denominator {
+  display: block;
+  text-align: center;
+  border-top: 1px solid currentColor;
+  padding-top: 2px;
+}
+
+.math-equation {
+  font-family: 'Times New Roman', serif;
+  font-weight: bold;
+  margin: 0 4px;
+}
+
+.math-multiplication, .math-division {
+  font-family: 'Times New Roman', serif;
+  font-weight: bold;
+}
+
+.math-steps {
+  margin: 20px 0;
+  border-left: 4px solid #3b82f6;
+  padding-left: 20px;
+}
+
+.math-step {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.step-number {
+  background: #3b82f6;
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.step-description {
+  font-weight: bold;
+  color: #1e40af;
+  margin-bottom: 5px;
+}
+
+.step-expression {
+  font-family: 'Times New Roman', serif;
+  font-size: 1.1em;
+  background: #f0f9ff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin: 5px 0;
+  border: 2px solid #3b82f6;
+}
+
+.step-explanation {
+  color: #6b7280;
+  font-style: italic;
+  margin-top: 5px;
+}
+
+.visual-fraction {
+  display: inline-block;
+  text-align: center;
+  margin: 10px;
+  padding: 15px;
+  background: #fef3c7;
+  border-radius: 8px;
+  border: 2px solid #f59e0b;
+}
+
+.fraction-display {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.visual-pieces {
+  font-size: 2em;
+  margin: 10px 0;
+  letter-spacing: 2px;
+}
+
+.interactive-math-problem {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 2px solid #0284c7;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.problem-question {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #0c4a6e;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.problem-steps {
+  margin-bottom: 20px;
+}
+
+.problem-step {
+  background: white;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-left: 4px solid #0284c7;
+}
+
+.step-instruction {
+  font-weight: bold;
+  color: #0369a1;
+  margin-bottom: 8px;
+}
+
+.problem-solution {
+  background: #ecfdf5;
+  border: 2px solid #16a34a;
+  border-radius: 8px;
+  padding: 15px;
+  text-align: center;
+}
+
+.final-answer {
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #15803d;
+  margin-bottom: 10px;
+}

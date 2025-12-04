@@ -8,6 +8,7 @@ import { Lesson } from '@/types/course';
 import { convertLegacyLesson } from '@/lib/legacyGameConverter';
 import { GameRenderer } from '@/components/games/GameRenderer';
 import { GameCompletionData } from '@/types/games';
+import { MathContent } from '@/components/MathContent';
 import { ChevronRight, ChevronLeft, Code2, Trophy } from 'lucide-react';
 import Link from 'next/link';
 import clsx from 'clsx';
@@ -360,9 +361,10 @@ export default function LessonPage() {
                 </pre>
               </div>
             ) : (
-              <div className="prose prose-invert max-w-none">
-                {renderContent(currentCard?.content || '')}
-              </div>
+              <MathContent
+                content={currentCard?.content || ''}
+                className="prose prose-invert max-w-none"
+              />
             )}
           </div>
 
