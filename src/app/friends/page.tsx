@@ -398,7 +398,7 @@ export default function FriendsPage() {
                     </div>
                     
                     <div className="divide-y divide-white/5">
-                        {[...friendsData.friends, { ...user, displayName: user?.displayName || 'אני', xp: user?.xp || 0, photoURL: user?.photoURL } as any]
+                        {[...friendsData.friends, { ...user, id: user?.uid, displayName: user?.displayName || 'אני', xp: (user as any)?.xp || 0, photoURL: user?.photoURL } as any]
                             .sort((a, b) => (b.xp || 0) - (a.xp || 0))
                             .map((person, index) => {
                                 const isTop3 = index < 3;
